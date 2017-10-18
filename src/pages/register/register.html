@@ -7,15 +7,34 @@
 <ion-header>
 
   <ion-navbar>
-   <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>register</ion-title>
+    <ion-title>Register new user</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+<form [formGroup]="signUpForm" (submit)="doSignup()">
+    <ion-list>
 
+      <ion-item>
+        <ion-label fixed>Name</ion-label>
+        <ion-input type="text" [(ngModel)]="account.name" formControlName="name" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="account.email" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Password</ion-label>
+        <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <div padding>
+        <button ion-button color="primary" block>Sign up</button>
+      </div>
+    </ion-list>
+  </form>
 </ion-content>

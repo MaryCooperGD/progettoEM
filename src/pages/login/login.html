@@ -7,12 +7,31 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>login</ion-title>
+    <ion-title>Login into your account</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+<form [formGroup]="signInForm" (submit)="doEmailPswLogin()" class="input">
+    <ion-list>
 
+      <ion-item>
+        <ion-label fixed>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password" formControlName="password"></ion-input>
+      </ion-item>
+
+
+      <div padding>
+        <button ion-button color="primary" block>Login with email and password</button>
+      </div>
+
+    </ion-list>
+  </form>
 </ion-content>

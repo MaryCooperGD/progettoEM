@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { LoginPage} from "../login/login"
+import { RegisterPage} from "../register/register"
 /**
  * Generated class for the WelcomepagePage page.
  *
@@ -15,11 +16,19 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class WelcomepagePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menu:MenuController) {
+    this.menu.enable(false)
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad WelcomepagePage');
   }
 
+  openLoginPage(){
+      this.navCtrl.push(LoginPage)
+  }
+
+  openRegisterPage(){
+    this.navCtrl.push(RegisterPage)
+  }
 }
