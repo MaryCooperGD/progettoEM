@@ -27,9 +27,11 @@ export class RegisterPage {
     password: ''
   };
 
+  buttonDisabled: boolean;
   signUpForm: FormGroup;
   constructor(public navCtrl: NavController, public navParams: NavParams, public menu:MenuController,
   public formBuilder:FormBuilder, public toastCtrl:ToastController, public api : Api) {
+    this.buttonDisabled = false;
     this.menu.enable(false)
     this.signUpForm = formBuilder.group({
     name: ['', Validators.required],
@@ -43,23 +45,31 @@ export class RegisterPage {
   }
 
   doSignup() {
-    
-    if(!this.signUpForm.valid){
-      this.displayLoginError("Please fill all the fields")
-    }
-     else {
-    var result : any = this.api.doSignUp(this.account.email, this.account.password,this.account.name);
-    let res = Observable.fromPromise(result);
-    res.subscribe(res => {
-      if (res instanceof Error){
-        this.displayLoginError(res.message) 
-      } else {
-          this.navCtrl.push(HomePage);
+    if(this.buttonDisabled){
+      console.log("Can't click")
 
+    } else {
+      if(!this.signUpForm.valid){
+        this.displayLoginError("Please fill all the fields")
       }
-    })
-
+       else {
+        this.buttonDisabled = true;
+  
+      var result : any = this.api.doSignUp(this.account.email, this.account.password,this.account.name);
+      let res = Observable.fromPromise(result);
+      res.subscribe(res => {
+        if (res instanceof Error){
+          this.displayLoginError(res.message) 
+        } else {
+            this.navCtrl.push(HomePage);
+  
+        }
+      })
+  
+      }
     }
+    
+    
   }
 
 
