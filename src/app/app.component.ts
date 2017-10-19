@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform,AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { Observable } from 'rxjs/Observable';
+import { Api } from '../providers/api';
 import { HomePage } from '../pages/home/home';
 import { CreateRoutePage } from "../pages/create-route/create-route";
 import { LoginPage } from "../pages/login/login";
@@ -24,7 +25,8 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,public api:Api,
+    public alertCtrl:AlertController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -52,7 +54,37 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  signOut(){
-    this.nav.setRoot(WelcomepagePage)
+  presentConfirm() {
+    let alert = this.alertCtrl.create({
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.signOut();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
+  signOut(){
+      var result:any = this.api.doLogOut();
+        let res = Observable.fromPromise(result);
+        res.subscribe(res => {
+        if (res instanceof Error){
+        } else {
+            this.nav.setRoot(WelcomepagePage);
+  
+        }
+      })
+    }
+  
 }

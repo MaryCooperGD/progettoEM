@@ -1,7 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-
+import { AngularFireModule} from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { HttpModule, Http } from '@angular/http';
+import { Api } from '../providers/api';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { CreateRoutePage } from "../pages/create-route/create-route";
@@ -15,6 +20,17 @@ import { WelcomepagePage } from "../pages/welcomepage/welcomepage";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+
+export const firebaseConfig = {
+  
+    apiKey: "AIzaSyCJuctITAc5lKZzNwTosmiLzduZjQPgqUg",
+    authDomain: "cesenaesploraem-f4694.firebaseapp.com",
+    databaseURL: "https://cesenaesploraem-f4694.firebaseio.com",
+    projectId: "cesenaesploraem-f4694",
+    storageBucket: "cesenaesploraem-f4694.appspot.com",
+    messagingSenderId: "942441525928"
+  
+};  
 @NgModule({
   declarations: [
     MyApp,
@@ -30,6 +46,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -48,6 +68,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    Api,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
