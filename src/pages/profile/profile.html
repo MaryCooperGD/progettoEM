@@ -18,11 +18,79 @@
 
 <ion-content padding>
 
-	<ion-grid>
-		  <ion-row>
-		    <ion-col col-6><ion-icon name="person"></ion-icon> </ion-col>
-		    <ion-col col-6>This column will take 6 columns</ion-col>
-		  </ion-row>
-	</ion-grid>
+<!--Card per avatar, punti e livello-->
+  <ion-card>
+      <ion-card-header class="blue-title">
+        [Username della persona loggata]
+      </ion-card-header>
+
+      <ion-card-content>
+      <ion-grid>
+          <ion-row>
+            <ion-col col-6> Qui metteremo l'avatar </ion-col>
+            <ion-col col-6>
+              <ion-row>
+                  Livello 
+              </ion-row>
+
+               <ion-row>
+                  Punti totali
+              </ion-row>
+
+
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+      </ion-card-content>
+  </ion-card>
+
+<!--Card per badge-->
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Badge
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-badge color="secondary">Fotografo junior </ion-badge>
+        <ion-badge color="secondary">Fotografo esperto </ion-badge>
+        <ion-badge color="secondary">Fotografo super </ion-badge>
+        <ion-badge color="primary">Contributore junior</ion-badge>
+        <ion-badge color="danger">Informatore junior</ion-badge>
+        <ion-badge color="dark">Taggatore provetto</ion-badge>
+
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+ <!--Card per preferenze--> 
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Preferenze
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <p>Musei</p>
+        <p>Rinascimento</p>
+        <p>Sculture</p>
+        <p>Biblioteche</p>
+        <p>Pittura</p>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+
+ <!--Card per foto--> 
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Foto
+    </ion-card-header>
+
+    <ion-card-content>
+    Qui possiamo usare le card con foto viste nel tutorial. oppure le foto con sopra la scritta tipo "malatestiana 10 foto" per dire che 'utente ne ha caricate 10'
+    </ion-card-content>
+  </ion-card>
+
 
 </ion-content>

@@ -1,22 +1,36 @@
 page-rank {
 
-}
+	.header .classifica {
+ 		background-color:#f5f5f0;
+  		border-radius: 5px 5px 5px 5px;
+	}
 
-	.header .col {
-  background-color:#f5f5f0;
-}
+	.classifica {
+  		border: solid 1px white;
+  		border-bottom-style: none;
+  		border-right-style: none;
+  		text-align: center;
+	}
 
-	.col {
-  border: solid 1px grey;
-  border-bottom-style: none;
-  border-right-style: none;
+	.classifica:last-child {
+  		border-right: solid 1px white;
+	}
 
-}
+	.row:last-child .classifica {
+  		border-bottom: solid 1px white;
+	}
 
-.col:last-child {
-  border-right: solid 1px grey;
-}
+	p {
+		text-align: center;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 
-.row:last-child .col {
-  border-bottom: solid 1px grey;
-}
+	#table {
+		padding-right: 15px;
+		padding-left: 15px;
+		padding-bottom: 15px;
+	}
+
+} /*Graffa di chiusa CSS*/
+

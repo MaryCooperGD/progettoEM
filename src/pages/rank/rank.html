@@ -4,6 +4,8 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
+
 <ion-header>
 
   <ion-navbar>
@@ -17,26 +19,31 @@
 
 
 <ion-content padding>
-	<p> [nomeutente] sei in posizione [X]</p>
-	<div class="row header">
-        <div class="col"> <ion-icon name="podium"></ion-icon> Posizione</div>
-        <div class="col"> <ion-icon name="person"></ion-icon> Username</div>
-        <div class="col"> <ion-icon name="medal"></ion-icon> Punti</div>
-          
-    </div>
+<ion-card>
 
-    <div class="row">
-        <div class="col">1°</div>
-        <div class="col">Erica</div>
-        <div class="col">340</div>
-    </div>
+	<p id="reached-rank"> [nomeutente] sei in posizione [X]</p>
 
-     <div class="row">
-        <div class="col">2°</div>
-        <div class="col">Marina</div>
-        <div class="col">300</div>
-    </div>
+	<div id="table">
+		<div class="row header">
+	        <div class="col classifica"> <ion-icon name="podium"></ion-icon> Posizione</div>
+	        <div class="col classifica"> <ion-icon name="person"></ion-icon> Username</div>
+	        <div class="col classifica"> <ion-icon name="medal"></ion-icon> Punti</div>
+	          
+	    </div>
 
+	    <div class="row">
+	        <div class="col classifica">1°</div>
+	        <div class="col classifica">Erica</div>
+	        <div class="col classifica">340</div>
+	    </div>
+
+	     <div class="row">
+	        <div class="col classifica">2°</div>
+	        <div class="col classifica">Marina</div>
+	        <div class="col classifica">300</div>
+	    </div>
+    </div>
+</ion-card>
 
 
 
