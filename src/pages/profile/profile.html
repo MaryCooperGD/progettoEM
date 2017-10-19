@@ -27,7 +27,10 @@
       <ion-card-content>
       <ion-grid>
           <ion-row>
-            <ion-col col-6> Qui metteremo l'avatar </ion-col>
+            <ion-col col-6>
+              <ion-img width="100" height="100"  src="assets/img/avatar-placeholder.png"></ion-img>
+            </ion-col>
+
             <ion-col col-6>
               <ion-row>
                   Livello 
@@ -36,8 +39,6 @@
                <ion-row>
                   Punti totali
               </ion-row>
-
-
             </ion-col>
           </ion-row>
       </ion-grid>
@@ -87,10 +88,27 @@
     Foto
     </ion-card-header>
 
-    <ion-card-content>
-    Qui possiamo usare le card con foto viste nel tutorial. oppure le foto con sopra la scritta tipo "malatestiana 10 foto" per dire che 'utente ne ha caricate 10'
+    <ion-card-content class="card-background-page"  id="foto-card">
+      <ion-scroll scrollX="true" scrollY="true">
+        <ion-card>
+          <img width="200" height="200" src="assets/img/fontanamasini.jpg"/>
+          <div class="card-title">Fontana masini</div>
+          <div class="card-subtitle">3 Foto caricate</div>
+        </ion-card>
+
+        <ion-card>
+          <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+          <div class="card-title">Malatestiana</div>
+          <div class="card-subtitle">5 foto caricate</div>
+        </ion-card>
+      </ion-scroll>
     </ion-card-content>
   </ion-card>
+
+
+
+
+  
 
 
 </ion-content>
