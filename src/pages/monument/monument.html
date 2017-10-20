@@ -7,12 +7,64 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>monument</ion-title>
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Luogo di interesse</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+<!--Card nome e foto-->
+<ion-card>
+  <ion-card-header class="blue-title">
+        [Nome luogo di interesse]
+  </ion-card-header>
+
+  <ion-card-content>
+    <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+  </ion-card-content>
+</ion-card>
+
+<!--Card descrizione e tag-->
+<ion-card>
+  <ion-card-header class="blue-title">
+        Descrizione e tag
+  </ion-card-header>
+
+  <ion-card-content>
+  	<ion-row>
+  		<ion-item>
+        <ion-badge color="secondary">Biblioteca</ion-badge>
+        <ion-badge color="secondary">XV secolo</ion-badge>
+        <ion-badge color="secondary">Luogo storico</ion-badge>
+      </ion-item>
+  	</ion-row>
+  	<ion-row>
+    	<p id ="local description">
+    		La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
+    	</p>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+
+<!--Card foto utenti-->
+<ion-card>
+  <ion-card-header class="blue-title">
+        Foto utenti
+  </ion-card-header>
+
+  <ion-card-content>
+    <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+  </ion-card-content>
+</ion-card>
+
+
+
+
+
 
 </ion-content>
