@@ -15,11 +15,27 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="card-background-page">
+         
+  <!--Contiene l'immagine -->
+  <ion-card>
+      <img src="assets/img/cesena.jpg"/>
+      <div class="card-title">CesenaEsplora</div>
+      <div class="card-subtitle">Un nuovo modo di visitare la città</div>
+  </ion-card>
+
   <p class="button-login-reg">
-<button ion-button (click)=openLoginPage()>Login</button>
+    <button ion-button (click)=openLoginPage() >Login</button>
   </p>
-<p>
-<button ion-button (click)=openRegisterPage() >Register</button>
-</p>
+  <p>
+    <button ion-button (click)=openRegisterPage() >Register</button>
+  </p>
+
+ 
 </ion-content>
+
+     
+    
+      
+
+
