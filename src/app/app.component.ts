@@ -13,7 +13,8 @@ import { RankPage } from "../pages/rank/rank";
 import { RegisterPage } from "../pages/register/register";
 import { SearchPlacePage } from "../pages/search-place/search-place";
 import { WelcomepagePage } from "../pages/welcomepage/welcomepage";
-
+import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
+import { EditMonumentPage } from "../pages/edit-monument/edit-monument"
 
 @Component({
   templateUrl: 'app.html'

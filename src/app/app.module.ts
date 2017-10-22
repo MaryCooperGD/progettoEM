@@ -19,7 +19,8 @@ import { SearchPlacePage } from "../pages/search-place/search-place";
 import { WelcomepagePage } from "../pages/welcomepage/welcomepage";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
+import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
 
 export const firebaseConfig = {
   
@@ -42,7 +43,9 @@ export const firebaseConfig = {
     RankPage,
     RegisterPage,
     SearchPlacePage,
-    WelcomepagePage
+    WelcomepagePage,
+    UploadPhotoPage,
+    EditMonumentPage
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,9 @@ export const firebaseConfig = {
     RankPage,
     RegisterPage,
     SearchPlacePage,
-    WelcomepagePage
+    WelcomepagePage,
+    UploadPhotoPage,
+    EditMonumentPage
   ],
   providers: [
     StatusBar,

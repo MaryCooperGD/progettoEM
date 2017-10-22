@@ -60,8 +60,18 @@
   </ion-card-content>
 </ion-card>
 
-
-
+<ion-card>
+    <ion-card-content>
+      <!--Cliccando sul bottone si apre la pagina per la modifica del monumento-->
+      <ion-row>
+        <button ion-button (click)=openEditMonumentPage() style="width: 100%">Contribuisci</button>
+      </ion-row>
+      <!--Cliccando sul bottone si apre la pagina per il caricamento della foto-->
+      <ion-row>
+        <button ion-button (click)=openUploadPhotoPage()  color="secondary" style="width: 100%" >Carica foto</button>
+      </ion-row>
+    </ion-card-content>
+</ion-card>
 
 
 

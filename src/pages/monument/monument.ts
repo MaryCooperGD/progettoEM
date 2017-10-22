@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { UploadPhotoPage } from '../upload-photo/upload-photo';
+import { EditMonumentPage } from "../edit-monument/edit-monument";
 
 /**
  * Generated class for the MonumentPage page.
@@ -21,5 +23,13 @@ export class MonumentPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MonumentPage');
   }
+
+  openUploadPhotoPage(){
+    this.navCtrl.push(UploadPhotoPage)
+  } 
+
+  openEditMonumentPage(){
+    this.navCtrl.push(EditMonumentPage)
+  } 
 
 }
