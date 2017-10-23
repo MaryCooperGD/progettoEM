@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { WelcomepagePage } from "../welcomepage/welcomepage"
+import { WelcomepagePage } from "../welcomepage/welcomepage";
 
 /**
  * Generated class for the UploadPhotoPage page.

@@ -17,5 +17,48 @@
 
 
 <ion-content padding>
+  <h6 class="blue-title">[NOME MONUMENTO]</h6>
+  
+  <!--Card bottoni per caricamento foto-->
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Carica o scatta
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-row>
+        <ion-col width-50 style="text-align: right">
+          <!--Bottone caricamento da cell-->
+          <button ion-button round large color="secondary"><ion-icon name="images"></ion-icon></button>
+        </ion-col>
+
+        <ion-col width-50 style="text-align: left">
+          <!--Bottone per scattare foto live-->
+          <button ion-button round large color="danger"><ion-icon name="camera"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Card con textarea per descrizione foto-->
+  <ion-card>
+    <ion-card-content>
+
+        <ion-item>
+          <ion-textarea placeholder="Descrivi brevemente la foto..."></ion-textarea>
+        </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!--Card con pulsante per caricare foto-->  
+  <ion-card>
+    <ion-card-content>
+      <button ion-button class="card-button">Carica foto</button>
+    </ion-card-content>
+  </ion-card>
+
+
+
 
 </ion-content>
