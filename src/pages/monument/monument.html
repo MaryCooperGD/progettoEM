@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-  	<button ion-button menuToggle>
+   <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Luogo di interesse</ion-title>
@@ -64,11 +64,11 @@
     <ion-card-content>
       <!--Cliccando sul bottone si apre la pagina per la modifica del monumento-->
       <ion-row>
-        <button ion-button (click)=openEditMonumentPage() > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>  Contribuisci</button>
+        <button ion-button class="card-button" (click)=openEditMonumentPage() > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>  Contribuisci</button>
       </ion-row>
       <!--Cliccando sul bottone si apre la pagina per il caricamento della foto-->
       <ion-row>
-        <button ion-button (click)=openUploadPhotoPage()  color="secondary" > <ion-icon name="images" class="icona-bottone"></ion-icon>Carica foto</button>
+        <button ion-button class="card-button" (click)=openUploadPhotoPage()  color="secondary" > <ion-icon name="images" class="icona-bottone"></ion-icon>Carica foto</button>
       </ion-row>
     </ion-card-content>
 </ion-card>
