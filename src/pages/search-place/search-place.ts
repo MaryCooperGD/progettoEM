@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MonumentPage } from "../monument/monument";
 
 /**
  * Generated class for the SearchPlacePage page.
@@ -20,6 +21,10 @@ export class SearchPlacePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchPlacePage');
+  }
+
+  openPlace(){
+    this.navCtrl.push(MonumentPage)
   }
 
 }

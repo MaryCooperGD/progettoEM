@@ -27,29 +27,37 @@
   </ion-list>
 
 
-  <ion-card>
-    <img src="assets/img/malatestiana.jpg"/>
-    <ion-card-content>
-      <ion-card-title>
-        Biblioteca Malatesiana
-        </ion-card-title>
-      <p>
-        Si tratta di una biblioteca monastica di particolare importanza storica. 
-      </p>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <img src="assets/img/fontanamasini.jpg"/>
-    <ion-card-content>
-      <ion-card-title>
-        Biblioteca Malatesiana
-        </ion-card-title>
-      <p>
-        Bell'esempio di architettura-scultura manierista, coeva del Nettuno bolognese, dal quale però differisce nettamente, soprattutto nell'apparato ornamentale.
-      </p>
-    </ion-card-content>
-  </ion-card>
+  <ion-list>
+    <button ion-item (click)="openPlace()"> <!-- a p passeremo l'elemento cliccato. Guarda sul vecchio progetto -->
+      <ion-card>
+        <img src="assets/img/malatestiana.jpg"/>
+        <ion-card-content>
+          <ion-card-title>
+            Biblioteca Malatestiana
+            </ion-card-title>
+          <p>
+            Si tratta di una biblioteca monastica di particolare importanza storica. 
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </button>
+    
+  <button ion-item (click)="openPlace()">
+    <ion-card>
+      <img src="assets/img/fontanamasini.jpg"/>
+      <ion-card-content>
+        <ion-card-title>
+          Fontana Masini
+          </ion-card-title>
+        <p>
+          Bell'esempio di architettura-scultura manierista, coeva del Nettuno bolognese, dal quale però differisce nettamente, soprattutto nell'apparato ornamentale.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </button>
+    
+  </ion-list>
+  
 
   
 

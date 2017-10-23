@@ -57,6 +57,7 @@ export class LoginPage {
     let res = Observable.fromPromise(result);
     res.subscribe(res => {
       if (res instanceof Error){
+        this.buttonDisabled = false;
         this.displayLoginError(res.message)
       } else {
           this.navCtrl.setRoot(HomePage);
