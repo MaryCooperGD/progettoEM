@@ -21,6 +21,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
 import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
+import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
+
+
 
 export const firebaseConfig = {
   
@@ -45,7 +48,8 @@ export const firebaseConfig = {
     SearchPlacePage,
     WelcomepagePage,
     UploadPhotoPage,
-    EditMonumentPage
+    EditMonumentPage,
+    EditPreferencesPage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +72,8 @@ export const firebaseConfig = {
     SearchPlacePage,
     WelcomepagePage,
     UploadPhotoPage,
-    EditMonumentPage
+    EditMonumentPage,
+    EditPreferencesPage
   ],
   providers: [
     StatusBar,

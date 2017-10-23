@@ -14,7 +14,8 @@ import { RegisterPage } from "../pages/register/register";
 import { SearchPlacePage } from "../pages/search-place/search-place";
 import { WelcomepagePage } from "../pages/welcomepage/welcomepage";
 import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
-import { EditMonumentPage } from "../pages/edit-monument/edit-monument"
+import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
+import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
 
 @Component({
   templateUrl: 'app.html'
@@ -37,6 +38,7 @@ export class MyApp {
       {title: 'Profilo', component: ProfilePage},
       {title: 'Classifica', component: RankPage},
       {title: 'Luogo di interesse', component: MonumentPage},
+      {title: 'Edit preferenze', component: EditPreferencesPage},
     ];
 
   }
