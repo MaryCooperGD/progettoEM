@@ -7,6 +7,7 @@ import * as firebase from 'firebase/app';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HomePage } from "../home/home";
 import { Api } from '../../providers/api';
+import { TutorialPage } from "../tutorial/tutorial";
 
 /**
  * Generated class for the RegisterPage page.
@@ -61,7 +62,7 @@ export class RegisterPage {
         this.buttonDisabled = false;
           this.displayLoginError(res.message) 
         } else {
-            this.navCtrl.push(HomePage);
+            this.navCtrl.push(TutorialPage);
   
         }
       })
