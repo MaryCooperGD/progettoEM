@@ -7,12 +7,60 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>createRoute</ion-title>
+    <ion-title>Definisci percorso</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+  <!--Partenza-->
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Partenza
+    </ion-card-header>
+    
+    <ion-card-content>
+        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+        <p class ="create-router-label">Cerca su mappa <ion-icon name="compass"></ion-icon> </p>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Arrivo--> 
+  <ion-card>
+    <ion-card-header class="blue-title">
+    Arrivo
+    </ion-card-header>
+    
+    <ion-card-content>
+        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+        <p class ="create-router-label"> Cerca su mappa <ion-icon name="compass"></ion-icon> </p>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Impostazione percorso--> 
+  <ion-card>
+      <ion-card-header class="blue-title">
+          Impostazione percorso
+      </ion-card-header>
+      
+      <ion-card-content>
+          <ion-item>
+              <ion-label fixed>Durata massima</ion-label>
+              <ion-input type="text" value=""></ion-input>
+          </ion-item>
+
+          <ion-item>
+                <ion-label fixed>m\km massimi</ion-label>
+                <ion-input type="text" value=""></ion-input>
+          </ion-item>
+
+          <ion-item>
+              <ion-label> Accessibilità</ion-label>
+              <ion-toggle checked="false"></ion-toggle>
+          </ion-item>
+      </ion-card-content>
+    </ion-card>
 
 </ion-content>

@@ -39,7 +39,8 @@ export class MyApp {
       {title: 'Profilo', component: ProfilePage},
       {title: 'Classifica', component: RankPage},
       {title: 'Luogo di interesse', component: MonumentPage},
-      {title: 'Edit preferenze', component: EditPreferencesPage},
+      {title: 'Modifica preferenze', component: EditPreferencesPage},
+      {title: 'Definisci percorso', component: CreateRoutePage},
     ];
 
   }
