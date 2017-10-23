@@ -44,13 +44,11 @@ export class LoginPage {
 
   doEmailPswLogin(){
 
-    if(this.buttonDisabled){
-      console.log("Can't click")
-
-    } else {
+    if(!this.buttonDisabled){
 
       if(!this.signInForm.valid){
         this.displayLoginError("Please fill all the fields")
+        this.buttonDisabled = false;
     }
      else {
        this.buttonDisabled = true;

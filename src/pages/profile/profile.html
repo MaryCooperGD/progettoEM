@@ -10,7 +10,7 @@
    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Profilo utente</ion-title>
+    <ion-title>Profilo di {{username}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,7 +21,7 @@
 <!--Card per avatar, punti e livello-->
   <ion-card>
       <ion-card-header class="blue-title">
-        [Username della persona loggata]
+        {{username}}
       </ion-card-header>
 
       <ion-card-content>

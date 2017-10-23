@@ -45,12 +45,10 @@ export class RegisterPage {
   }
 
   doSignup() {
-    if(this.buttonDisabled){
-      console.log("Can't click")
-
-    } else {
+    if(!this.buttonDisabled){
       if(!this.signUpForm.valid){
         this.displayLoginError("Please fill all the fields")
+        this.buttonDisabled = false;
       }
        else {
         this.buttonDisabled = true;
