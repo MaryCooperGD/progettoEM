@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Register new user</ion-title>
+    <ion-title>Registrati</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -32,8 +32,48 @@
         <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
       </ion-item>
 
+      <h6 class="blue-title" id="riga-preferenze">Scegli almeno tre preferenze (potrai modificarle in seguito)</h6>
+      <ion-list>
+        <ion-scroll style="height: 300px" scrollY="true">
+          <ion-item>
+            <ion-label>Musei</ion-label>
+            <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Siti Archeologici</ion-label>
+            <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+          </ion-item>
+
+                  <ion-item>
+                      <ion-label>Pittura</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Rinascimento</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Monumenti</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Biblioteche</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Strutture storiche</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+              </ion-scroll>
+          </ion-list>
+
       <div padding>
-        <button ion-button color="primary" block [disabled]="buttonDisabled">Sign up</button>
+        <button ion-button color="primary" block [disabled]="buttonDisabled">Registrati</button>
       </div>
     </ion-list>
   </form>
