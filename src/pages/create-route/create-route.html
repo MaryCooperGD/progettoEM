@@ -26,7 +26,12 @@
     
     <ion-card-content>
         <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-        <p class ="create-router-label">Cerca su mappa <ion-icon name="compass"></ion-icon> </p>
+
+        <ion-row>
+            <button ion-button class="card-button"> <ion-icon name="compass" class="icona-bottone"></ion-icon> Cerca su mappa</button>
+        </ion-row>
+
+
     </ion-card-content>
   </ion-card>
 
@@ -38,7 +43,9 @@
     
     <ion-card-content>
         <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-        <p class ="create-router-label"> Cerca su mappa <ion-icon name="compass"></ion-icon> </p>
+        <ion-row>
+            <button ion-button class="card-button"> <ion-icon name="compass" class="icona-bottone"></ion-icon> Cerca su mappa</button>
+        </ion-row>
     </ion-card-content>
   </ion-card>
 
