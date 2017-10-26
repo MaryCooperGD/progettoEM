@@ -33,12 +33,12 @@ export class TutorialPage {
         title: "Benvenuto su CesenaEsplora!",
         description: "CesenaEsplora ti permette di organizzare il tuo viaggio culturale in giro per la città",
         image: '',
+        
       },
       {
         title: "Organizza il tuo viaggio",
         description: "Scegli i tag che ti interessano e inizia ad esplorare",
-        image: '',
-        
+        image: '', 
       },
       {
         title: "Contribuisci alla conoscenza",
