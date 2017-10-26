@@ -7,9 +7,53 @@
 </ion-header>
 
 <ion-content no-bounce>
-  <ion-slides pager="true" (ionWillChange)="onSlideChangeStart($event)">
+  <ion-slides pager="true" (ionWillChange)="onSlideChangeStart($event)" (ionSlideDidChange)="slideChanged()">
 
-    <ion-slide *ngFor="let slide of slides">
+    <ion-slide *ngFor="let slide of slidess">
+      <img [src]="slide.image" class="slide-image" />
+      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+      <p [innerHTML]="slide.description"></p>
+      <h6 *ngIf="second" class="blue-title" id="riga-preferenze">Scegli almeno tre preferenze (potrai modificarle in seguito)</h6>
+      <ion-list *ngIf="second">
+        <ion-scroll style="height: 300px" scrollY="true">
+          <ion-item>
+            <ion-label>Musei</ion-label>
+            <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Siti Archeologici</ion-label>
+            <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+          </ion-item>
+
+                  <ion-item>
+                      <ion-label>Pittura</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Rinascimento</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Monumenti</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Biblioteche</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+
+                  <ion-item>
+                      <ion-label>Strutture storiche</ion-label>
+                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                  </ion-item>
+              </ion-scroll>
+          </ion-list>
+    </ion-slide>
+    <!-- <ion-slide *ngFor="let slide of slides">
       <img [src]="slide.image" class="slide-image" />
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
       <p [innerHTML]="slide.description"></p>
@@ -23,7 +67,7 @@
         START
         <ion-icon name="arrow-forward"></ion-icon>
       </button>
-    </ion-slide>
+    </ion-slide> -->
   </ion-slides>
 </ion-content>
   
