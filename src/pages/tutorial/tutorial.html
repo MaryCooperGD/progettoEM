@@ -14,8 +14,9 @@
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
       <p [innerHTML]="slide.description"></p>
       <h6 *ngIf="second" class="blue-title" id="riga-preferenze">Scegli almeno tre preferenze (potrai modificarle in seguito)</h6>
-      <ion-list *ngIf="second">
-        <ion-scroll style="height: 300px" scrollY="true">
+      
+      <ion-list id="lista-tag" *ngIf="second">
+        <ion-scroll id="scroll-lista-tag" scrollY="true">
           <ion-item>
             <ion-label>Musei</ion-label>
             <ion-checkbox color="secondary" checked="false"></ion-checkbox>
