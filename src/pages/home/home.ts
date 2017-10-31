@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, MenuController} from 'ionic-angular';
 import L from "leaflet";
-
+import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -10,7 +10,7 @@ export class HomePage {
   map: L.Map;
   center: L.PointTuple;
 
-  constructor(public navCtrl: NavController, public menuCtrl:MenuController) {
+  constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation) {
     this.menuCtrl.enable(true)
 
 
@@ -42,6 +42,19 @@ export class HomePage {
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
       .addTo(this.map);    
+      this.geolocate();
+  }
+
+  geolocate(){
+    this.geolocation.getCurrentPosition().then((resp) =>{
+      var positionMarker: L.Marker;
+      let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
+      positionMarker = L.marker(latlng).addTo(this.map);
+      positionMarker.bindPopup("Tu sei qui");
+      this.map.setView(latlng,13)
+      this.map.panTo(latlng)
+
+    })
   }
 
 }

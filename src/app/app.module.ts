@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { AngularFireModule} from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
+
 import * as firebase from 'firebase/app';
 import { HttpModule, Http } from '@angular/http';
 import { Api } from '../providers/api';
@@ -81,6 +83,7 @@ export const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     Api,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
