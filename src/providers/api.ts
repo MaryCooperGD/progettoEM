@@ -55,13 +55,7 @@ export class Api {
   }
 
 
-  setGPS(){
-    !this.gpsEnabled;
-  }
-
-  getGPS(){
-    return this.gpsEnabled;
-  }
+  
   //User management methods
   //Api from firebase are used, which automatically handle login
   //logout and other useful features
