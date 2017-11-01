@@ -14,7 +14,9 @@ import 'rxjs/add/observable/fromPromise';
 export class Api {
   url: string = 'https://example.com/api/v1';
   public user : firebase.User;
+  gpsEnabled : boolean;
   constructor(public http: Http, public afAuth: AngularFireAuth, public db: AngularFireDatabase) {
+    this.gpsEnabled = false;
   }
 
   get(endpoint: string, params?: any, options?: RequestOptions) {
@@ -53,6 +55,13 @@ export class Api {
   }
 
 
+  setGPS(){
+    !this.gpsEnabled;
+  }
+
+  getGPS(){
+    return this.gpsEnabled;
+  }
   //User management methods
   //Api from firebase are used, which automatically handle login
   //logout and other useful features
