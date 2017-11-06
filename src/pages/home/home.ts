@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { NavController, MenuController} from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, MenuController, ToastController} from 'ionic-angular';
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
+import { Diagnostic } from "@ionic-native/diagnostic";
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -10,22 +11,35 @@ export class HomePage {
   map: L.Map;
   center: L.PointTuple;
 
-  constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation) {
+  @ViewChild('map-container') mapContainer;
+
+  constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
+  public toastCtrl:ToastController, public diagnostic:Diagnostic) {
     this.menuCtrl.enable(true)
 
 
   }
 
+  
 
   ionViewDidLoad() {
     //set map center
     this.center = [41.9027835,12.496365500000024]; 
     
+    this.diagnostic.isLocationEnabled().then((state)=>{
+      if(state){
+        this.displayGPSError("Enabled")
+      } else{
+        this.displayGPSError("Not enabled")
+      }
+    })
     //setup leaflet map
-    this.initMap();
+        this.initMap();
     
-    
-    //this.withMapBox();
+      }
+
+  ionViewCanLeave(){
+    document.getElementById("map").outerHTML = "";
   }
 
   initMap() {
@@ -44,8 +58,8 @@ export class HomePage {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
-      .addTo(this.map);    
-      this.geolocate();
+      .addTo(this.map);   
+      //this.geolocate();
   }
 
 
@@ -59,8 +73,17 @@ export class HomePage {
       this.map.panTo(latlng)
 
     }).catch((err) =>{
-      console.log("Cannot read location")
+      this.displayGPSError("Cannot read location")
     })
+  }
+
+  displayGPSError(messageErr: string){
+    let toast = this.toastCtrl.create({
+      message: messageErr,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 
 }
