@@ -56,10 +56,7 @@ export class HomePage {
     })
       .addTo(this.map);   
 
-      /*let watch = this.geolocation.watchPosition();
-      watch.subscribe((data)=>{
-        
-      })*/
+      
       if(this.platform.is('core')){
         //on browser
       } else {
@@ -108,6 +105,13 @@ export class HomePage {
       positionMarker.bindPopup("Tu sei qui");
       this.map.setView(latlng,13)
       this.map.panTo(latlng)
+
+      let watch = this.geolocation.watchPosition();
+      watch.subscribe((data)=>{
+        
+      }, error => {
+        this.displayGPSError("Cannot read location. Turn on your GPS and reload the page.")
+      })
 
     }).catch((err) =>{
       this.displayGPSError("Cannot read location")
