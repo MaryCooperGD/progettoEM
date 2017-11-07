@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, MenuController, ToastController} from 'ionic-angular';
+import { NavController, MenuController, ToastController, Platform, AlertController} from 'ionic-angular';
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
@@ -14,25 +14,21 @@ export class HomePage {
   @ViewChild('map-container') mapContainer;
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
-  public toastCtrl:ToastController, public diagnostic:Diagnostic) {
+  public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController) {
     this.menuCtrl.enable(true)
+    
 
 
   }
 
+  
   
 
   ionViewDidLoad() {
     //set map center
     this.center = [41.9027835,12.496365500000024]; 
     
-    this.diagnostic.isLocationEnabled().then((state)=>{
-      if(state){
-        this.displayGPSError("Enabled")
-      } else{
-        this.displayGPSError("Not enabled")
-      }
-    })
+    
     //setup leaflet map
         this.initMap();
     
@@ -59,7 +55,48 @@ export class HomePage {
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
       .addTo(this.map);   
-      //this.geolocate();
+
+      /*let watch = this.geolocation.watchPosition();
+      watch.subscribe((data)=>{
+        
+      })*/
+      if(this.platform.is('core')){
+        //on browser
+      } else {
+        this.diagnostic.isLocationEnabled().then((state)=>{
+          if(state){
+            this.geolocate();
+          } else{
+            this.presentConfirm();      
+          }
+        })
+
+      }
+      
+  }
+
+  
+
+  presentConfirm() {
+    let alert = this.alertCtrl.create({
+      title: 'Location',
+      message: 'Please enable location to start your trip and reload the page.',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.diagnostic.switchToLocationSettings();
+            }
+        }
+      ]
+    });
+    alert.present();
   }
 
 
