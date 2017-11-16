@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from "ionic-angular";
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AngularFireDatabaseModule, AngularFireDatabase} from 'angularfire2/database';
@@ -15,7 +16,8 @@ export class Api {
   url: string = 'https://example.com/api/v1';
   public user : firebase.User;
   gpsEnabled : boolean;
-  constructor(public http: Http, public afAuth: AngularFireAuth, public db: AngularFireDatabase) {
+  constructor(public http: Http, public afAuth: AngularFireAuth, public db: AngularFireDatabase,
+              public toastCtrl:ToastController) {
     this.gpsEnabled = false;
   }
 
@@ -69,10 +71,17 @@ export class Api {
       });
    }
 
+   
+
     doEmailPswLogin(email: string, password : string){
        return firebase.auth().signInWithEmailAndPassword(email,password)
         .then((any) => {
           this.user = firebase.auth().currentUser;
+          if(this.user.emailVerified){
+            
+          } else {
+            return new Error;
+          }
         },
         (err) => {
           return err;
@@ -82,11 +91,16 @@ export class Api {
      doSignUp(email:string, password:string, username:string){
        return firebase.auth().createUserWithEmailAndPassword(email,password)
        .then((any) => {
-         firebase.auth().currentUser.updateProfile({
-           displayName : username,
-           photoURL: "https://i.imgflip.com/d0tb7.jpg"
+        this.user = firebase.auth().currentUser;
+        firebase.auth().currentUser.updateProfile({
+          displayName : username,
+          photoURL: "https://i.imgflip.com/d0tb7.jpg"
+        })
+         firebase.auth().currentUser.sendEmailVerification().then(function(){
+           
          })
-         this.user = firebase.auth().currentUser;
+          
+         
        },
         (err) => {
           return err;
@@ -98,6 +112,15 @@ export class Api {
       
       }).catch(function(error) {
       });
+    }
+
+    displayError(messageErr:string){
+      let toast = this.toastCtrl.create({
+        message: messageErr,
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
     }
 
 

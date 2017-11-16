@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HomePage } from "../home/home";
 import { Api } from '../../providers/api';
 import { TutorialPage } from "../tutorial/tutorial";
+import { LoginPage } from "../login/login";
 
 /**
  * Generated class for the RegisterPage page.
@@ -42,13 +43,12 @@ export class RegisterPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RegisterPage');
   }
 
   doSignup() {
     if(!this.buttonDisabled){
       if(!this.signUpForm.valid){
-        this.displayLoginError("Please fill all the fields")
+        this.displayLoginError("Per favore, riempi tutti i campi.")
         this.buttonDisabled = false;
       }
        else {
@@ -62,15 +62,26 @@ export class RegisterPage {
         this.buttonDisabled = false;
           this.displayLoginError(res.message) 
         } else {
-            this.navCtrl.push(TutorialPage);
+          this.writeUserData(this.account.email,this.account.name)
+           this.navCtrl.push(LoginPage)
   
         }
       })
   
       }
     }
+
+
     
     
+    
+  }
+
+  writeUserData(email:string, name) {
+    email = email.replace('.','%2E')
+    firebase.database().ref('users/' + email).set({
+      username: name,
+    });
   }
 
 

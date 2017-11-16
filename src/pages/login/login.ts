@@ -39,7 +39,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
   }
 
   doEmailPswLogin(){
@@ -47,7 +46,7 @@ export class LoginPage {
     if(!this.buttonDisabled){
 
       if(!this.signInForm.valid){
-        this.displayLoginError("Please fill all the fields")
+        this.displayLoginError("Per favore, riempi tutti i campi.")
         this.buttonDisabled = false;
     }
      else {
@@ -58,9 +57,18 @@ export class LoginPage {
     res.subscribe(res => {
       if (res instanceof Error){
         this.buttonDisabled = false;
-        this.displayLoginError(res.message)
+        this.displayLoginError("Si è verificato un errore. Controlla di aver confermato il tuo indirizzo email"+
+        " prima di effettuare il login.")
       } else {
           this.navCtrl.setRoot(HomePage);
+          var userMail:string = firebase.auth().currentUser.email.replace('.','%2E');
+          //userMail.replace('.','%2E');
+          console.log(userMail+"")
+          var updates = {};
+          updates['/users/'+userMail+'/username'] = "Cambio";
+          updates['/users/'+userMail+'/phone'] = 123456789;
+          firebase.database().ref().update(updates);
+
   
       }
     })

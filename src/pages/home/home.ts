@@ -58,7 +58,7 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-        //on browser
+        this.geolocate()
       } else {
         this.diagnostic.isLocationEnabled().then((state)=>{
           if(state){

@@ -63,7 +63,7 @@ export class MyApp {
   presentConfirm() {
     let alert = this.alertCtrl.create({
       title: 'Logout',
-      message: 'Are you sure you want to logout?',
+      message: 'Vuoi effettuare il logout?',
       buttons: [
         {
           text: 'No',
@@ -72,7 +72,7 @@ export class MyApp {
           }
         },
         {
-          text: 'Yes',
+          text: 'Sì',
           handler: () => {
             this.signOut();
           }
