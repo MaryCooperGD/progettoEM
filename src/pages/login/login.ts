@@ -65,7 +65,7 @@ export class LoginPage {
           //userMail.replace('.','%2E');
           console.log(userMail+"")
           var updates = {};
-          updates['/users/'+userMail+'/username'] = "Cambio";
+          //updates['/users/'+userMail+'/username'] = "Cambio";
           updates['/users/'+userMail+'/phone'] = 123456789;
           firebase.database().ref().update(updates);
 

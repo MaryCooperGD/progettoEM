@@ -81,6 +81,8 @@ export class RegisterPage {
     email = email.replace('.','%2E')
     firebase.database().ref('users/' + email).set({
       username: name,
+      total_points: 0,
+      email_user: email,
     });
   }
 
