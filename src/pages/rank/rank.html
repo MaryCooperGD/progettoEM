@@ -31,21 +31,18 @@
 	          
 	    </div>
 
-	    <div class="row">
-	        <div class="col classifica">1°</div>
-	        <div class="col classifica">Erica</div>
-	        <div class="col classifica">340</div>
+	    <div class="row" *ngFor="let item of items">
+	        <div class="col classifica">{{ item.total_points }}</div>
+	        <div class="col classifica">{{ item.username }} </div>
+	        <div class="col classifica">{{ item.total_points }} </div>
 	    </div>
 
-	     <div class="row">
+	     <!--<div class="row">
 	        <div class="col classifica">2°</div>
 	        <div class="col classifica">Marina</div>
 	        <div class="col classifica">300</div>
-	    </div>
+	    </div>-->
     </div>
 </ion-card>
-
-
-
 
 </ion-content>
