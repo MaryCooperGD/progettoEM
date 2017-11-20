@@ -31,4 +31,5 @@ export class WelcomepagePage {
   openRegisterPage(){
     this.navCtrl.push(RegisterPage)
   }
+  
 }
