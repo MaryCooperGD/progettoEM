@@ -123,5 +123,11 @@ export class Api {
       toast.present();
     }
 
+    replaceCharacters(strng : string){
+
+     var str:string= strng.replace('.','%2E').replace('#','%23').replace('$','%24').replace('[','%5B').replace(']','%5D');
+      return str;
+    }
+
 
   }

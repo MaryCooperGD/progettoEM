@@ -3,6 +3,8 @@ import { NavController, MenuController, ToastController, Platform, AlertControll
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
+
+import { File } from '@ionic-native/file';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -14,7 +16,8 @@ export class HomePage {
   @ViewChild('map-container') mapContainer;
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
-  public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController) {
+  public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
+  public file:File) {
     this.menuCtrl.enable(true)
     
 
@@ -105,6 +108,7 @@ export class HomePage {
       positionMarker.bindPopup("Tu sei qui");
       this.map.setView(latlng,13)
       this.map.panTo(latlng)
+      this.getFeatures()
 
       let watch = this.geolocation.watchPosition();
       watch.subscribe((data)=>{
@@ -125,6 +129,68 @@ export class HomePage {
       position: 'top'
     });
     toast.present();
+  }
+
+
+  getFeatures(){
+    var pointList = [];
+    let bounds = this.map.getBounds();
+    let bbox = bounds.getSouth()+','+bounds.getWest()+','+bounds.getNorth()+','+bounds.getEast();  
+    
+     let request = "";
+     let overlays ={};
+     let lat,lon;
+     
+     
+    request+=`node[amenity=hospital][wheelchair=yes](${bbox});`
+    request+=`way[amenity=hospital][wheelchair=yes](${bbox});`
+    let url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(${request});out center;`;
+    fetch(url).then(response => {
+
+      
+      
+      return response.json();
+    }).then(results => {
+      this.file.writeFile("../","text.txt",JSON.stringify(results))
+     // overlays['amenity=hospital'].clearLayers;
+      let i = 0;
+       results.elements.forEach(e => {
+        console.log('Name '+e.tags["name"])
+        
+        if(e.type == "way"){
+            console.log('ID: ' + e.id)
+               lat = e.center["lat"]
+              lon = e.center["lon"]
+              pointList.push(new L.LatLng(lat,lon));
+               let marker = L.marker([lat, lon])
+          let content = '';
+         for (let tag in  e.tags) {
+          content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
+        };
+        marker.bindPopup(content) 
+       marker.addTo(this.map)
+        marker.openPopup()
+          } else {
+              lat = e.lat
+              lon = e.lon
+              pointList.push(new L.LatLng(lat,lon));
+              let marker = L.marker([lat, lon])
+              let content = '';
+            for (let tag in e.tags) {
+              content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
+            };
+           marker.bindPopup(content)
+           marker.addTo(this.map)
+          //marker.addTo(overlays['amenity=hospital']);
+           marker.openPopup()
+          }
+          console.log('Latitudine: ' + lat + ' Longitudine: ' + lon)
+      
+      });
+  
+    }).catch(error => {
+      console.log(''+ error)
+    });  
   }
 
 }

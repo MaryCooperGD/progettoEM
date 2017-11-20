@@ -61,11 +61,9 @@ export class LoginPage {
         " prima di effettuare il login.")
       } else {
           this.navCtrl.setRoot(HomePage);
-          var userMail:string = firebase.auth().currentUser.email.replace('.','%2E');
-          //userMail.replace('.','%2E');
+          var userMail:string = this.api.replaceCharacters(firebase.auth().currentUser.email);
           console.log(userMail+"")
           var updates = {};
-          //updates['/users/'+userMail+'/username'] = "Cambio";
           updates['/users/'+userMail+'/phone'] = 123456789;
           firebase.database().ref().update(updates);
 

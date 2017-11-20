@@ -60,10 +60,10 @@ export class RegisterPage {
         if (res instanceof Error){
 
         this.buttonDisabled = false;
-          this.displayLoginError(res.message) 
+          this.displayLoginError("L'indirizzo email fornito non è corretto.") 
         } else {
           this.writeUserData(this.account.email,this.account.name)
-           this.navCtrl.push(LoginPage)
+           this.navCtrl.push(TutorialPage)
   
         }
       })
@@ -78,7 +78,8 @@ export class RegisterPage {
   }
 
   writeUserData(email:string, name) {
-    email = email.replace('.','%2E')
+    email = this.api.replaceCharacters(email);
+    console.log(email+'')
     firebase.database().ref('users/' + email).set({
       username: name,
       total_points: 0,

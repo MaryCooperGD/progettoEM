@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams,Slides } from 'ionic-angular';
 import { HomePage } from "../home/home";
-/**
+import { LoginPage } from "../login/login";
+/*
  * Generated class for the TutorialPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
@@ -54,11 +55,10 @@ export class TutorialPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TutorialPage');
   }
 
   startApp() {
-    this.navCtrl.setRoot(HomePage, {}, {
+    this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
       direction: 'forward'
     });

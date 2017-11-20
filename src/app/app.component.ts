@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Observable } from 'rxjs/Observable';
 import { Api } from '../providers/api';
+import 'firebase/storage'
 import { HomePage } from '../pages/home/home';
 import { CreateRoutePage } from "../pages/create-route/create-route";
 import { LoginPage } from "../pages/login/login";

@@ -6,8 +6,10 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
-
+import { Camera } from '@ionic-native/camera';
 import * as firebase from 'firebase/app';
+import 'firebase/storage'
+import { File } from '@ionic-native/file';
 import { HttpModule, Http } from '@angular/http';
 import { Api } from '../providers/api';
 import { MyApp } from './app.component';
@@ -87,6 +89,8 @@ export const firebaseConfig = {
     Geolocation,
     Diagnostic,
     Api,
+    Camera,
+    File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
