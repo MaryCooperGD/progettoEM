@@ -48,7 +48,7 @@ export class HomePage {
       zoom: 13
     });
     L.marker(this.center).addTo(this.map)
-    .bindPopup('Popup')
+    .bindPopup('Tu sei qui')
     .openPopup();
     this.map.panTo(this.center)
     
@@ -58,6 +58,7 @@ export class HomePage {
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
       .addTo(this.map);   
+
 
       
       if(this.platform.is('core')){
@@ -109,14 +110,25 @@ export class HomePage {
       this.map.setView(latlng,13)
       this.map.panTo(latlng)
       this.getFeatures()
+      var self = this;
+      var x = new HomePage(this.navCtrl, this.menuCtrl,this.geolocation,
+        this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
+        this.file);
+     this.map.addEventListener('dragend', function(e){
+       self.getFeatures()
+     }) 
 
-      let watch = this.geolocation.watchPosition();
-      watch.subscribe((data)=>{
-        
-      }, error => {
-        this.displayGPSError("Cannot read location. Turn on your GPS and reload the page.")
-      })
+      
 
+      if(!this.platform.is('core')){
+        let watch = this.geolocation.watchPosition();
+        watch.subscribe((data)=>{
+          
+        }, error => {
+          this.displayGPSError("Cannot read location. Turn on your GPS and reload the page.")
+        })         
+      }
+      
     }).catch((err) =>{
       this.displayGPSError("Cannot read location")
     })
@@ -142,8 +154,8 @@ export class HomePage {
      let lat,lon;
      
      
-    request+=`node[amenity=hospital][wheelchair=yes](${bbox});`
-    request+=`way[amenity=hospital][wheelchair=yes](${bbox});`
+    request+=`node[amenity=restaurant](${bbox});`
+    request+=`way[amenity=restaurant](${bbox});`
     let url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(${request});out center;`;
     fetch(url).then(response => {
 
@@ -151,7 +163,7 @@ export class HomePage {
       
       return response.json();
     }).then(results => {
-      this.file.writeFile("../","text.txt",JSON.stringify(results))
+      //this.file.writeFile("../","text.txt",JSON.stringify(results))
      // overlays['amenity=hospital'].clearLayers;
       let i = 0;
        results.elements.forEach(e => {
