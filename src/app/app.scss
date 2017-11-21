@@ -66,11 +66,14 @@
   }
 
   .getstart{
-    background-image: url('../assets/img/fontanamasini.jpg');
-    -webkit-background-image: url('../assets/img/fontanamasini.jpg');
+    background-image: url('../assets/img/venice.jpg');
+    -webkit-background-image: url('../assets/img/venice.jpg');
     -webkit-background-size: cover;
     -moz-background-size: cover;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-size:cover;
+    width:100%;
+
 
   }
 
