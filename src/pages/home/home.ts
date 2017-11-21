@@ -154,8 +154,10 @@ export class HomePage {
      let lat,lon;
      
      
-    request+=`node[amenity=restaurant](${bbox});`
-    request+=`way[amenity=restaurant](${bbox});`
+     request+=`node[historic](${bbox});`
+     request+=`way[historic](${bbox});`
+    /*request+=`node[amenity=restaurant](${bbox});`
+    request+=`way[amenity=restaurant](${bbox});`*/
     let url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(${request});out center;`;
     fetch(url).then(response => {
 
