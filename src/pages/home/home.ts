@@ -125,11 +125,12 @@ export class HomePage {
 
      this.map = L.map('map', {
       center: this.center,
-      zoom: 13
+      zoom: 16 //livello di zoom migliore, se decresce non si richiama il metodo getFeatures() altrimenti
+      //impalla tutto
     });
     L.marker(this.center).addTo(this.map)
-    .bindPopup('Tu sei qui')
-    .openPopup();
+    /*.bindPopup('Tu sei qui')
+    .openPopup();*/
     this.map.panTo(this.center)
     
     //Add OSM Layer
@@ -142,8 +143,8 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-        this.getFeatures()
-      //  this.geolocate()
+       // this.getFeatures()
+        this.geolocate()
       } else {
         this.diagnostic.isLocationEnabled().then((state)=>{
           if(state){
@@ -181,6 +182,9 @@ export class HomePage {
     alert.present();
   }
 
+  getMapZoom(){
+    return this.map.getZoom();
+  }
 
   geolocate(){
     this.geolocation.getCurrentPosition().then((resp) =>{
@@ -188,7 +192,7 @@ export class HomePage {
       let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
       positionMarker = L.marker(latlng).addTo(this.map);
       positionMarker.bindPopup("Tu sei qui");
-      this.map.setView(latlng,13)
+      this.map.setView(latlng,16)
       this.map.panTo(latlng)
       this.getFeatures()
       var self = this;
@@ -196,8 +200,23 @@ export class HomePage {
         this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
         this.file);
      this.map.addEventListener('dragend', function(e){
-       self.getFeatures()
+       if(self.getMapZoom()>16){
+        self.getFeatures()
+       } else {
+         self.displayGPSError("Diminuisci il livello di zoom per visualizzare i punti di interesse " +
+        "sulla mappa");
+       }
+      
      }) 
+     this.map.addEventListener('zoomend', function(e){
+       if (self.getMapZoom()<16){
+        self.displayGPSError("Diminuisci il livello di zoom per visualizzare i punti di interesse " +
+        "sulla mappa");     
+       }else {
+         self.getFeatures();
+       }
+       
+     })
 
       
 
