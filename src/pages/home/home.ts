@@ -3,6 +3,10 @@ import { NavController, MenuController, ToastController, Platform, AlertControll
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 
 import { File } from '@ionic-native/file';
 @Component({
@@ -19,8 +23,84 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File) {
     this.menuCtrl.enable(true)
-    
+    //Possibili template aggiunte a DB. NON CANCELLARE 
 
+
+     /* PRIMO TEMPLATE - AGGIUNTA SEMPLICE
+     In ordine, quello che si fa è :
+     1) prendere il riferimento al nodo del DB su cui intendiamo lavorare
+     2) generare la chiave (o le chiavi) per i dati da aggiungere. In questo caso, dovendo aggiungere due
+     nuove città, genero le chiavi, che mi serviranno per creare i miei nuovi sottoalberi
+     3) creo il vettore degli updates che pusherò al DB
+     4) creo i dati che vorrò pushare. In questo caso, le città hanno come campi solo "nome" e "pois"; quest'
+     ultimo verrà creato e aggiornato ogni volta che aggiungeremo punti di interesse (vedi sotto)
+     5) per aggiungere la nuova città, nel vettore updates la sintassi si riferisce a:
+        nodo di interesse (cities) + chiave da aggiungere = dati specificati
+    6) pusho al DB. L'output è quello che si vede nel nodo "cities"!
+
+     
+    1) var ref = firebase.database().ref('/cities/');
+    2)var key = firebase.database().ref().child('cities').push().key;
+    var key2 = firebase.database().ref().child('cities').push().key;
+    3)var updates = {};
+    4) var data = {
+      name: "Cesena"
+    }
+    var data2 = {
+      name: "Bologna"
+
+    }
+    5)updates['/cities/'+key] = data;
+    updates['/cities/'+key2 ] = data2;
+    6)firebase.database().ref().update(updates);*/
+    
+    
+    /*
+    SECONDO TEMPLATE - AGGIUNTA SU DUE (o più) NODI
+     In ordine, quello che si fa è :
+     1) prendere il riferimento al nodo del DB su cui intendiamo lavorare
+     2) generare la chiave (o le chiavi) per i dati da aggiungere. In questo caso stiamo aggiungendo un nuovo
+     punto di interesse, quindi genererò una sola chiave. E' ovvio che se ne devo inserire 10, ne genererò
+     altrettante. Questo processo va AUTOMATIZZATO, al momento sto cercando un modo per farlo costruendo
+     la var "data" automaticamente prendendo le info dal file json.
+     3) creo il vettore degli updates che pusherò al DB
+     4) creo i dati che vorrò pushare. In questo caso la struttura è più ricca di campi, ma il senso è sempre
+     lo stesso. La storia del voler automatizzare la raccolta di info è riferita al fatto che al momento 
+     OpenStreetMap mi dà quelle + altre informazioni, e voglio cercare il modo per estrapolare quelle utili
+     senza dover copia-incollare i dati a mano sul file JSON che si importa nel DB.... ANche perché con 20 
+     punti di interesse la storia è lunga.
+     5) la sintassi è uguale a quella precedente, ma qui si aggiungono due cose diverse: ,
+     5a) aggiungo semplicemente i miei dati del punto di interesse al nodo corrispondente, con la chiave
+     univoca generata al punto (2);
+     5b) aggiungo al nodo CITIES in corrispondenza della chiave di CESENA nel suo sottoalbero POIS la chiave
+     del mio punto di interesse che sto aggiungendo e gli setto il valore a TRUE (per dire che lo ha!).
+     L'albero visivamente sarebbe
+      - Cities
+        - Cesena
+          - pois
+            - key punto di interesse
+    6) pusho al DB. L'output è quello che si vede nel nodo "point_of_interest" e dentro "cities" 
+    alla voce "poi"!
+    
+    
+    1) var ref = firebase.database().ref('/point_of_interest/');
+    2) var key = firebase.database().ref().child('point_of_interest').push().key;
+    3)var updates = {}
+    4)var data = {
+      "description" : "",
+      "informations" : "",
+      "name" : "Biblioteca Malatestiana",
+	    "city": "Cesena",
+	    "lat": 44.1388386,
+      "lon": 12.2437070,
+	    "amenity": "library",
+	    "tourism": "attraction"
+    }
+    5a)updates['/point_of_interest/'+key] = data;
+    5b)updates['/cities/-KzZFy1JPWnrwTzRyS9R/pois/' + key] = "true";
+    6)firebase.database().ref().update(updates);*/
+
+  
 
   }
 
