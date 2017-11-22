@@ -21,7 +21,11 @@
 <ion-content padding>
 <ion-card>
 
-	<p id="reached-rank"> {{username}} sei in posizione [X]</p>
+	<ion-card-header class ="centered">
+		<p *ngFor="let item of position; let x = index" > {{username}} sei in posizione {{x + 1}}!</p>
+  </ion-card-header>
+		
+	
 
 	<div id="table">
 		<div class="row header">
@@ -31,8 +35,8 @@
 	          
 	    </div>
 
-	    <div class="row" *ngFor="let item of items">
-	        <div class="col classifica">{{ item.total_points }}</div>
+	    <div class="row" *ngFor="let item of items; let i = index">
+	        <div class="col classifica">{{i + 1}}</div>
 	        <div class="col classifica">{{ item.username }} </div>
 	        <div class="col classifica">{{ item.total_points }} </div>
 	    </div>

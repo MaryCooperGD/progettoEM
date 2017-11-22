@@ -3,6 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import * as firebase from 'firebase/app';
 
+
+
+
 /**
  * Generated class for the RankPage page.
  *
@@ -22,7 +25,12 @@ export class RankPage {
   //Per la Classifica (rank.ts)
   public items: Array<any> = [];
   public itemRef: firebase.database.Reference = firebase.database().ref('/users');
-  constructor1(){}
+  
+  //Per la posizione giocatore
+  public position: Array<any> = [];
+  public positionRef: firebase.database.Reference = firebase.database().ref('/users');
+  
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
   }
@@ -34,15 +42,31 @@ export class RankPage {
       this.username = this.api.user.displayName
   }    
 
-  //--- per la classifica
-  this.itemRef.on('value', itemSnapshot => {
+   //--- per la classifica
+  //Ordina i dati in base al punteggio dei giocatori. Mostra la lista decrescente
+    this.itemRef.orderByChild("total_points").on('value',itemSnapshot =>{
     this.items = [];
     itemSnapshot.forEach( itemSnap => {
       this.items.push(itemSnap.val());
       return false;
     });
+    return this.items.reverse(); //Siccome da firebase i dati si estraggono solamente in ordine crescente, il reverse serve per ottenere l'ordinamento decrescente
   });
   //---fine classifica
+
+
+  //--per posizione giocatore
+  this.positionRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+    this.position = [];
+    itemSnapshot.forEach( itemSnap => {
+      this.position.push(itemSnap.val());
+      return false;
+    });
+    return this.position;
+  });
+
+ 
+  
 
 
   }

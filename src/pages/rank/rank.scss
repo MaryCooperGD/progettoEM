@@ -20,17 +20,17 @@ page-rank {
   		border-bottom: solid 1px white;
 	}
 
-	p {
-		text-align: center;
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-
+	
 	#table {
 		padding-right: 15px;
 		padding-left: 15px;
 		padding-bottom: 15px;
 	}
+
+	.centered{
+		text-align: center;
+	}
+	
 
 } /*Graffa di chiusa CSS*/
 
