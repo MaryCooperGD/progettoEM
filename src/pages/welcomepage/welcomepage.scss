@@ -39,14 +39,34 @@ page-welcomepage {
 		
 	}	/*Chiusura di card-background-page*/
 
+	#big_title{
+		color: white; 
+		font-family: 'Helvetica Neue', sans-serif; 
+		font-size: 50px; 
+		font-weight: bold; 
+		letter-spacing: -1px; 
+		line-height: 1; 
+		text-align: center;
+	}
 
-	/*Se tolgo questo va via lo sfondo*/
-	/*.getstart{
-	background-image: url('../assets/img/venice.jpg');
-	background-repeat: no-repeat;
-	background-size:cover;
-	width:100%;
-}*/
+	#little_title{
+		color: white; 
+		margin-top: -50px !important; 
+		font-family: 'Open Sans', sans-serif; 
+		font-size: 20px; 
+		font-weight: 300; 
+		line-height: 32px; 
+		margin: 0 0 72px; 
+		text-align: center;
+	}
+
+	#app_title{
+		margin-top: 20%;
+	}
+
+	#button_log_reg{
+		margin-top:10%;
+	}
 
 } /*Graffa di chiusa CSS*/
 

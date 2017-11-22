@@ -17,12 +17,12 @@
 <!--Se si toglie questo ioncontent e si ripristina navbar + altro content, torna come prima-->
 <ion-content    padding class="getstart">
 
-  <div class="app-title" style="margin-top: 20%;">
-    <p style="color: white; font-family: 'Helvetica Neue', sans-serif; font-size: 50px; font-weight: bold; letter-spacing: -1px; line-height: 1; text-align: center; "> Cultura in movimento</p>
-    <p style="color: white; margin-top: -50px !important; font-family: 'Open Sans', sans-serif; font-size: 20px; font-weight: 300; line-height: 32px; margin: 0 0 72px; text-align: center; "> Il tuo viaggio a portata di click</p>
+  <div id="app_title">
+    <p id="big_title"> Cultura in movimento</p>
+    <p id="little_title"> Il tuo viaggio a portata di touch</p>
   </div>
      
-  <div style="margin-top:10%;">
+  <div id="buttons_log_reg">
     <p class="button-login-reg" >
       <button ion-button (click)=openLoginPage()> Accedi</button>
     </p>
@@ -31,30 +31,8 @@
     </p>
   </div>
 
-
-
-  </ion-content>
-
-<!--
-<ion-content padding class="card-background-page">
-         
-  
-  <ion-card>
-      <img src="assets/img/cesena.jpg"/>
-      <div class="card-title">CesenaEsplora</div>
-      <div class="card-subtitle">Un nuovo modo di visitare la città</div>
-  </ion-card>
-
-  <p class="button-login-reg">
-    <button ion-button (click)=openLoginPage()> Login</button>
-  </p>
-  <p>
-    <button ion-button (click)=openRegisterPage()> Register</button>
-  </p>
-
-
 </ion-content>
--->
+
 
 
      
