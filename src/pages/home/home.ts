@@ -29,7 +29,7 @@ export class HomePage {
 
   ionViewDidLoad() {
     //set map center
-    this.center = [41.9027835,12.496365500000024]; 
+    this.center = [44.13832, 12.2447 ]; 
     
     
     //setup leaflet map
@@ -62,7 +62,8 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-        this.geolocate()
+        this.getFeatures()
+      //  this.geolocate()
       } else {
         this.diagnostic.isLocationEnabled().then((state)=>{
           if(state){
@@ -148,13 +149,13 @@ export class HomePage {
     var pointList = [];
     let bounds = this.map.getBounds();
     let bbox = bounds.getSouth()+','+bounds.getWest()+','+bounds.getNorth()+','+bounds.getEast();  
-    
+    console.log("bbox " + bounds.getSouth()+', '+bounds.getWest()+', '+bounds.getNorth()+', '+bounds.getEast())
      let request = "";
      let overlays ={};
      let lat,lon;
      
      
-     request+=`node[historic](${bbox});`
+     request+=`node[historic][tourism](${bbox});`
      request+=`way[historic](${bbox});`
     /*request+=`node[amenity=restaurant](${bbox});`
     request+=`way[amenity=restaurant](${bbox});`*/
@@ -166,7 +167,7 @@ export class HomePage {
       return response.json();
     }).then(results => {
       //this.file.writeFile("../","text.txt",JSON.stringify(results))
-     // overlays['amenity=hospital'].clearLayers;
+     // overlays['amenity=hospital'].clearLayers;console.log
       let i = 0;
        results.elements.forEach(e => {
         console.log('Name '+e.tags["name"])
