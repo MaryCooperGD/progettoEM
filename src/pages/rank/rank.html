@@ -21,32 +21,38 @@
 <ion-content padding>
 <ion-card>
 
-	<ion-card-header class ="centered">
-		<p *ngFor="let item of position; let x = index" > {{username}} sei in posizione {{x + 1}}!</p>
-  </ion-card-header>
+	<!--<ion-card-header class ="centered" id="header_classifica" >
+		<div > {{username}} you are in position XX</div>
+	<div *ngFor="let item of position; let x = index" id="user_position" > {{username}} #{{x + 1}} <ion-icon name="podium"></ion-icon></div>
+	</ion-card-header>-->
+	
+	<ion-card-header class ="centered" id="header_classifica" > 
+		<div > USER you are in position {{userService.currentUserPosition}}</div>
+</ion-card-header>
 		
 	
 
 	<div id="table">
 		<div class="row header">
-	        <div class="col classifica"> <ion-icon name="podium"></ion-icon> Posizione</div>
-	        <div class="col classifica"> <ion-icon name="person"></ion-icon> Username</div>
-	        <div class="col classifica"> <ion-icon name="medal"></ion-icon> Punti</div>
+	        <div class="col classifica"> <b class="voci_table_header"> Posizione</b></div>
+	        <div class="col classifica"> <b class="voci_table_header"> Username</b></div>
+	        <div class="col classifica"> <b class="voci_table_header"> Punti</b></div>
 	          
 	    </div>
 
 	    <div class="row" *ngFor="let item of items; let i = index">
-	        <div class="col classifica">{{i + 1}}</div>
+	        <div class="col classifica">{{ i + 1 }}</div>
 	        <div class="col classifica">{{ item.username }} </div>
 	        <div class="col classifica">{{ item.total_points }} </div>
 	    </div>
 
-	     <!--<div class="row">
-	        <div class="col classifica">2°</div>
-	        <div class="col classifica">Marina</div>
-	        <div class="col classifica">300</div>
-	    </div>-->
+	    
     </div>
 </ion-card>
+
+
+
+
+
 
 </ion-content>
