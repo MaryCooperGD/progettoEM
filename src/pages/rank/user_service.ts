@@ -29,7 +29,7 @@ getUsers(){
     
     itemSnapshot.forEach( itemSnap => {
       this.items.push(itemSnap.val());
-      
+      return false;
     });
      self.sortUsers(items);
   });
