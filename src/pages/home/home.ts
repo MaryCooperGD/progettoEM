@@ -125,12 +125,9 @@ export class HomePage {
 
      this.map = L.map('map', {
       center: this.center,
-      zoom: 16 //livello di zoom migliore, se decresce non si richiama il metodo getFeatures() altrimenti
-      //impalla tutto
+      zoom: 16 
     });
     L.marker(this.center).addTo(this.map)
-    /*.bindPopup('Tu sei qui')
-    .openPopup();*/
     this.map.panTo(this.center)
     
     //Add OSM Layer
@@ -162,8 +159,8 @@ export class HomePage {
 
   presentConfirm() {
     let alert = this.alertCtrl.create({
-      title: 'Location',
-      message: 'Please enable location to start your trip and reload the page.',
+      title: 'Posizione',
+      message: 'Abilita il GPS per localizzare la tua posizione.',
       buttons: [
         {
           text: 'No',
@@ -172,7 +169,7 @@ export class HomePage {
           }
         },
         {
-          text: 'Yes',
+          text: 'Sì',
           handler: () => {
             this.diagnostic.switchToLocationSettings();
             }
@@ -185,6 +182,8 @@ export class HomePage {
   getMapZoom(){
     return this.map.getZoom();
   }
+
+ 
 
   geolocate(){
     this.geolocation.getCurrentPosition().then((resp) =>{
@@ -200,7 +199,7 @@ export class HomePage {
         this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
         this.file);
      this.map.addEventListener('dragend', function(e){
-       if(self.getMapZoom()>16){
+       if(self.getMapZoom()>=16){
         self.getFeatures()
        } else {
          self.displayGPSError("Diminuisci il livello di zoom per visualizzare i punti di interesse " +
@@ -225,12 +224,12 @@ export class HomePage {
         watch.subscribe((data)=>{
           
         }, error => {
-          this.displayGPSError("Cannot read location. Turn on your GPS and reload the page.")
+          this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
         })         
       }
       
     }).catch((err) =>{
-      this.displayGPSError("Cannot read location")
+      this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
     })
   }
 
@@ -244,6 +243,29 @@ export class HomePage {
   }
 
 
+  modifiyJSON(results){
+   /* var it = 0;
+    results.elements.forEach(e => {
+      var Exception = {};
+       var ref = firebase.database().ref('/point_of_interest/');
+      var key = firebase.database().ref().child('point_of_interest').push().key;   
+      var updates = {};
+      var data = {
+        amenity: "Cesena"
+      }      
+      updates['/point_of_interest/'+key] = data;      
+      firebase.database().ref().update(updates);
+      throw Exception;
+    })*/
+    results.elements.forEach(e=>{
+     console.log("Nome nel foreach " + e.tags["name"])
+    })
+   
+    
+
+  }
+
+
   getFeatures(){
     var pointList = [];
     let bounds = this.map.getBounds();
@@ -254,10 +276,8 @@ export class HomePage {
      let lat,lon;
      
      
-     request+=`node[historic][tourism](${bbox});`
-     request+=`way[historic](${bbox});`
-    /*request+=`node[amenity=restaurant](${bbox});`
-    request+=`way[amenity=restaurant](${bbox});`*/
+     request+=`node[~"^(tourism|historic)$"~"."](${bbox});`
+     request+=`way[~"^(tourism|historic)$"~"."](${bbox});`
     let url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(${request});out center;`;
     fetch(url).then(response => {
 
@@ -265,8 +285,7 @@ export class HomePage {
       
       return response.json();
     }).then(results => {
-      //this.file.writeFile("../","text.txt",JSON.stringify(results))
-     // overlays['amenity=hospital'].clearLayers;console.log
+      this.modifiyJSON(results);
       let i = 0;
        results.elements.forEach(e => {
         console.log('Name '+e.tags["name"])

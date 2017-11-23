@@ -13,7 +13,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage() 
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',

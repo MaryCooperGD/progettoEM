@@ -12,6 +12,7 @@ import 'firebase/storage'
 import { File } from '@ionic-native/file';
 import { HttpModule, Http } from '@angular/http';
 import { Api } from '../providers/api';
+import { UserService } from '../providers/user_service';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { CreateRoutePage } from "../pages/create-route/create-route";
@@ -89,6 +90,7 @@ export const firebaseConfig = {
     Geolocation,
     Diagnostic,
     Api,
+    UserService,
     Camera,
     File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

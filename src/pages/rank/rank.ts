@@ -24,6 +24,7 @@ import {UserService} from '../../providers/user_service';
 export class RankPage {
 
   username:any;
+  position;
 
 
   //Per la Classifica (rank.ts)
@@ -33,11 +34,12 @@ export class RankPage {
   //Per la posizione giocatore
   //public position: Array<any> = [];
   //public positionRef: firebase.database.Reference = firebase.database().ref('/users');
-  constructor(public userService:UserService){
-    
-    this.userService.getUsers();
-    this.userService.getUserPosition(this.username); // you need to pass the user accessing the rank page
+  constructor(public userService:UserService,public api: Api){
+    this.username = this.api.user.displayName;
+    this.userService.getUsers()//.getUserPosition(this.usern;
+    this.position = this.userService.getUserPosition(this.username); // you need to pass the user accessing the rank page
  }
+
 
 
  // constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
