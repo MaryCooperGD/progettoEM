@@ -18,9 +18,13 @@ import {UserService} from '../../providers/user_service';
   selector: 'page-rank',
   templateUrl: 'rank.html',
 })
+
+
+
 export class RankPage {
 
   username:any;
+
 
   //Per la Classifica (rank.ts)
   //public items: Array<any> = [];
@@ -30,6 +34,7 @@ export class RankPage {
   //public position: Array<any> = [];
   //public positionRef: firebase.database.Reference = firebase.database().ref('/users');
   constructor(public userService:UserService){
+    
     this.userService.getUsers();
     this.userService.getUserPosition(this.username); // you need to pass the user accessing the rank page
  }
