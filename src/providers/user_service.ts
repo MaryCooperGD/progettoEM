@@ -20,12 +20,14 @@ currentUserPosition:Number;
 getUsers(){
 
    let items: Array <{username: string,total_points: Number}>;
-
+  var self = this;
    this.itemRef.on('value',itemSnapshot =>{ // you need to define your item Ref as a global variable in this service
     itemSnapshot.forEach( itemSnap => {
       this.items.push(itemSnap.val());
+      return false;
+
     });
-     this.sortUsers(items);
+     self.sortUsers(items);
   });
 }
 
