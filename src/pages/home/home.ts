@@ -140,12 +140,13 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-       // this.getFeatures()
-        this.geolocate()
+       this.getFeatures()
+        //this.geolocate()
       } else {
         this.diagnostic.isLocationEnabled().then((state)=>{
           if(state){
-            this.geolocate();
+            //this.geolocate();
+            this.getFeatures();
           } else{
             this.presentConfirm();      
           }
@@ -243,27 +244,44 @@ export class HomePage {
   }
 
 
-  modifiyJSON(results){
-   /* var it = 0;
-    results.elements.forEach(e => {
-      var Exception = {};
-       var ref = firebase.database().ref('/point_of_interest/');
+  saveData(e){
+    //if(e.tags.hasOwnProperty("tourism") && e.tags["tourism"]!="hotel"){
+      
+    //}
+    var attrs = ["addr:city", "amenity", "addr:street", "name"];
+    var labels = ["città", "tipologia", "indirizzo", "nome"]
+    var data = { };
+
+    attrs.forEach((a, i) => {
+       if (e.tags[a]) { 
+         data[labels[i]] = e.tags[a]; 
+        }
+        if (e.type=="node"){
+          data["lat"] = e.lat
+          data["lon"] = e.lon
+        } else if (e.type=="way"){
+          data["lat"] = e.center["lat"]
+          data["lon"] = e.center["lon"]
+        }
+        
+    });
+    
+      var ref = firebase.database().ref('/point_of_interest/');
       var key = firebase.database().ref().child('point_of_interest').push().key;   
       var updates = {};
-      var data = {
-        amenity: "Cesena"
-      }      
-      updates['/point_of_interest/'+key] = data;      
-      firebase.database().ref().update(updates);
-      throw Exception;
-    })*/
-    results.elements.forEach(e=>{
-     console.log("Nome nel foreach " + e.tags["name"])
-    })
-   
-    
+      /*var data = {
+        città: e.tags["addr:city"],
+        tipologia: e.tags["amenity"],
+        indirizzo: e.tags["addr:street"],
+        nome: e.tags["name"],
+        lat: e.lat,
+        lon: e.lon
 
-  }
+      }   */   
+      updates['/point_of_interest/'+key] = data;      
+      firebase.database().ref().update(updates);      
+    
+   }
 
 
   getFeatures(){
@@ -276,20 +294,17 @@ export class HomePage {
      let lat,lon;
      
      
-     request+=`node[~"^(tourism|historic)$"~"."](${bbox});`
-     request+=`way[~"^(tourism|historic)$"~"."](${bbox});`
+     request+=`node[~"^(tourism|historic)$"~"."](if:t["tourism"]!="hotel" %26%26 t["tourism"]!="guest_house")(${bbox});`
+     request+=`way[~"^(tourism|historic)$"~"."](if:t["tourism"]!="hotel" %26%26 t["tourism"]!="guest_house")(${bbox});`
     let url = `https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(${request});out center;`;
     fetch(url).then(response => {
-
-      
       
       return response.json();
     }).then(results => {
-      this.modifiyJSON(results);
+           
       let i = 0;
        results.elements.forEach(e => {
-        console.log('Name '+e.tags["name"])
-        
+        this.saveData(e)
         if(e.type == "way"){
             console.log('ID: ' + e.id)
                lat = e.center["lat"]
