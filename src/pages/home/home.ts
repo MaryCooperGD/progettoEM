@@ -7,8 +7,10 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import * as fs from "@ionic-native/file"
+import { File, FileReader } from '@ionic-native/file';
 
-import { File } from '@ionic-native/file';
+declare var require: any
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -23,6 +25,7 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File) {
     this.menuCtrl.enable(true)
+    this.saveTags()
     //Possibili template aggiunte a DB. NON CANCELLARE 
 
 
@@ -243,6 +246,22 @@ export class HomePage {
     toast.present();
   }
 
+  saveTags(){
+   var ref = firebase.database().ref('/tag/');
+    var key = firebase.database().ref().child('tag').push().key;
+    var updates = {};
+    
+    var data = {
+      name: "Cesena"
+    }
+    var data2 = {
+      name: "Bologna"
+
+    }
+    updates['/cities/'+key] = data;
+    firebase.database().ref().update(updates);
+     
+  }
 
   saveData(e){
     //if(e.tags.hasOwnProperty("tourism") && e.tags["tourism"]!="hotel"){
@@ -304,7 +323,7 @@ export class HomePage {
            
       let i = 0;
        results.elements.forEach(e => {
-        this.saveData(e)
+        //this.saveData(e)
         if(e.type == "way"){
             console.log('ID: ' + e.id)
                lat = e.center["lat"]
