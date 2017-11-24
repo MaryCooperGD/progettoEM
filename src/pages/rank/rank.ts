@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Api } from "../../providers/api";
-import { UserService } from "../../providers/user_service";
 import * as firebase from 'firebase/app';
-
-
-// import {UserService} from '../../providers/user_service'; IMPORT DEL FILE DEL TIZIO
 
 /**
  * Generated class for the RankPage page.
@@ -20,27 +16,17 @@ import * as firebase from 'firebase/app';
   templateUrl: 'rank.html',
 })
 
-
-
 export class RankPage {
 
   username:any;
   position;
 
-
   //Per la Classifica (rank.ts)
   public items: Array<any> = [];
   public itemRef: firebase.database.Reference = firebase.database().ref('/users/');
   
-  //---------CODICE DEL TIZIO-----------------//
-  constructor(public userService:UserService,public api: Api){
-    this.username = this.api.user.displayName;
-    //this.userService.getUsers()//.getUserPosition(this.usern;
-    //this.position = this.userService.getUserPosition(this.username); // you need to pass the user accessing the rank page
- }
-
-  /*constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
-  }*/
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api:Api) {
+  }
 
   ionViewDidLoad() {
     if(this.api.user.displayName==null){
@@ -70,21 +56,7 @@ export class RankPage {
     });
     
   //---fine classifica
-
-
   } //Fine metodo ionViewDidLoad
-
-
-  calculatePosition(){
-    var j = 0;
-    this.items.forEach(i=>{
-      console.log("Username: " + i.username)
-      j++;
-      if (new String(i.username).valueOf() == new String(this.username).valueOf()){
-        this.position = j;
-      }
-    })
-  }
 }
 
 

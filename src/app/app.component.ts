@@ -17,8 +17,8 @@ import { WelcomepagePage } from "../pages/welcomepage/welcomepage";
 import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
 import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
 import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
-import { TutorialPage } from "../pages/tutorial/tutorial"
-import { UserService } from '../providers/user_service';;
+import { TutorialPage } from "../pages/tutorial/tutorial";
+
 
 @Component({
   templateUrl: 'app.html'

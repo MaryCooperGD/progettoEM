@@ -22,15 +22,8 @@
 <ion-card>
 
 	<ion-card-header class ="centered" id="header_classifica" >
-		<div > {{username}} you are in position {{position}}</div>
-	<!--<div *ngFor="let item of position; let x = index" id="user_position" > {{username}} #{{x + 1}} <ion-icon name="podium"></ion-icon></div>-->
+			<div > {{username}} #{{position}} <ion-icon name="podium"></ion-icon></div>
 	</ion-card-header>
-	
-<!--	<ion-card-header class ="centered" id="header_classifica" > 
-		<div > USER you are in position {{position}}</div>
-</ion-card-header>-->
-		
-	
 
 	<div id="table">
 		<div class="row header">
@@ -45,14 +38,9 @@
 	        <div class="col classifica">{{ item.username }} </div>
 	        <div class="col classifica">{{ item.total_points }} </div>
 	    </div>
-
 	    
     </div>
 </ion-card>
-
-
-
-
 
 
 </ion-content>
