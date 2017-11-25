@@ -25,7 +25,7 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File) {
     this.menuCtrl.enable(true)
-    this.saveTags()
+    //this.saveTags()
     //Possibili template aggiunte a DB. NON CANCELLARE 
 
 
@@ -250,19 +250,27 @@ export class HomePage {
 
     var ref = firebase.database().ref('/tag/');
     
-    var tags = ["aqueduct",	"Acquedotto",
-      "battlefield",	"Campo da battaglia",
-      "castle",	"Castello",
+    var tags = ["bunker",	"Bunker",
+      "chapel",	"Cappella",
+      "cathedral",	"Cattedrale",
       "church",	"Chiesa",
-      "wayside_shrine",	"edicola",
-      "memorial",	"Memoriale",
-      "monastery",	"Monastero",
-      "monument",	"Monumento",
-      "boundary_stone",	"pietra miliare",
-      "ruins",	"Rovine",
-      "archaeological_site",	"Sito archeologico",
-      "tomb",	"Tombe",
-      "manor",	"Villa storica" ];
+      "mosque",	"Moschea",
+      "shrine",	"Santuario",
+      "synagogue",	"Sinagoga",
+      "paleontological_site",	"Sito paleontologico",
+      "university",	"Università",
+      "attraction",	"Attrazione",
+      "gallery",	"Galleria d'arte",
+      "museum", "Museo",
+      "artwork",	"Scultura pubblica",
+      "ditch",	"Fossato",
+      "city_wall",	"Mura", 
+      "campanile",	"Campanile",
+      "cross",	"Croce",
+      "obelisk",	"Obelisco",
+      "water_well", 	"Pozzo",
+      "nature_reserve",	"Riserva naturale",
+      "square",	"Piazza"];
       for (var i=0;i<tags.length; i+=2){
         var updates = {};
         var data = {};        
