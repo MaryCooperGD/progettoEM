@@ -247,19 +247,33 @@ export class HomePage {
   }
 
   saveTags(){
-   var ref = firebase.database().ref('/tag/');
-    var key = firebase.database().ref().child('tag').push().key;
-    var updates = {};
-    
-    var data = {
-      name: "Cesena"
-    }
-    var data2 = {
-      name: "Bologna"
 
-    }
-    updates['/cities/'+key] = data;
-    firebase.database().ref().update(updates);
+    var ref = firebase.database().ref('/tag/');
+    
+    var tags = ["aqueduct",	"Acquedotto",
+      "battlefield",	"Campo da battaglia",
+      "castle",	"Castello",
+      "church",	"Chiesa",
+      "wayside_shrine",	"edicola",
+      "memorial",	"Memoriale",
+      "monastery",	"Monastero",
+      "monument",	"Monumento",
+      "boundary_stone",	"pietra miliare",
+      "ruins",	"Rovine",
+      "archaeological_site",	"Sito archeologico",
+      "tomb",	"Tombe",
+      "manor",	"Villa storica" ];
+      for (var i=0;i<tags.length; i+=2){
+        var updates = {};
+        var data = {};        
+        var key = firebase.database().ref().child('tag').push().key;
+        data["OSM"] = tags[i]
+        data["nome"] = tags[i+1]
+        updates['/tag/'+key] = data;
+        firebase.database().ref().update(updates);
+      }
+   
+   
      
   }
 
