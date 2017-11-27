@@ -17,6 +17,7 @@ import { LoginPage } from "../login/login";
  * Ionic pages and navigation.
  */
 
+
 @IonicPage()
 @Component({
   selector: 'page-register',
@@ -78,12 +79,15 @@ export class RegisterPage {
   }
 
   writeUserData(email:string, name) {
+    var email_clear = email; //Memorizzo la mail prima di togliere i caratteri non ammessi. Mi serve per stamparla correttamente a video.
     email = this.api.replaceCharacters(email);
     console.log(email+'')
     firebase.database().ref('users/' + email).set({
       username: name,
       total_points: 0,
       email_user: email,
+      clear_email: email_clear, //Registro nel db anche questa mail pulita
+      data_registrazione: new Date().getTime()
     });
   }
 

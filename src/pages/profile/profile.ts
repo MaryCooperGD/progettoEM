@@ -25,6 +25,11 @@ export class ProfilePage {
   public myPhoto: any;
   public myPhotoURL: any;
 
+  //--Per mostrare punti utente e altre informazioni
+  public items_user_details: Array<any> = [];
+  public itemRef_user_details: firebase.database.Reference = firebase.database().ref('/users/');
+
+  correct_data; //variabile per inserire la data corretta della registrazione dell'utente.
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
@@ -71,7 +76,30 @@ export class ProfilePage {
       this.username = this.api.user.displayName
   }      
 
+   //----Questa query ci permette di recuperare tutte le informazioni inserite nel nodo dell'utente loggato, nella tabella users
+   this.itemRef_user_details.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+    this.items_user_details = [];
+    itemSnapshot.forEach( itemSnap => {
+      this.items_user_details.push(itemSnap.val());
+      return false;
+    });
+    this.items_user_details.forEach(i=>{
+      this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
+    })
+    return this.items_user_details; //Restituisce tutte le informazioni
+  });
+  //----
 
-  }
+
+
+ 
+
+
+
+
+  
+
+
+  } //--Fine ionViewDidLoad
 
 }
