@@ -18,6 +18,8 @@ declare var require: any
 export class HomePage {
   map: L.Map;
   center: L.PointTuple;
+  public poiKeys:Array<any>;
+  
 
   @ViewChild('map-container') mapContainer;
 
@@ -25,7 +27,8 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File) {
     this.menuCtrl.enable(true)
-    //this.saveTags()
+
+    
     //Possibili template aggiunte a DB. NON CANCELLARE 
 
 
@@ -246,9 +249,31 @@ export class HomePage {
     toast.present();
   }
 
-  saveTags(){
 
-    var ref = firebase.database().ref('/tag/');
+  updateCityPois(){
+    let poisKeys = [];
+    var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois')
+    var ref1 = firebase.database().ref('/point_of_interest');
+    ref1.once('value', function(snapshot){ //ciclo sui punti di interesse (snapshot è la CHIAVE)
+      snapshot.forEach(function(childSnapshot){ 
+        if(childSnapshot.child("città").val() == "Cesena"){ //campo "città" dei tag
+          poisKeys.push(childSnapshot.key);
+        }       
+        return false;
+      })
+    }).then(a=>{
+      this.poiKeys = poisKeys;
+      var updates = {};
+      this.poiKeys.forEach(k =>{   
+        updates['/cities/-KzZFy1JPWnrwTzRyS9R/pois/'+k] = "true"; //aggiorno la lista dei punti di interesse
+      })
+      firebase.database().ref().update(updates);
+
+    })
+  }
+
+  saveTags(){
+   /*  var ref = firebase.database().ref('/tag/');
     
     var tags = ["bunker",	"Bunker",
       "chapel",	"Cappella",
@@ -279,10 +304,7 @@ export class HomePage {
         data["nome"] = tags[i+1]
         updates['/tag/'+key] = data;
         firebase.database().ref().update(updates);
-      }
-   
-   
-     
+      } */ 
   }
 
   saveData(e){
