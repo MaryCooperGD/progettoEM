@@ -81,12 +81,9 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-list>
-        <p>Musei</p>
-        <p>Rinascimento</p>
-        <p>Sculture</p>
-        <p>Biblioteche</p>
-        <p>Pittura</p>
+      <ion-list *ngFor="let tag of poiKeys">
+        <p>{{tag}}</p>
+       
       </ion-list>
     </ion-card-content>
   </ion-card>
@@ -107,7 +104,7 @@
         </ion-card>
 
         <ion-card>
-          <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+          <img width="200" height="200" src="assets/img/malatestiana-1.jpg"/>
           <div class="card-title">Malatestiana</div>
           <div class="card-subtitle">5 foto caricate</div>
         </ion-card>

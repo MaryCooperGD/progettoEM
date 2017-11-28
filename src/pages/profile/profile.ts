@@ -31,6 +31,13 @@ export class ProfilePage {
 
   correct_data; //variabile per inserire la data corretta della registrazione dell'utente.
 
+  //--  PROVA PREFERENZE UTENTE
+  //public tags: Array<any>
+
+  public user_preferences:Array<any>;
+  public poiKeys:Array<any>;
+
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
 
@@ -81,20 +88,69 @@ export class ProfilePage {
     this.items_user_details = [];
     itemSnapshot.forEach( itemSnap => {
       this.items_user_details.push(itemSnap.val());
+      
       return false;
     });
     this.items_user_details.forEach(i=>{
       this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
+      
     })
     return this.items_user_details; //Restituisce tutte le informazioni
   });
   //----
 
+  //------------------DA QUI C'è LA MERDA-----------------------------------------
+  //--PROVA QUERY PER RECUPERO PREFERENZE
+ 
+  /*let tagName = []
+  var ref = firebase.database().ref('/user/catlady03@libero%2Eit')
+  console.log("CIAOOOOOOOOOOOOOOOOO111111111")
+  ref.orderByChild("preferenze").on('value',function(snapshot){ //ciclo sulle preferenze
+    snapshot.forEach(function(childSnapshot){
+     // console.log(snapshot.val())
+      tagName.push(childSnapshot.child("preferenze").val())
+      console.log("CIAOOOOOOOOOOOOOOOOO")
+      return false;
+      
+    });
+    return this.tagName;
+
+  })*/
 
 
+  //PROVA 2
+  /*let user_preferences_KEY = [];
+  var ref = firebase.database().ref('/users/catlady03@libero%2Eit/preferenze')
+  var ref1 = firebase.database().ref('/tag');
+  ref1.once('value', function(snapshot){ //ciclo sui punti di interesse (snapshot è la CHIAVE)
+    snapshot.forEach(function(childSnapshot){ 
+      
+      user_preferences_KEY.push(childSnapshot.key);
+         
+      return false;
+    })
+
+    return this.user_preferences_KEY;
+
+  });*/
  
 
 
+  let poisKeys = [];
+  var ref = firebase.database().ref('/users/catlady03@libero%2Eit/preferenze') //al momento ho provato a dargli direttamente l'username invece di una variabile dell'utente loggato
+  var ref1 = firebase.database().ref('/tag');
+  ref1.once('value', function(snapshot){ 
+    snapshot.forEach(function(childSnapshot){ 
+      if(childSnapshot.child("nome").val() == snapshot.val()){ 
+        poisKeys.push(childSnapshot.key);
+      }       
+      return false;
+    })
+  }).then(a=>{
+      this.poiKeys = poisKeys;
+      
+
+    })
 
 
   
