@@ -35,7 +35,7 @@ export class ProfilePage {
   //public tags: Array<any>
 
   public user_preferences:Array<any>;
-  public poiKeys:Array<any>;
+  public tags:Array<any>;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
@@ -136,19 +136,50 @@ export class ProfilePage {
  
 
 
-  let poisKeys = [];
-  var ref = firebase.database().ref('/users/catlady03@libero%2Eit/preferenze') //al momento ho provato a dargli direttamente l'username invece di una variabile dell'utente loggato
-  var ref1 = firebase.database().ref('/tag');
-  ref1.once('value', function(snapshot){ 
-    snapshot.forEach(function(childSnapshot){ 
-      if(childSnapshot.child("nome").val() == snapshot.val()){ 
-        poisKeys.push(childSnapshot.key);
-      }       
+  let userTags = [];
+  var ref = firebase.database().ref('/users/catlady03@libero%2Eit/preferenze/') //al momento ho provato a dargli direttamente l'username invece di una variabile dell'utente loggato
+  var ref1 = firebase.database().ref('/tag/');
+  ref.once('value', function(preferenze){ //sto ciclando sulle preferenze dell'utente.
+    preferenze.forEach(function(singolaPref){//snapshot è l'intero albero, singolaPref è la singola componente dell'albero
+      ref1.once('value', function(tags){ //adesso invece ciclo su tutti i tag.
+        tags.forEach(function (singoloTag){ //come sopra! è speculare
+          if(singolaPref.key == singoloTag.key){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+          //rispetto a quelle presenti nel nodo dei tag totali
+
+          //console.log("Nome tag " + singoloTag.child("nome").val()) 
+          /*---> se decommenti la linea sopra, vedrai che ti stampa i nomi dei tag che ha l'utente tra le
+          preferenze. */
+          
+            
+          /*qui inserisci le istruzioni che ti servono. Ad esempio, probabilmente vorrai riempire un vettore, da mostrare
+          nell'html, con i nomi dei tag che l'utente ha tra le preferenze. Quindi farai una cosa del tipo: */
+          
+         // userTags.push(singoloTag.child("nome").val()) //STAI RIEMPIENDO UN VETTORE!
+
+         /* Nota BENE che singoloTag è la chiave del (dei) tag: facendo .child("nome campo") accedi al campo specifico
+          per quell'oggetto (in questo caso a  noi serve "nome"), e il .val() restituisce il valore associato al campo.
+          Nel DB infatti abbiamo "name" = "Acquedotto", ad esempio, quindi il .val() restituirà acquedotto.
+          
+          */
+          
+          
+          }
+          return false;
+        })
+      })
       return false;
     })
   }).then(a=>{
-      this.poiKeys = poisKeys;
-      
+      this.tags = userTags;
+      /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
+      Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 
+      unico vettore?". Il fatto è che essendo questa una callback, non puoi accedere agli elementi esterni della classe,
+      e oltretutto per avere il vettore "pieno" devi attendere che la callback faccia il return. è per questo motivo che
+      userTags viene riempito durante il ciclo, e soltanto in questo THEN (che sta a significare "quando la callback ha 
+      finito, allora fai queste istruzioni") copierai il valore di userTags in tags, che è il vettore pubblico dichiarato
+      in cima alla classe. 
+      Quindi, nel tuo HTML avrai un *ngFor classico per mostrare una lista di elementi che utilizzerà il vettore "tags".
+      */
 
     })
 
