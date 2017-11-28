@@ -64,6 +64,7 @@ export class RegisterPage {
           this.displayLoginError("L'indirizzo email fornito non è corretto.") 
         } else {
           this.writeUserData(this.account.email,this.account.name)
+          this.displayLoginError("Ti è stata inviata una mail di conferma. Controlla la tua posta prima di effettuare il login.")
            this.navCtrl.push(TutorialPage)
   
         }
