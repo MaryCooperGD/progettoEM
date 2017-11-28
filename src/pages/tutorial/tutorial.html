@@ -17,40 +17,12 @@
       
       <ion-list id="lista-tag" *ngIf="second">
         <ion-scroll id="scroll-lista-tag" scrollY="true">
-          <ion-item>
-            <ion-label>Musei</ion-label>
+          <ion-item *ngFor="let tag of tags">
+            <ion-label>{{tag}}</ion-label>
             <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-          </ion-item>
+        </ion-item>
 
-          <ion-item>
-            <ion-label>Siti Archeologici</ion-label>
-            <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-          </ion-item>
-
-                  <ion-item>
-                      <ion-label>Pittura</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-                  </ion-item>
-
-                  <ion-item>
-                      <ion-label>Rinascimento</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-                  </ion-item>
-
-                  <ion-item>
-                      <ion-label>Monumenti</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-                  </ion-item>
-
-                  <ion-item>
-                      <ion-label>Biblioteche</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-                  </ion-item>
-
-                  <ion-item>
-                      <ion-label>Strutture storiche</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
-                  </ion-item>
+          
               </ion-scroll>
           </ion-list>
     </ion-slide>

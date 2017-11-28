@@ -72,12 +72,7 @@ export class RegisterPage {
   
       }
     }
-
-
-    
-    
-    
-  }
+  }  // FINE - doSignup()
 
   writeUserData(email:string, name) {
     var email_clear = email; //Memorizzo la mail prima di togliere i caratteri non ammessi. Mi serve per stamparla correttamente a video.
@@ -85,10 +80,16 @@ export class RegisterPage {
     console.log(email+'')
     firebase.database().ref('users/' + email).set({
       username: name,
-      total_points: 0,
       email_user: email,
       clear_email: email_clear, //Registro nel db anche questa mail pulita
-      data_registrazione: new Date().getTime()
+      data_registrazione: new Date().getTime(),
+
+      //Punti che mi servono per classifica e badge
+      total_points: 0, //Punti totali, per classifica
+      points_photos: 0, //Punti per assegnare badge foto
+      points_tag: 0, //Punti per assegnare badge tag
+      points_info: 0 , //Punti per assegnare badge informazioni
+
     });
   }
 

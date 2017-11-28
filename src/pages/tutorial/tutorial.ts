@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams,Slides } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { LoginPage } from "../login/login";
+import * as firebase from 'firebase/app';
 /*
  * Generated class for the TutorialPage page.
  *
@@ -24,12 +25,15 @@ export interface Slide {
 
 export class TutorialPage {
 
+  public tags: Array<any>
 
   @ViewChild(Slides) slides: Slides;
   slidess: Slide[];
   showSkip = true;
   second =false;
   
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
@@ -52,6 +56,21 @@ export class TutorialPage {
         image: '',
       }
     ]; 
+
+
+
+    let tagName = []
+    var ref = firebase.database().ref('/tag/')
+    ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag
+      snapshot.forEach(function(childSnapshot){
+        tagName.push(childSnapshot.child("nome").val())
+        return false;
+      })
+
+    }).then(v => {
+      this.tags = tagName;
+
+    })
   }
 
   ionViewDidLoad() {
