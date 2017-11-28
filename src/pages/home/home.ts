@@ -9,6 +9,7 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import * as fs from "@ionic-native/file"
 import { File, FileReader } from '@ionic-native/file';
+import * as GraphHopper from 'graphhopper-js-api-client';
 
 declare var require: any
 @Component({
@@ -272,6 +273,95 @@ export class HomePage {
     })
   }
 
+  graphHopper(){
+    
+        var defaultKey = "2770d027-3826-4bf4-afc9-9491e75c983a";
+        var profile = "foot";
+        var host = "https://graphhopper.com/api/1/";
+       
+      require('graphhopper-js-api-client')
+      var GraphHopperRouting = require('graphhopper-js-api-client/src/GraphHopperRouting');
+      var GHInput = require('graphhopper-js-api-client/src/GHInput');
+      var GHOptimization = require('graphhopper-js-api-client/src/GraphHopperOptimization');
+      //var Routing = require('leaflet-routing-machine')
+      var routingLayer = L.geoJSON().addTo(this.map) ;
+      
+      (routingLayer as any).options = {
+        style: {color: "#00cc33", "weight": 5, "opacity": 0.6}
+      }
+    
+      
+       
+        //var ghRouting = new GraphHopperRouting({key: defaultKey, host: host, vehicle:profile,elevation:false,optimize:true,calc_points:true})
+        //var ghRouting = new GHOptimization({key: defaultKey, host: host, vehicle_types:profile,elevation:false,optimize:true})
+        var ghRouting = new GraphHopperRouting({key: defaultKey, host: host, vehicle:profile,optimize:true, points_encoded:false})
+        /* pointList.forEach(point =>{
+          //ghRouting.addPoint(new GHInput(point.lat,point.lng))
+        }) */
+       var myArray = []
+       myArray.push([44.1388386,12.243707])
+       myArray.push([44.1374648,12.2480796])
+       myArray.push([44.1359114,12.2454082])
+       myArray.push([44.1371501,12.24147])
+       myArray.push([44.136342,12.2429801])
+      
+      /* myArray.forEach(i => {
+         console.log("Prova " + i[0])
+       })*/
+
+        ghRouting.addPoint(new GHInput(44.1388386,12.243707));
+        ghRouting.addPoint(new GHInput(44.1374648,12.2480796));
+        ghRouting.addPoint(new GHInput(44.1359114,12.2454082));
+        ghRouting.addPoint(new GHInput(44.1371501,12.24147));
+        ghRouting.addPoint(new GHInput(44.136342,12.2429801));
+     
+        var newMap = this.map;
+         
+         ghRouting.doRequest().then(function(json){    
+          /* json.paths[0].points.coordinates.forEach(c=>{
+            console.log("Lon: " + c[0] + " lat " + c[1])
+            let marker = L.marker([c[1], c[0]])
+            let content = '';
+           
+           marker.bindPopup(content) 
+         marker.addTo(self.map)
+         marker.openPopup() 
+          })     */
+          // console.log("Points" + json.paths[0].points.coordinates[0])
+           /* json.paths[0].instructions.forEach(t =>{
+             console.log(' ' + t.text)
+           }) */
+            //console.log('Ordine dei punti: '+json.paths[0].points_order)
+            var newArray = [];
+            json.paths[0].points_order.forEach(o=>{
+              newArray.push(myArray[o])
+            })
+            let index = 1;
+            newArray.forEach(p=>{
+              let marker = L.marker([p[0],p[1]])
+              let content = "Posizione " + index;
+             marker.bindPopup(content) 
+           marker.addTo(newMap)
+           marker.openPopup() 
+           index++;
+
+            })
+            
+
+
+           var path = json.paths[0];
+           (routingLayer as any).addData({
+                            "type": "Feature",
+                            "geometry": path.points
+                        }); 
+         }).catch(function(err){
+           console.log("Error "+ err.message)
+         })
+         
+
+          
+      }
+
   saveTags(){
    /*  var ref = firebase.database().ref('/tag/');
     
@@ -378,9 +468,9 @@ export class HomePage {
          for (let tag in  e.tags) {
           content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
         };
-        marker.bindPopup(content) 
+        /* marker.bindPopup(content) 
        marker.addTo(this.map)
-        marker.openPopup()
+       marker.openPopup() */
           } else {
               lat = e.lat
               lon = e.lon
@@ -390,10 +480,10 @@ export class HomePage {
             for (let tag in e.tags) {
               content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
             };
-           marker.bindPopup(content)
+           /* marker.bindPopup(content)
            marker.addTo(this.map)
           //marker.addTo(overlays['amenity=hospital']);
-           marker.openPopup()
+           marker.openPopup() */
           }
           console.log('Latitudine: ' + lat + ' Longitudine: ' + lon)
       
@@ -402,6 +492,8 @@ export class HomePage {
     }).catch(error => {
       console.log(''+ error)
     });  
+    this.graphHopper();
+
   }
 
 }
