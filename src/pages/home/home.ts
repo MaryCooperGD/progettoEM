@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 import * as fs from "@ionic-native/file"
 import { File, FileReader } from '@ionic-native/file';
 import * as GraphHopper from 'graphhopper-js-api-client';
+import { CHECKBOX_REQUIRED_VALIDATOR } from '@angular/forms/src/directives/validators';
 
 declare var require: any
 @Component({
@@ -250,6 +251,29 @@ export class HomePage {
     toast.present();
   }
 
+  findPoiByTag(tag){
+    var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
+    var ref1 = firebase.database().ref('/point_of_interest');
+    ref.once('value', function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+        ref1.once('value',function(snapshot1){
+          snapshot1.forEach(function(childSnapshot1){
+            //if(childSnapshot1.child("tipologia").val() == tag){//se è taggato come sto cercando
+            if(tag.indexOf(childSnapshot1.child("tipologia").val()) > -1){ //controllo per il vettore
+              if (childSnapshot.key == childSnapshot1.key){
+                console.log("Punto taggato " + childSnapshot1.child("tipologia").val() + " è " + childSnapshot1.key)
+              }
+
+            }
+            return false;
+          })
+        })
+
+        return false;
+      })
+
+    })
+  }
 
   updateCityPois(){
     let poisKeys = [];
@@ -299,11 +323,11 @@ export class HomePage {
           //ghRouting.addPoint(new GHInput(point.lat,point.lng))
         }) */
        var myArray = []
-       myArray.push([44.1388386,12.243707])
-       myArray.push([44.1374648,12.2480796])
-       myArray.push([44.1359114,12.2454082])
-       myArray.push([44.1371501,12.24147])
-       myArray.push([44.136342,12.2429801])
+       myArray.push([44.1388386,12.243707,"Piazza"])
+       myArray.push([44.1374648,12.2480796,"Fontana"])
+       myArray.push([44.1359114,12.2454082,"Museo"])
+       myArray.push([44.1371501,12.24147,"Cattedrale"])
+       myArray.push([44.136342,12.2429801,"Ericacca"])
       
       /* myArray.forEach(i => {
          console.log("Prova " + i[0])
@@ -332,20 +356,33 @@ export class HomePage {
              console.log(' ' + t.text)
            }) */
             //console.log('Ordine dei punti: '+json.paths[0].points_order)
-            var newArray = [];
+
+            /* console.log('Punti nel vettore: ' + json.paths[0].snapped_waypoints.coordinates[0][1].toString())
+            json.paths[0].snapped_waypoints.coordinates.forEach(c=>{
+              let index = 1;
+                let marker = L.marker(c[1],c[0])
+                let content = "Posizione " + index;
+               marker.bindPopup(content) 
+               marker.addTo(newMap)
+               marker.openPopup() 
+               index++;
+            }) */
+
+            
+             var newArray = [];
             json.paths[0].points_order.forEach(o=>{
               newArray.push(myArray[o])
             })
             let index = 1;
             newArray.forEach(p=>{
               let marker = L.marker([p[0],p[1]])
-              let content = "Posizione " + index;
+              let content = `<b>Nome</b>: ${p[2]}<br/>`+"Posizione " + index;
              marker.bindPopup(content) 
            marker.addTo(newMap)
            marker.openPopup() 
            index++;
 
-            })
+            }) 
             
 
 
@@ -493,6 +530,8 @@ export class HomePage {
       console.log(''+ error)
     });  
     this.graphHopper();
+    var tags = ["library", "parco"]
+    this.findPoiByTag(tags)
 
   }
 
