@@ -11,7 +11,8 @@ import * as fs from "@ionic-native/file"
 import { File, FileReader } from '@ionic-native/file';
 import * as GraphHopper from 'graphhopper-js-api-client';
 import { CHECKBOX_REQUIRED_VALIDATOR } from '@angular/forms/src/directives/validators';
-
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition,MarkerOptions, Marker } from '@ionic-native/google-maps';
+declare var google: any;
 declare var require: any
 @Component({
   selector: 'page-home',
@@ -21,6 +22,8 @@ export class HomePage {
   map: L.Map;
   center: L.PointTuple;
   public poiKeys:Array<any>;
+  public GOOGLE_API_KEY = "AIzaSyDUKtnraJqbHqMP8jDHeGAZ75fUZZ9lLlw";
+  public directionsService = new google.maps.DirectionsService();
   
 
   @ViewChild('map-container') mapContainer;
@@ -122,6 +125,7 @@ export class HomePage {
     
     //setup leaflet map
         this.initMap();
+        this.withGoogle();
     
       }
 
@@ -252,6 +256,11 @@ export class HomePage {
   }
 
   findPoiByTag(tag){
+
+    var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
+      this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
+      this.file)
+      var found = false;
     var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
     var ref1 = firebase.database().ref('/point_of_interest');
     ref.once('value', function(snapshot){
@@ -260,11 +269,12 @@ export class HomePage {
           snapshot1.forEach(function(childSnapshot1){
             //if(childSnapshot1.child("tipologia").val() == tag){//se è taggato come sto cercando
             if(tag.indexOf(childSnapshot1.child("tipologia").val()) > -1){ //controllo per il vettore
+              found = true;
               if (childSnapshot.key == childSnapshot1.key){
                 console.log("Punto taggato " + childSnapshot1.child("tipologia").val() + " è " + childSnapshot1.key)
               }
 
-            }
+            } 
             return false;
           })
         })
@@ -273,6 +283,13 @@ export class HomePage {
       })
 
     })
+
+      if (!found){
+        self.displayGPSError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
+        +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
+      }
+      
+    
   }
 
   updateCityPois(){
@@ -295,6 +312,50 @@ export class HomePage {
       firebase.database().ref().update(updates);
 
     })
+  }
+
+
+  withGoogle(){
+
+  
+
+    var first = new google.maps.LatLng(44.1359114,12.2454082);
+    var second = new google.maps.LatLng(44.1371501,12.24147);
+    var third = new google.maps.LatLng(44.136342,12.2429801);
+    
+    var data1 = {
+      location: first,
+      stopover: false
+    }
+
+    var data2 = {
+      location: second,
+      stopover: false
+    }
+
+    var data3 = {
+      location:third,
+      stopover:false
+    }
+
+    var waypoints= [data1,data2,data3]
+    console.log("Sono prima del routing")
+    this.directionsService.route({
+      origin: new google.maps.LatLng(44.1388386,12.243707),
+      destination: new google.maps.LatLng(44.1388386,12.243707),
+      waypoints: waypoints,
+      optimizeWaypoints: true,
+      travelMode: google.maps.TravelMode.WALKING
+    }, (response, status) => {
+      if (status === 'OK') {
+        console.log("prova " + response.geocoded_waypoints[0].geocoder_status)
+         
+      } else {
+        window.alert('Directions request failed due to ');
+      }
+    });
+
+
   }
 
   graphHopper(){
@@ -529,8 +590,8 @@ export class HomePage {
     }).catch(error => {
       console.log(''+ error)
     });  
-    this.graphHopper();
-    var tags = ["library", "parco"]
+    //this.graphHopper();
+    var tags = ["prova"]
     this.findPoiByTag(tags)
 
   }
