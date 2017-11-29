@@ -44,10 +44,11 @@
             </ion-col>
 
             <ion-row>
-                <ion-col col-12> <div *ngFor="let item of items_user_details;">
+                <ion-col col-12> 
+                  <div *ngFor="let item of items_user_details;">
                     <p><b>Punti totali:</b> {{item.total_points}}</p> 
-                 </div></ion-col>
-               
+                  </div>
+                </ion-col>
             </ion-row>
 
           </ion-row>
@@ -81,7 +82,7 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-list *ngFor="let tag of poiKeys">
+      <ion-list *ngFor="let tag of tags">
         <p>{{tag}}</p>
        
       </ion-list>
