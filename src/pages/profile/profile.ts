@@ -37,6 +37,9 @@ export class ProfilePage {
 
   id_user; //Siccome da noi l'utente è identificato dalla mail con i caratteri strani strani (email_user nell'albero), qui ci metteremo tale mail. es: "jerikam92@gmail%2Ecom"
 
+  number_of_preferences;
+
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
 
@@ -113,7 +116,7 @@ export class ProfilePage {
                   nell'html, con i nomi dei tag che l'utente ha tra le preferenze. Quindi farai una cosa del tipo: */
                   
                   userTags.push(singoloTag.child("nome").val()) //STAI RIEMPIENDO UN VETTORE!
-
+                   
                 /* Nota BENE che singoloTag è la chiave del (dei) tag: facendo .child("nome campo") accedi al campo specifico
                   per quell'oggetto (in questo caso a  noi serve "nome"), e il .val() restituisce il valore associato al campo.
                   Nel DB infatti abbiamo "name" = "Acquedotto", ad esempio, quindi il .val() restituirà acquedotto.
@@ -121,12 +124,16 @@ export class ProfilePage {
                   */
                   }
                   return false;
+                 
                 })
               })
               return false;
+             
             })
+           
           }).then(a=>{
               this.tags = userTags;
+              
               /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
               Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 
               unico vettore?". Il fatto è che essendo questa una callback, non puoi accedere agli elementi esterni della classe,
@@ -136,19 +143,15 @@ export class ProfilePage {
               in cima alla classe. 
               Quindi, nel tuo HTML avrai un *ngFor classico per mostrare una lista di elementi che utilizzerà il vettore "tags".
               */
-            })
+          
+            }) //--- fine di .then(a=>{
+      //Fine parte delle preferenze dell'utente
      
     }) //foreach dei dettagli utente
     
     return this.items_user_details; //Restituisce tutte le informazioni
   });
   //----
-
-
-
-
-  
-
 
   } //--Fine ionViewDidLoad
 
