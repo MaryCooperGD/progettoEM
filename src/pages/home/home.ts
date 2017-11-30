@@ -323,6 +323,9 @@ export class HomePage {
     var second = new google.maps.LatLng(44.1371501,12.24147);
     var third = new google.maps.LatLng(44.136342,12.2429801);
     
+
+    
+
     var data1 = {
       location: first,
       stopover: false
@@ -338,22 +341,57 @@ export class HomePage {
       stopover:false
     }
 
+
+    var polyUtil = require('polyline-encoded')
+    var latlngs;
+  // should print '_p~iF~cn~U_ulLn{vA_mqNvxq`@'
+  //console.log("Encoded " +polyUtil.encode(latlngs));
+  var newMap = this.map;
     var waypoints= [data1,data2,data3]
-    console.log("Sono prima del routing")
+    var encoded;
     this.directionsService.route({
       origin: new google.maps.LatLng(44.1388386,12.243707),
-      destination: new google.maps.LatLng(44.1388386,12.243707),
+      destination: new google.maps.LatLng(44.1374648,12.2480796),
       waypoints: waypoints,
       optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.WALKING
     }, (response, status) => {
       if (status === 'OK') {
-        console.log("prova " + response.geocoded_waypoints[0].geocoder_status)
+        encoded = response.routes[0].overview_polyline; 
+        console.log("Encoded: " + encoded)
+        latlngs = polyUtil.decode(encoded)
+
+        var firstpolyline = new L.Polyline(latlngs, {
+          color: 'red',
+          weight: 3,
+          opacity: 0.5,
+          smoothFactor: 1
+      });
+      firstpolyline.addTo(newMap);
+
+      console.log("Ordine " +response.routes[0].waypoint_order)
+
+        /* var routingLayer = L.geoJSON().addTo(newMap) ;
+
+
+        (routingLayer as any).options = {
+          style: {color: "#00cc33", "weight": 5, "opacity": 0.6}
+        }
+    
+        var prova = 5 ;
+        (routingLayer as any).addData({
+          "type": "Feature",
+          "coordinates":latlngs
+      }) */
+          
+        //console.log("Encoded " +encoded);
          
       } else {
         window.alert('Directions request failed due to ');
       }
-    });
+    })
+
+    
 
 
   }
