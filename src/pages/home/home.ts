@@ -328,17 +328,17 @@ export class HomePage {
 
     var data1 = {
       location: first,
-      stopover: false
+      stopover: true
     }
 
     var data2 = {
       location: second,
-      stopover: false
+      stopover: true
     }
 
     var data3 = {
       location:third,
-      stopover:false
+      stopover:true
     }
 
 
@@ -357,8 +357,12 @@ export class HomePage {
       travelMode: google.maps.TravelMode.WALKING
     }, (response, status) => {
       if (status === 'OK') {
+
+       // console.log("" + JSON.stringify(response))
+        
         encoded = response.routes[0].overview_polyline; 
-        console.log("Encoded: " + encoded)
+
+        //console.log("Istruzioni " + response.routes[0].legs[0].steps[0].html_instructions)
         latlngs = polyUtil.decode(encoded)
 
         var firstpolyline = new L.Polyline(latlngs, {
@@ -369,7 +373,34 @@ export class HomePage {
       });
       firstpolyline.addTo(newMap);
 
-      console.log("Ordine " +response.routes[0].waypoint_order)
+     // console.log("Ordine " +response.routes[0].waypoint_order)
+     var myRoute= response.routes[0].legs[0]
+     console.log("Prova mia" + JSON.stringify(myRoute.steps[0]))
+     console.log("Lunghezza: " + myRoute.steps.length)
+     for(var i=0; i<myRoute.steps.length; i++){ 
+       console.dir("I " + myRoute.steps[i].instructions)
+     }
+      var myArray = []
+      myArray.push([44.1359114,12.2454082,"Museo"])
+      myArray.push([44.1371501,12.24147,"Cattedrale"])
+      myArray.push([44.136342,12.2429801,"Ericacca"])
+
+      var newArray =[]
+
+      response.routes[0].waypoint_order.forEach(o=>{
+        newArray.push(myArray[o])
+      })
+      let index = 1;
+      myArray.forEach(p =>{
+        let marker = L.marker([p[0],p[1]])
+        let content = `<b>Nome</b>: ${p[2]}<br/>`+"Posizione " + index;
+          marker.bindPopup(content) 
+          marker.addTo(newMap)
+         marker.openPopup() 
+         index++;
+
+      })
+     
 
         /* var routingLayer = L.geoJSON().addTo(newMap) ;
 
