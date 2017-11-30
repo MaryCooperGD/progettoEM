@@ -18,6 +18,8 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 export class EditPreferencesPage {
   public tags: Array<any>
 
+  number_of_preferences;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
     let tagName = []
@@ -30,6 +32,14 @@ export class EditPreferencesPage {
 
     }).then(v => {
       this.tags = tagName;
+
+      var j = 0;
+      this.tags.forEach(i=>{
+        j++;
+        
+          this.number_of_preferences = j;
+        
+      })
 
     })
   }

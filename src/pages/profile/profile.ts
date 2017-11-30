@@ -31,14 +31,13 @@ export class ProfilePage {
 
   correct_data; //variabile per inserire la data corretta della registrazione dell'utente.
 
+  id_user; //Siccome da noi l'utente è identificato dalla mail con i caratteri strani strani (email_user nell'albero), qui ci metteremo tale mail. es: "jerikam92@gmail%2Ecom"
+  
   //--Per mostrare le preferenze utente
-  public user_preferences:Array<any>;
   public tags:Array<any>;
 
-  id_user; //Siccome da noi l'utente è identificato dalla mail con i caratteri strani strani (email_user nell'albero), qui ci metteremo tale mail. es: "jerikam92@gmail%2Ecom"
-
-  number_of_preferences;
-
+  //--Per mostrare i badge dell'utente
+  public badges_utente:Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
@@ -109,6 +108,10 @@ export class ProfilePage {
                   //rispetto a quelle presenti nel nodo dei tag totali
 
                   //console.log("Nome tag " + singoloTag.child("nome").val()) 
+                  
+                  //console.log("Nome tag " + singolaPref.val()) //Così facendo vediamo il true delle preferenze dell'utente
+                  //.child non funziona perchè non ha figli
+
                   /*---> se decommenti la linea sopra, vedrai che ti stampa i nomi dei tag che ha l'utente tra le
                   preferenze. */
                   
@@ -122,6 +125,8 @@ export class ProfilePage {
                   Nel DB infatti abbiamo "name" = "Acquedotto", ad esempio, quindi il .val() restituirà acquedotto.
                   
                   */
+
+                  
                   }
                   return false;
                  
@@ -133,7 +138,6 @@ export class ProfilePage {
            
           }).then(a=>{
               this.tags = userTags;
-              
               /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
               Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 
               unico vettore?". Il fatto è che essendo questa una callback, non puoi accedere agli elementi esterni della classe,
@@ -146,12 +150,64 @@ export class ProfilePage {
           
             }) //--- fine di .then(a=>{
       //Fine parte delle preferenze dell'utente
+
+      //Inizio parte dei badge
+      let userMiscBadges = [];
+      var ref2 = firebase.database().ref('/users/'+ this.id_user +'/badge/')
+      var ref3 = firebase.database().ref('/badges/');
+      
+      ref2.once('value',function(badge){ //ciclo sui badge
+        badge.forEach(function(singolo_Badge_Utente){
+              ref3.once('value', function(badge_totali){
+                 badge_totali.forEach(function(badge_lista_totale){ //come sopra! è speculare
+                      if(singolo_Badge_Utente.key == badge_lista_totale.key){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+                        //rispetto a quelle presenti nel nodo dei badge complessivi
+    
+                        //console.log("Nome badge " + singolo_Badge_Utente.key) 
      
+                        userMiscBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+                      }
+                      return false;
+                  })
+      
+              })
+              return false;
+          })
+      }).then(a=>{
+          this.badges_utente = userMiscBadges;
+      })
+      //Fine parte dei badge
+
+
+
+
+
+
+
+
+
     }) //foreach dei dettagli utente
     
     return this.items_user_details; //Restituisce tutte le informazioni
   });
   //----
+
+            //------------PROVA PER FARE VEDERE I BADGE
+           /* this.itemRef_user_badges.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+              this.items_user_badges = [];
+              itemSnapshot.forEach( itemSnap => {
+                this.items_user_badges.push(itemSnap.val());
+                
+                return false;
+              });
+              this.items_user_badges.forEach(i=>{
+                this.user_badge_total = i.total_points; //fino a qui estraggo il numero di total points del giocatore, per poi confrontarli
+                console.log(this.user_badge_total); //Verificato che estrae correttamente 
+                
+              });
+            });*/
+            //----FINE PROVA BADGE
+
 
   } //--Fine ionViewDidLoad
 

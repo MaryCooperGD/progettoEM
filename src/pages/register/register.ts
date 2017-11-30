@@ -93,7 +93,6 @@ export class RegisterPage {
     });
   }
 
-
    displayLoginError(messageErr: string){
     let toast = this.toastCtrl.create({
       message: messageErr,
@@ -103,4 +102,6 @@ export class RegisterPage {
     toast.present();
   }
 
-}
+
+
+} //Fine classe RegisterPage

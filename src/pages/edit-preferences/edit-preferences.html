@@ -19,20 +19,31 @@
 <ion-content padding>
     <ion-card>
         <ion-card-header class="blue-title">
-              Modifica preferenze
+              Modifica preferenze ({{number_of_preferences}} totali)
         </ion-card-header>
       
-        <!--Ovviamente queste preferenze sono d'esempio-->
+        
         <ion-card-content>
-          <ion-list>
+         <ion-list>
               <ion-scroll style="height: 300px" scrollY="true">
-                  
+                  <script>
+                  </script>
                   <ion-item *ngFor="let tag of tags">
                       <ion-label>{{tag}}</ion-label>
-                      <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+                      <ion-checkbox color="secondary" checked="false" [(ngModel)]="tag.Name"></ion-checkbox>
                   </ion-item>
               </ion-scroll>
           </ion-list>
+
+          <!--CODICE VECCHIO-->
+          <!--<ion-list>
+            <ion-scroll style="height: 300px" scrollY="true">
+              <ion-item *ngFor="let tag of tags">
+                <ion-label>{{tag}}</ion-label>
+                <ion-checkbox color="secondary" checked="false"></ion-checkbox>
+              </ion-item>
+            </ion-scroll>
+          </ion-list>-->
 
           <button ion-button class="card-button">Modifica</button>
 
