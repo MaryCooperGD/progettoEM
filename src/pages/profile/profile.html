@@ -68,41 +68,32 @@
       </ion-card-content>
   </ion-card>
 
-<!--Card per badge CODICE IMMACOLATO-->
-  <!--<ion-card>
-    <ion-card-header class="blue-title">
-    Badge
-    </ion-card-header>
-
-    <ion-card-content>
-        <ion-row id ="tag-row">
-            <ion-badge class="tag-profile" color="secondary">Fotografo junior </ion-badge>
-            <ion-badge class="tag-profile" color="secondary">Fotografo esperto </ion-badge>
-            <ion-badge class="tag-profile" color="secondary">Fotografo super </ion-badge>
-            <ion-badge class="tag-profile" color="primary">Contributore junior</ion-badge>
-            <ion-badge class="tag-profile" color="danger">Informatore junior</ion-badge>
-            <ion-badge class="tag-profile" color="dark">Taggatore provetto</ion-badge>
-         </ion-row>
-
-    </ion-card-content>
-  </ion-card>-->
-
-  <!--Card per badge-->
+  <!--Card per badges-->
   <ion-card>
     <ion-card-header class="blue-title">
     Badge
     </ion-card-header>
 
     <ion-card-content>
+      <ion-scroll id="scroll_preferenze" scrollY="true">
         <ion-row id ="tag-row">
-            <ion-list  *ngFor="let badge of badges_utente;">
-               
+            <ion-list  *ngFor="let badge of badges_utente_misto;">
               <ion-badge class="tag-profile" color="secondary">{{badge}} </ion-badge>
             </ion-list>
-            
-            
-         </ion-row>
 
+            <ion-list  *ngFor="let badge of badges_utente_taggatore;">
+              <ion-badge class="tag-profile" color="light">{{badge}} </ion-badge>
+           </ion-list>
+
+           <ion-list  *ngFor="let badge of badges_utente_fotografo;">
+              <ion-badge class="tag-profile" color="danger">{{badge}} </ion-badge>
+           </ion-list>
+
+           <ion-list  *ngFor="let badge of badges_utente_informatore;">
+              <ion-badge class="tag-profile">{{badge}} </ion-badge>
+           </ion-list>
+        </ion-row>
+      </ion-scroll>
     </ion-card-content>
   </ion-card>
 
@@ -112,7 +103,7 @@
     Preferenze
     </ion-card-header>
 
-    <ion-card-content>
+    <ion-card-content style="text-align: center;">
       <ion-scroll id="scroll_preferenze" scrollY="true">
         <ion-list *ngFor="let tag of tags">
           <p>{{tag}}</p>

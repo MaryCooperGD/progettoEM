@@ -37,7 +37,10 @@ export class ProfilePage {
   public tags:Array<any>;
 
   //--Per mostrare i badge dell'utente
-  public badges_utente:Array<any>;
+  public badges_utente_misto:Array<any>;
+  public badges_utente_taggatore:Array<any>;
+  public badges_utente_informatore:Array<any>;
+  public badges_utente_fotografo:Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
@@ -153,19 +156,32 @@ export class ProfilePage {
 
       //Inizio parte dei badge
       let userMiscBadges = [];
+      let userTagBadges = [];
+      let userFotoBadges = [];
+      let userInfoBadges = [];
+
       var ref2 = firebase.database().ref('/users/'+ this.id_user +'/badge/')
       var ref3 = firebase.database().ref('/badges/');
       
-      ref2.once('value',function(badge){ //ciclo sui badge
+      ref2.once('value',function(badge){ //ciclo sui badge dell'utente
         badge.forEach(function(singolo_Badge_Utente){
               ref3.once('value', function(badge_totali){
                  badge_totali.forEach(function(badge_lista_totale){ //come sopra! è speculare
-                      if(singolo_Badge_Utente.key == badge_lista_totale.key){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+                      if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "misto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
                         //rispetto a quelle presenti nel nodo dei badge complessivi
-    
-                        //console.log("Nome badge " + singolo_Badge_Utente.key) 
-     
                         userMiscBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+                      }
+                      if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "taggatore")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+                      //rispetto a quelle presenti nel nodo dei badge complessivi
+                        userTagBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+                      }
+                      if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "foto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+                      //rispetto a quelle presenti nel nodo dei badge complessivi
+                        userFotoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+                      }
+                      if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "info")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+                      //rispetto a quelle presenti nel nodo dei badge complessivi
+                        userInfoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
                       }
                       return false;
                   })
@@ -174,7 +190,10 @@ export class ProfilePage {
               return false;
           })
       }).then(a=>{
-          this.badges_utente = userMiscBadges;
+          this.badges_utente_misto = userMiscBadges;
+          this.badges_utente_taggatore = userTagBadges;
+          this.badges_utente_fotografo = userFotoBadges;
+          this.badges_utente_informatore = userInfoBadges;
       })
       //Fine parte dei badge
 
