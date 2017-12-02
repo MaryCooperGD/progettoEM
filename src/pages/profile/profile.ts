@@ -18,7 +18,16 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
   selector: 'page-profile',
   templateUrl: 'profile.html',
 })
+
+
 export class ProfilePage {
+
+  //---INIZIO--parte per far funzionare i segment
+  menu: string = "Preferenze";
+  isAndroid: boolean = false;
+
+  
+  //---FINE--parte funzionamento segment
 
   username:any;
   public myPhotosRef: any;
@@ -42,6 +51,7 @@ export class ProfilePage {
   public badges_utente_informatore:Array<any>;
   public badges_utente_fotografo:Array<any>;
 
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
 
@@ -141,6 +151,7 @@ export class ProfilePage {
            
           }).then(a=>{
               this.tags = userTags;
+              
               /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
               Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 
               unico vettore?". Il fatto è che essendo questa una callback, non puoi accedere agli elementi esterni della classe,
@@ -150,6 +161,8 @@ export class ProfilePage {
               in cima alla classe. 
               Quindi, nel tuo HTML avrai un *ngFor classico per mostrare una lista di elementi che utilizzerà il vettore "tags".
               */
+              
+             
           
             }) //--- fine di .then(a=>{
       //Fine parte delle preferenze dell'utente
@@ -167,6 +180,7 @@ export class ProfilePage {
         badge.forEach(function(singolo_Badge_Utente){
               ref3.once('value', function(badge_totali){
                  badge_totali.forEach(function(badge_lista_totale){ //come sopra! è speculare
+                  
                       if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "misto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
                         //rispetto a quelle presenti nel nodo dei badge complessivi
                         userMiscBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
@@ -194,16 +208,10 @@ export class ProfilePage {
           this.badges_utente_taggatore = userTagBadges;
           this.badges_utente_fotografo = userFotoBadges;
           this.badges_utente_informatore = userInfoBadges;
+
+         
       })
       //Fine parte dei badge
-
-
-
-
-
-
-
-
 
     }) //foreach dei dettagli utente
     
