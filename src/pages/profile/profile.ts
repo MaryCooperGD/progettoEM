@@ -219,22 +219,6 @@ export class ProfilePage {
   });
   //----
 
-            //------------PROVA PER FARE VEDERE I BADGE
-           /* this.itemRef_user_badges.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
-              this.items_user_badges = [];
-              itemSnapshot.forEach( itemSnap => {
-                this.items_user_badges.push(itemSnap.val());
-                
-                return false;
-              });
-              this.items_user_badges.forEach(i=>{
-                this.user_badge_total = i.total_points; //fino a qui estraggo il numero di total points del giocatore, per poi confrontarli
-                console.log(this.user_badge_total); //Verificato che estrae correttamente 
-                
-              });
-            });*/
-            //----FINE PROVA BADGE
-
 
   } //--Fine ionViewDidLoad
 
