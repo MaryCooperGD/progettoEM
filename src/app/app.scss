@@ -72,10 +72,21 @@
     -moz-background-size: cover;
     background-repeat: no-repeat;
 	background-size:cover;
-	width:100%;
-
-
+  width:100%;
   }
+  
+  .skyline{
+    background-image: url('../assets/img/sfondoapp.png');
+    -webkit-background-image: url('../assets/img/sfondoapp.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-repeat: no-repeat;
+    background-size:cover;
+    width:100%;
+}
+
+
+
 
 
   
