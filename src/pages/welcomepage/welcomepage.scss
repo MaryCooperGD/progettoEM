@@ -35,14 +35,15 @@ page-welcomepage {
 		text-align: center;
 	}
 
+	
 	#app_title{
-		margin-top: 20%;
-		margin-bottom: -50px;
 		position: sticky;
 	}
 
-	#button_log_reg{
-		margin-top:10%;
+	#buttons_log_reg{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
 	}
 
 
