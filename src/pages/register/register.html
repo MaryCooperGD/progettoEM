@@ -14,27 +14,29 @@
 
 
 <ion-content padding>
-<form [formGroup]="signUpForm" (submit)="doSignup()">
-    <ion-list>
+  <ion-card id = "register-card"> 
+    <form [formGroup]="signUpForm" (submit)="doSignup()">
+        <ion-list>
 
-      <ion-item>
-        <ion-label fixed>Username</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name" formControlName="name" ></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label fixed>Username</ion-label>
+            <ion-input type="text" [(ngModel)]="account.name" formControlName="name" ></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label fixed>Email</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" formControlName="email"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label fixed>Email</ion-label>
+            <ion-input type="email" [(ngModel)]="account.email" formControlName="email"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label fixed>Password</ion-label>
-        <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label fixed>Password</ion-label>
+            <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
+          </ion-item>
 
-      <div padding>
-        <button ion-button color="primary" block [disabled]="buttonDisabled">Registrati</button>
-      </div>
-    </ion-list>
-  </form>
+          <div padding>
+            <button ion-button color="primary" block [disabled]="buttonDisabled">Registrati</button>
+          </div>
+        </ion-list>
+    </form>
+  </ion-card>
 </ion-content>

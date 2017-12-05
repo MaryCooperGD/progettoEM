@@ -16,10 +16,13 @@ import { RegisterPage} from "../register/register"
 })
 export class WelcomepagePage {
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public menu:MenuController) {
     this.menu.enable(false)
+    
   }
 
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad WelcomepagePage');
   }
