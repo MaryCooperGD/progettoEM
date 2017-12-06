@@ -5,65 +5,61 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
     <ion-navbar>
         <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Modifica informazioni</ion-title>
       </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
 
-<!--CARD 1 -->
+	<!--CARD 1 PER AGGIUNTA DEI TAG-->
 	<ion-card>
 		<ion-card-header class="blue-title">
-		Aggiungi un nuovo tag
+			Aggiungi un nuovo tag
 		</ion-card-header>
 
 		<ion-card-content>
 			<ion-row>
 				<ion-item>
-    				<ion-label fixed>Tag 1</ion-label>
-    				<ion-input type="text" value=""></ion-input>
-  				</ion-item>
-  				<ion-item>
-    				<ion-label fixed>Tag 2</ion-label>
-    				<ion-input type="text" value=""></ion-input>
-  				</ion-item>
-  				<ion-item>
-    				<ion-label fixed>Tag 3</ion-label>
-    				<ion-input type="text" value=""></ion-input>
-  				</ion-item>
+					<ion-label fixed>Tag 1</ion-label>
+					<ion-input type="text" value=""></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label fixed>Tag 2</ion-label>
+					<ion-input type="text" value=""></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label fixed>Tag 3</ion-label>
+					<ion-input type="text" value=""></ion-input>
+				</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<button ion-button class="card-button" color="secondary" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuovi tag</button>
 			</ion-row>
 		</ion-card-content>
 	</ion-card>
 
-	
-<ion-row>
-        <button ion-button class="card-button" color="secondary" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuovi tag</button>
-</ion-row>
-
-<!--CARD 2 -->
-<ion-card>
+	<!--CARD 2 PER AGGIUNTA DELLE INFORMAZIONI-->
+	<ion-card>
 		<ion-card-header class="blue-title">
-		Aggiungi informazione
+			Aggiungi informazione
 		</ion-card-header>
 
 		<ion-card-content>
 			<ion-row>
 				<ion-item>
-    				<ion-textarea [(ngModel)]="myInput"  placeholder="Nuova informazione..."></ion-textarea>
-  				</ion-item>
+					<ion-textarea [(ngModel)]="myInput"  placeholder="Nuova informazione..."></ion-textarea>
+				</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<button  ion-button class="card-button" color="secondary" (click)="addInfo()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuova informazione</button>
 			</ion-row>
 		</ion-card-content>
 	</ion-card>
-
-<ion-row>
-        <button ion-button class="card-button" color="secondary" (click)="addInfo()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuova informazione</button>
-</ion-row>
 
 </ion-content>

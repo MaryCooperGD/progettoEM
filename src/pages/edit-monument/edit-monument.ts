@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { WelcomepagePage } from "../welcomepage/welcomepage";
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Api } from "../../providers/api";
+import { MonumentPage } from "../monument/monument";
 
 /**
  * Generated class for the EditMonumentPage page.
@@ -33,8 +34,9 @@ export class EditMonumentPage {
 
   //punteggio che verrà incrementato
   punteggio;
+  punteggio_totale;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
 
     this.poi = navParams.get('poi');
 
@@ -58,12 +60,14 @@ export class EditMonumentPage {
       this.user_email.forEach(i=>{
         this.id_user = i.email_user;
         this.punteggio = i.points_info;
+        this.punteggio_totale = i.total_points;
+
       })
     });
 
   } //fine ionViewDidLoad
 
-//Aggiunge le informazioni nel database in maniera corretta
+//Aggiunge le informazioni nel database in maniera corretta, manda messaggio di conferma e torna a pagina precedente
   addInfo(){
 
     var ref = firebase.database().ref("/descriptions/");
@@ -79,12 +83,29 @@ export class EditMonumentPage {
     updates["/descriptions/"+key] = data;
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
 
-    //Incrementa la variabile dei punti
+    //Incrementa la variabile dei punti delle informazioni
     this.punteggio = this.punteggio + 15 ;
     updates["/users/"+this.id_user+"/points_info"]  = this.punteggio;
 
+    //Incrementa la variabile dei PUNTI TOTALI
+    this.punteggio_totale = this.punteggio_totale + 15 ;
+    updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+
     firebase.database().ref().update(updates);
-     
+
+    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!") 
+    this.navCtrl.pop(); //Bottone per tornare indietro
   }
+
+  //per il messaggio di conferma!
+  displayLoginError(messageErr: string){
+    let toast = this.toastCtrl.create({
+      message: messageErr,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
 
 }
