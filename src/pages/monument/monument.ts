@@ -22,10 +22,13 @@ export class MonumentPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
     
+    
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MonumentPage');
+
+
   }
 
   openUploadPhotoPage(){
@@ -34,8 +37,10 @@ export class MonumentPage {
 
   openEditMonumentPage(){
     this.navCtrl.push(EditMonumentPage, {
-      poi: this.poi
+      poi: this.poi,
+      
     })
   } 
+
 
 }

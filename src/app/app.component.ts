@@ -40,7 +40,6 @@ export class MyApp {
 	    {title: 'Cerca luogo', component: SearchPlacePage},
       {title: 'Profilo', component: ProfilePage},
       {title: 'Classifica', component: RankPage},
-      {title: 'Luogo di interesse', component: MonumentPage},
       {title: 'Modifica preferenze', component: EditPreferencesPage},
       {title: 'Definisci percorso', component: CreateRoutePage},
     ];
