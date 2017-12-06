@@ -21,7 +21,6 @@ export class WelcomepagePage {
     this.menu.enable(false)
     
   }
-
   
   ionViewDidLoad() {
     console.log('ionViewDidLoad WelcomepagePage');
