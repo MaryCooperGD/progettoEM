@@ -42,6 +42,11 @@
 		</ion-card-content>
 	</ion-card>
 
+	
+<ion-row>
+        <button ion-button class="card-button" color="secondary" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuovi tag</button>
+</ion-row>
+
 <!--CARD 2 -->
 <ion-card>
 		<ion-card-header class="blue-title">
@@ -51,14 +56,14 @@
 		<ion-card-content>
 			<ion-row>
 				<ion-item>
-    				<ion-textarea placeholder="Scrivi..."></ion-textarea>
+    				<ion-textarea [(ngModel)]="myInput"  placeholder="Nuova informazione..."></ion-textarea>
   				</ion-item>
 			</ion-row>
 		</ion-card-content>
 	</ion-card>
 
 <ion-row>
-        <button ion-button class="card-button" color="secondary" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci</button>
+        <button ion-button class="card-button" color="secondary" (click)="addInfo()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuova informazione</button>
 </ion-row>
 
 </ion-content>

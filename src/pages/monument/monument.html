@@ -21,7 +21,7 @@
 <!--Card nome e foto-->
 <ion-card>
   <ion-card-header class="blue-title">
-        [Nome luogo di interesse]
+    {{poi.nome}}
   </ion-card-header>
 
   <ion-card-content>
@@ -37,9 +37,10 @@
 
   <ion-card-content>
   	<ion-row id ="tag-row">
-       <ion-badge class="tag-local" color="secondary">Biblioteca</ion-badge>
-       <ion-badge class="tag-local" color="secondary">XV secolo</ion-badge>
-       <ion-badge class="tag-local" color="secondary">Luogo storico</ion-badge>
+      <ion-list *ngFor="let tag of poi.tipo">
+
+       <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
+       </ion-list>
   	</ion-row>
   	<ion-row>
     	<p id ="local description">

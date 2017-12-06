@@ -38,13 +38,26 @@ export class SearchPlacePage {
     var list = [];
     var self = this;
      var ref = firebase.database().ref("/point_of_interest/");
+     var ref1 = firebase.database().ref("/tag/")
      ref.once('value', function(pois){
       pois.forEach(function(singlepoi){
         if(singlepoi.child("città").val() == self.city){
-          var data = { nome: singlepoi.child("nome").val(), tipo:singlepoi.child("tipologia").val() }
+
+          var tagsList = [];
+          singlepoi.child("tags").forEach(t=>{ //scorro i tag associati al punto di interesse
+            ref1.once('value', function(tag){
+              tag.forEach(function(singletag){
+                if(t.key == singletag.key){
+                  tagsList.push(singletag.child("nome").val())
+                }
+                return false;
+              })
+            })
+            return false;
+          })
+
+          var data = { nome: singlepoi.child("nome").val(), tipo:tagsList, chiave: singlepoi.key }
           list.push(data);
-          console.log("Nome: " +list[0].nome)
-          
         }
         return false;
       })
@@ -55,8 +68,10 @@ export class SearchPlacePage {
 
   }
 
-  openPlace(){
-    this.navCtrl.push(MonumentPage)
+  openPlace(item){
+    this.navCtrl.push(MonumentPage, {
+      reference: item
+    })
   }
 
 }

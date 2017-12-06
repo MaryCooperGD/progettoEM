@@ -17,7 +17,11 @@ import { EditMonumentPage } from "../edit-monument/edit-monument";
 })
 export class MonumentPage {
 
+  public poi;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.poi = navParams.get('reference')
+    
   }
 
   ionViewDidLoad() {
@@ -29,7 +33,9 @@ export class MonumentPage {
   } 
 
   openEditMonumentPage(){
-    this.navCtrl.push(EditMonumentPage)
+    this.navCtrl.push(EditMonumentPage, {
+      poi: this.poi
+    })
   } 
 
 }
