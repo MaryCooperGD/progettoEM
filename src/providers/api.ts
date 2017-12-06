@@ -15,6 +15,7 @@ import 'rxjs/add/observable/fromPromise';
 export class Api {
   url: string = 'https://example.com/api/v1';
   public user : firebase.User;
+  city: string ;
   gpsEnabled : boolean;
   constructor(public http: Http, public afAuth: AngularFireAuth, public db: AngularFireDatabase,
               public toastCtrl:ToastController) {
@@ -57,7 +58,23 @@ export class Api {
   }
 
 
-  
+  /**
+   * A method that sets the city where the user is currently in. 
+   */
+  setCity(city){
+    this.city = city;
+    console.log("La città inserita è " + this.city)
+  }
+
+
+  /** 
+   * A method that returns the city where the user is currently in
+   */
+  getCity(){
+    return this.city;
+  }
+
+
   //User management methods
   //Api from firebase are used, which automatically handle login
   //logout and other useful features

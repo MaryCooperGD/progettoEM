@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import * as fs from "@ionic-native/file"
+import { Api } from "../../providers/api";
 import { File, FileReader } from '@ionic-native/file';
 import * as GraphHopper from 'graphhopper-js-api-client';
 import { CHECKBOX_REQUIRED_VALIDATOR } from '@angular/forms/src/directives/validators';
@@ -30,7 +31,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
-  public file:File) {
+  public file:File, public api:Api) {
     this.menuCtrl.enable(true)
 
     
@@ -119,13 +120,14 @@ export class HomePage {
   
 
   ionViewDidLoad() {
+
     //set map center
     this.center = [44.13832, 12.2447 ]; 
     
     
     //setup leaflet map
         this.initMap();
-        this.withGoogle();
+        //this.withGoogle();
     
       }
 
@@ -152,13 +154,13 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-       this.getFeatures()
-        //this.geolocate()
+       //this.getFeatures()
+        this.geolocate()
       } else {
         this.diagnostic.isLocationEnabled().then((state)=>{
           if(state){
-            //this.geolocate();
-            this.getFeatures();
+            this.geolocate(); 
+            //this.getFeatures();
           } else{
             this.presentConfirm();      
           }
@@ -202,6 +204,37 @@ export class HomePage {
     this.geolocation.getCurrentPosition().then((resp) =>{
       var positionMarker: L.Marker;
       let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
+      var request = new XMLHttpRequest();
+      var method = 'GET'
+      var url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${resp.coords.latitude},${resp.coords.longitude}&sensor=true`
+      request.open(method,url,true);
+      var self = this;
+      request.onreadystatechange = function(){
+        if (request.readyState == 4 && request.status == 200){
+          var data = JSON.parse(request.responseText);
+          var city;
+
+          for (var i=0; i<data.results[0].address_components.length; i++) {
+            for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
+
+            //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+                if (data.results[0].address_components[i].types[b] == "administrative_area_level_3") {
+                    //this is the object you are looking for
+                    city= data.results[0].address_components[i];
+                    break;
+                }
+            }
+        }
+        self.api.setCity(city.long_name);
+
+
+
+
+        }
+      }
+      request.send();
+      
+      
       positionMarker = L.marker(latlng).addTo(this.map);
       positionMarker.bindPopup("Tu sei qui");
       this.map.setView(latlng,16)
@@ -210,7 +243,7 @@ export class HomePage {
       var self = this;
       var x = new HomePage(this.navCtrl, this.menuCtrl,this.geolocation,
         this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
-        this.file);
+        this.file,this.api);
      this.map.addEventListener('dragend', function(e){
        if(self.getMapZoom()>=16){
         self.getFeatures()
@@ -259,7 +292,7 @@ export class HomePage {
 
     var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
       this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
-      this.file)
+      this.file,this.api)
       var found = false;
     var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
     var ref1 = firebase.database().ref('/point_of_interest');
