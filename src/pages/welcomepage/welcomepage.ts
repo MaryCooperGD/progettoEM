@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-import { LoginPage} from "../login/login"
-import { RegisterPage} from "../register/register"
+import { LoginPage} from "../login/login";
+import { RegisterPage} from "../register/register";
+import { CreditsPage } from "../credits/credits";
 /**
  * Generated class for the WelcomepagePage page.
  *
@@ -33,5 +34,9 @@ export class WelcomepagePage {
   openRegisterPage(){
     this.navCtrl.push(RegisterPage)
   }
+
+  openCreditsPage(){
+    this.navCtrl.push(CreditsPage)
+  } 
   
 }

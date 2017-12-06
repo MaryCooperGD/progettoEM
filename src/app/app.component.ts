@@ -18,7 +18,7 @@ import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
 import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
 import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
 import { TutorialPage } from "../pages/tutorial/tutorial";
-
+import { CreditsPage } from "../pages/credits/credits";
 
 @Component({
   templateUrl: 'app.html'

@@ -1,0 +1,19 @@
+page-credits {
+
+    #credits_card{
+        position: sticky; 
+        padding: 5px; 
+        text-align: center;
+        text-shadow: 2px 2px 4px #000000;
+        background: rgba(2, 2, 2, 0.54);
+    }
+
+    #title_credits{
+        font-size: 25px; 
+        font-weight: bold;
+    }
+
+    p{
+        color: white !important;
+    }
+}

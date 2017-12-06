@@ -29,7 +29,7 @@ import { UploadPhotoPage } from "../pages/upload-photo/upload-photo";
 import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
 import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
 import { TutorialPage } from "../pages/tutorial/tutorial";
-
+import { CreditsPage } from "../pages/credits/credits";
 
 
 export const firebaseConfig = {
@@ -57,7 +57,8 @@ export const firebaseConfig = {
     UploadPhotoPage,
     EditMonumentPage,
     EditPreferencesPage,
-    TutorialPage
+    TutorialPage,
+    CreditsPage
   ],
   imports: [
     BrowserModule,
@@ -82,7 +83,8 @@ export const firebaseConfig = {
     UploadPhotoPage,
     EditMonumentPage,
     EditPreferencesPage,
-    TutorialPage
+    TutorialPage,
+    CreditsPage
   ],
   providers: [
     StatusBar,
