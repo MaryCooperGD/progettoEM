@@ -31,23 +31,41 @@
 
 <!--Card descrizione e tag-->
 <ion-card>
-  <ion-card-header class="blue-title">
-        Descrizione e tag
-  </ion-card-header>
+  <ion-segment [(ngModel)]="menu">
+    <ion-segment-button value="Descrizione" style="border-radius:0px !important">
+      Descrizione
+    </ion-segment-button>
+
+    <ion-segment-button value="Tag" style="border-radius:0px !important">
+      Tag
+    </ion-segment-button>     
+  </ion-segment>
 
   <ion-card-content>
-  	<ion-row id ="tag-row">
-      <ion-list *ngFor="let tag of poiTags"> <!-- Lista di badge -->
-
-       <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
-       <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
-       </ion-list>
-  	</ion-row>
-  	<ion-row>
-    	<p id ="local description">
-    		La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
-      </p>
-    </ion-row>
+    <div [ngSwitch]="menu">
+      <ion-list *ngSwitchCase="'Descrizione'">
+        <ion-card-content style="text-align: center;">
+          <ion-scroll id="scroll_preferenze" scrollY="true">
+              <p class="giustificato">
+                  La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
+              </p>
+          </ion-scroll>
+        </ion-card-content>  
+      </ion-list>
+                  
+      <ion-list *ngSwitchCase="'Tag'">
+        <ion-card-content style="text-align: center;">
+          <ion-scroll id="scroll_preferenze" scrollY="true">
+            <ion-row id ="tag-row" justify-content-center align-items-center>
+              <ion-list *ngFor="let tag of poiTags" id="tag_list"> <!-- Lista di badge -->
+                <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
+                <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
+              </ion-list>
+            </ion-row>
+          </ion-scroll>
+        </ion-card-content>
+      </ion-list>
+    </div>
   </ion-card-content>
 </ion-card>
 
@@ -59,7 +77,7 @@
   
     <ion-card-content>
         <ion-grid>
-          <ion-list *ngFor="let d of descriptions">
+          <ion-list *ngFor="let d of descriptions" class="giustificato">
               <ion-row>
                   <ion-col col-12>"{{d.text}}" - {{d.user}}</ion-col>
                 </ion-row>

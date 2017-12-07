@@ -4,7 +4,7 @@ page-monument {
 		margin-left: 5px;
 		margin-right: 5px;
 		margin-bottom: 2px;
-		width: 100px;
+		width: 100%;
 	}
 
 	#tag-row{
@@ -15,5 +15,19 @@ page-monument {
 		padding-right: 5px;
 	}
 
+	#tag_list{
+		margin-left: 2px; 
+		margin-right: 2px;
+	}
+	
+
+	.giustificato{
+		text-align: justify;
+	}
+
+	#scroll_preferenze{
+		height: 150px;
+		}
+	
 
 }

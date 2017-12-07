@@ -24,9 +24,7 @@ export class ProfilePage {
 
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Preferenze";
-  isAndroid: boolean = false;
 
-  
   //---FINE--parte funzionamento segment
 
   username:any;

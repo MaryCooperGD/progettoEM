@@ -21,6 +21,11 @@ import * as firebase from 'firebase/app';
 })
 export class MonumentPage {
 
+  //---INIZIO--parte per far funzionare i segment
+  menu: string = "Descrizione";
+  
+  //---FINE--parte funzionamento segment
+
   poi;
   poiName;
   descriptions;
