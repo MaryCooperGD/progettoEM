@@ -7,6 +7,7 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Api } from "../../providers/api";
 import { MonumentPage } from "../monument/monument";
+import { NewtagPage } from "../newtag/newtag";
 
 /**
  * Generated class for the EditMonumentPage page.
@@ -35,11 +36,16 @@ export class EditMonumentPage {
   //punteggio che verrà incrementato
   punteggio;
   punteggio_totale;
+  public tagList: Array<any>;
+  public loadedTagList: Array<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
 
     this.poi = navParams.get('poi');
+    this.refreshTags();
 
+    
+    
   }
 
   ionViewDidLoad() {
@@ -66,6 +72,58 @@ export class EditMonumentPage {
     });
 
   } //fine ionViewDidLoad
+
+
+
+  refreshTags(){
+    var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
+    var ref1 = firebase.database().ref('/tag/');
+
+    let tagShow = [];
+    ref1.once('value', function(snapshot){ //ciclo sui tag
+      snapshot.forEach(function(childSnapshot){
+          var childKey = childSnapshot.key; //chiave tag
+          var exists = false;
+          ref.once('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              var childKey1 = childSnapshot.key;
+              if (childKey == childKey1){ //se ne trovo uno uguale, eisste nella lista dei tag del poi
+                  exists = true;
+              }
+              return false;
+            })
+          }).then(a => {
+            if (!exists){
+              tagShow.push(childSnapshot);
+            }
+          })                
+        return false;
+      })
+    }).then(a=>{
+      this.tagList = tagShow;
+    this.loadedTagList = tagShow;
+    })
+
+    this.tagList = tagShow;
+    this.loadedTagList = tagShow;
+  }
+
+
+  addSelectedTag(index){
+    var tagToAdd = this.tagList[index]; //corretto
+    var updates = {};
+   updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
+   firebase.database().ref().update(updates);
+   this.refreshTags();
+ }
+
+ ionViewWillEnter(){
+   this.initializeItems()
+ }
+
+ initializeItems(): void {
+  this.tagList = this.loadedTagList;
+}
 
 //Aggiunge le informazioni nel database in maniera corretta, manda messaggio di conferma e torna a pagina precedente
   addInfo(){
@@ -95,6 +153,14 @@ export class EditMonumentPage {
 
     this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!") 
     this.navCtrl.pop(); //Bottone per tornare indietro
+  }
+
+
+  openAddNewTagPage(){
+    this.navCtrl.push(NewtagPage, {
+     poi: this.poi
+
+    })
   }
 
   //per il messaggio di conferma!

@@ -30,6 +30,7 @@ import { EditMonumentPage } from "../pages/edit-monument/edit-monument";
 import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences";
 import { TutorialPage } from "../pages/tutorial/tutorial";
 import { CreditsPage } from "../pages/credits/credits";
+import {NewtagPage} from "../pages/newtag/newtag";
 
 
 export const firebaseConfig = {
@@ -58,7 +59,8 @@ export const firebaseConfig = {
     EditMonumentPage,
     EditPreferencesPage,
     TutorialPage,
-    CreditsPage
+    CreditsPage,
+    NewtagPage
   ],
   imports: [
     BrowserModule,
@@ -84,7 +86,8 @@ export const firebaseConfig = {
     EditMonumentPage,
     EditPreferencesPage,
     TutorialPage,
-    CreditsPage
+    CreditsPage, 
+    NewtagPage
   ],
   providers: [
     StatusBar,

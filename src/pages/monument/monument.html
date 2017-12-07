@@ -37,8 +37,9 @@
 
   <ion-card-content>
   	<ion-row id ="tag-row">
-      <ion-list *ngFor="let tag of poi.tipo"> <!-- Lista di badge -->
+      <ion-list *ngFor="let tag of poiTags"> <!-- Lista di badge -->
 
+       <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
        <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
        </ion-list>
   	</ion-row>

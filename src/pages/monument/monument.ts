@@ -24,15 +24,16 @@ export class MonumentPage {
   poi;
   poiName;
   descriptions;
+  poiTags;
+  
   
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
+    this.poiTags = this.poi.tipo
     this.refreshList();
-    
-    
-
-    
+    this.refreshTags();
+   
   }
 
   ionViewDidLoad() {
@@ -43,7 +44,37 @@ export class MonumentPage {
 
   ionViewWillEnter(){
     this.refreshList()
+    this.refreshTags()
   }
+
+
+  refreshTags(){
+    var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
+    var ref1 = firebase.database().ref('/tag/');
+
+    let tagShow = [];
+    ref1.once('value', function(snapshot){ //ciclo sui tag
+      snapshot.forEach(function(childSnapshot){
+          var childKey = childSnapshot.key; //chiave tag
+          ref.once('value', function(snapshot1){
+            snapshot1.forEach(function(childSnapshot1){
+              var childKey1 = childSnapshot1.key;
+              if (childKey == childKey1){ //se ne trovo uno uguale, eisste nella lista dei tag del poi
+                  tagShow.push(childSnapshot.child("nome").val())
+              }
+              return false;
+            })
+          })             
+        return false;
+      })
+    }).then(a=>{
+      this.poiTags = tagShow;
+    
+    })
+
+    this.poiTags = tagShow;
+  }
+ 
 
 
   refreshList(){
@@ -67,7 +98,8 @@ export class MonumentPage {
     })
 
     this.descriptions = descpts;
-    
+
+
 
   }
 

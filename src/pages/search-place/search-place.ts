@@ -34,6 +34,12 @@ export class SearchPlacePage {
 
   }
 
+  ionViewWillEnter(){
+    this.loadPois();
+
+  }
+
+
   loadPois(){
     var list = [];
     var self = this;
