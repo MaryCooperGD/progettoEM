@@ -56,7 +56,9 @@ export class SearchPlacePage {
             return false;
           })
 
-          var data = { nome: singlepoi.child("nome").val(), tipo:tagsList, chiave: singlepoi.key }
+          //var data = { nome: singlepoi.child("nome").val(), tipo:tagsList, chiave: singlepoi.key }
+          //var data = { myPoi: singlepoi, tipo:tagsList }
+          var data = {myPoi: singlepoi.val(), tipo: tagsList, chiave: singlepoi.key}
           list.push(data);
         }
         return false;

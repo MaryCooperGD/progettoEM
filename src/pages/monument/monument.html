@@ -10,7 +10,7 @@
    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Luogo di interesse</ion-title>
+    <ion-title>{{poiName}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,7 +21,7 @@
 <!--Card nome e foto-->
 <ion-card>
   <ion-card-header class="blue-title">
-    {{poi.nome}}
+    {{poiName}}
   </ion-card-header>
 
   <ion-card-content>
@@ -37,7 +37,7 @@
 
   <ion-card-content>
   	<ion-row id ="tag-row">
-      <ion-list *ngFor="let tag of poi.tipo">
+      <ion-list *ngFor="let tag of poi.tipo"> <!-- Lista di badge -->
 
        <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
        </ion-list>
@@ -45,7 +45,7 @@
   	<ion-row>
     	<p id ="local description">
     		La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
-    	</p>
+      </p>
     </ion-row>
   </ion-card-content>
 </ion-card>
@@ -53,17 +53,16 @@
 <!--Card informazioni utenti-->
 <ion-card>
     <ion-card-header class="blue-title">
-          Informazioni
+          Informazioni dagli utenti
     </ion-card-header>
   
     <ion-card-content>
         <ion-grid>
-            <ion-row>
-              <ion-col col-12>"blablablablab" - jericam</ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col col-6>"lablblbalbalbalb" - marina</ion-col>
-            </ion-row>
+          <ion-list *ngFor="let d of descriptions">
+              <ion-row>
+                  <ion-col col-12>"{{d.text}}" - {{d.user}}</ion-col>
+                </ion-row>
+          </ion-list>
           </ion-grid>
     </ion-card-content>
   </ion-card>

@@ -16,7 +16,13 @@ import { WelcomepagePage } from "../welcomepage/welcomepage";
 })
 export class UploadPhotoPage {
 
+  poi;
+  poiName;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+      this.poi = navParams.get('poi')
+      this.poiName = this.poi.myPoi.nome
+
   }
 
   ionViewDidLoad() {

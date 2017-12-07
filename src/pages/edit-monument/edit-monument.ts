@@ -101,7 +101,7 @@ export class EditMonumentPage {
   displayLoginError(messageErr: string){
     let toast = this.toastCtrl.create({
       message: messageErr,
-      duration: 3000,
+      duration: 2000,
       position: 'top'
     });
     toast.present();
