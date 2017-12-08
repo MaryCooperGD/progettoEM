@@ -13,6 +13,9 @@ import { File, FileReader } from '@ionic-native/file';
 import * as GraphHopper from 'graphhopper-js-api-client';
 import { CHECKBOX_REQUIRED_VALIDATOR } from '@angular/forms/src/directives/validators';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition,MarkerOptions, Marker } from '@ionic-native/google-maps';
+import { NavParams } from 'ionic-angular/navigation/nav-params';
+import { CreateRoutePage } from "../create-route/create-route";
+import { getComponent } from '@angular/core/src/linker/component_factory_resolver';
 declare var google: any;
 declare var require: any
 @Component({
@@ -31,8 +34,11 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
-  public file:File, public api:Api) {
+  public file:File, public api:Api, public navParams: NavParams) {
     this.menuCtrl.enable(true)
+    if(this.navParams.get('route')!=null){
+      console.log("Sto entrando dalla vecchia homepage")
+    }
 
     
     //Possibili template aggiunte a DB. NON CANCELLARE 
@@ -154,6 +160,7 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
+        this.withGoogle()
        //this.getFeatures()
         this.geolocate()
       } else {
@@ -167,7 +174,13 @@ export class HomePage {
         })
 
       }
+
       
+      
+  }
+
+  planTrip(){
+    this.navCtrl.push(CreateRoutePage);
   }
 
   
@@ -201,6 +214,7 @@ export class HomePage {
  
 
   geolocate(){
+    this.geocode("Mastro birarrio, cesena");
     this.geolocation.getCurrentPosition().then((resp) =>{
       var positionMarker: L.Marker;
       let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
@@ -243,7 +257,7 @@ export class HomePage {
       var self = this;
       var x = new HomePage(this.navCtrl, this.menuCtrl,this.geolocation,
         this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
-        this.file,this.api);
+        this.file,this.api, this.navParams);
      this.map.addEventListener('dragend', function(e){
        if(self.getMapZoom()>=16){
         self.getFeatures()
@@ -279,6 +293,19 @@ export class HomePage {
     })
   }
 
+  geocode(address:string){
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address':address}, function(results, status){
+      if (status === 'OK') {
+        console.log("Risultato: " + results[0].geometry.location)
+      } else {
+        console.log("Geocoding not ok")
+      }
+    })
+  }
+
+
+
   displayGPSError(messageErr: string){
     let toast = this.toastCtrl.create({
       message: messageErr,
@@ -292,7 +319,7 @@ export class HomePage {
 
     var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
       this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
-      this.file,this.api)
+      this.file,this.api, this.navParams)
       var found = false;
     var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
     var ref1 = firebase.database().ref('/point_of_interest');
@@ -350,14 +377,9 @@ export class HomePage {
 
   withGoogle(){
 
-  
-
     var first = new google.maps.LatLng(44.1359114,12.2454082);
     var second = new google.maps.LatLng(44.1371501,12.24147);
     var third = new google.maps.LatLng(44.136342,12.2429801);
-    
-
-    
 
     var data1 = {
       location: first,
@@ -383,7 +405,7 @@ export class HomePage {
     var waypoints= [data1,data2,data3]
     var encoded;
     this.directionsService.route({
-      origin: new google.maps.LatLng(44.1388386,12.243707),
+      origin: "Piazza Maurizio Bufalini, Cesena",
       destination: new google.maps.LatLng(44.1374648,12.2480796),
       waypoints: waypoints,
       optimizeWaypoints: true,
@@ -563,40 +585,7 @@ export class HomePage {
           
       }
 
-  saveTags(){
-   /*  var ref = firebase.database().ref('/tag/');
-    
-    var tags = ["bunker",	"Bunker",
-      "chapel",	"Cappella",
-      "cathedral",	"Cattedrale",
-      "church",	"Chiesa",
-      "mosque",	"Moschea",
-      "shrine",	"Santuario",
-      "synagogue",	"Sinagoga",
-      "paleontological_site",	"Sito paleontologico",
-      "university",	"Università",
-      "attraction",	"Attrazione",
-      "gallery",	"Galleria d'arte",
-      "museum", "Museo",
-      "artwork",	"Scultura pubblica",
-      "ditch",	"Fossato",
-      "city_wall",	"Mura", 
-      "campanile",	"Campanile",
-      "cross",	"Croce",
-      "obelisk",	"Obelisco",
-      "water_well", 	"Pozzo",
-      "nature_reserve",	"Riserva naturale",
-      "square",	"Piazza"];
-      for (var i=0;i<tags.length; i+=2){
-        var updates = {};
-        var data = {};        
-        var key = firebase.database().ref().child('tag').push().key;
-        data["OSM"] = tags[i]
-        data["nome"] = tags[i+1]
-        updates['/tag/'+key] = data;
-        firebase.database().ref().update(updates);
-      } */ 
-  }
+
 
   saveData(e){
     //if(e.tags.hasOwnProperty("tourism") && e.tags["tourism"]!="hotel"){

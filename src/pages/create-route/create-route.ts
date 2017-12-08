@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HomePage } from "../home/home";
 
 /**
  * Generated class for the CreateRoutePage page.
@@ -15,11 +16,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CreateRoutePage {
 
+  myInputPartenza: string;
+  myInputArrivo: string;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateRoutePage');
+  }
+
+
+  calculateRoute(){
+    console.log("Partenza " +  this.myInputPartenza + " Arrivo " + this.myInputArrivo)
+    this.navCtrl.setRoot(HomePage)
+
   }
 
 }

@@ -58,11 +58,11 @@ export class NewtagPage {
 }
 
 refreshItems():void{
-var ref1 = firebase.database().ref('/tags/'); //prendo tutti i tag esistenti
+var ref1 = firebase.database().ref('/tag/'); //prendo tutti i tag esistenti
 
 
       //creo la lista di tag
-       ref1.once('value', tagList => {
+       ref1.on('value', tagList => {
       let tags = [];
       tagList.forEach( poi => {
         tags.push(poi.val());
@@ -109,7 +109,6 @@ clickedButton(){
     firebase.database().ref().update(updates);
     this.presentToastOk();
     this.refreshItems();
-    //this.initializeItems();
     this.isEnabled = false;
   } else {
     this.presentToastWrong();
