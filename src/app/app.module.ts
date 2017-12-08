@@ -68,7 +68,12 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      //Serve affinchè non sballino le form che sono centrate. Senza queste tre righe quando clicchi su un campo la tastiera fa sballare tutto!
+      scrollPadding: false,
+      scrollAssist: true,
+      autoFocusAssist: false
+  })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

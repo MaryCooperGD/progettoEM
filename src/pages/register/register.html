@@ -13,30 +13,43 @@
 </ion-header>-->
 
 
-<ion-content padding>
-  <ion-card id = "register-card"> 
-    <form [formGroup]="signUpForm" (submit)="doSignup()">
-        <ion-list>
+<ion-content>
 
-          <ion-item>
-            <ion-label fixed>Username</ion-label>
-            <ion-input type="text" [(ngModel)]="account.name" formControlName="name" ></ion-input>
-          </ion-item>
+    <div id="crossfade"> <!--Costrutto per immagini che appaiono-->
+      <img src="assets/img/florence-1.png" alt="Image 2" id="immagine_2">
+      <img src="assets/img/cesena-1.png" alt="Image 2" id="immagine_2">
+      <img src="assets/img/venice-1.png" alt="Image 3" id="immagine_3">
+      <img src="assets/img/rome-1.png" alt="Image 4" id="immagine_4">
+      <img src="assets/img/bologna-1.png" alt="Image 5" id="immagine_5">
+    </div>
 
-          <ion-item>
-            <ion-label fixed>Email</ion-label>
-            <ion-input type="email" [(ngModel)]="account.email" formControlName="email"></ion-input>
-          </ion-item>
+    <ion-grid style="height: 100%">
+        <ion-row justify-content-center align-items-center style="height: 100%">
+            <ion-card id = "register-card" class="sticky_content"> 
+              <form [formGroup]="signUpForm" (submit)="doSignup()">
+                  <ion-list>
 
-          <ion-item>
-            <ion-label fixed>Password</ion-label>
-            <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
-          </ion-item>
+                    <ion-item>
+                      <ion-label fixed>Username</ion-label>
+                      <ion-input type="text" [(ngModel)]="account.name" formControlName="name" ></ion-input>
+                    </ion-item>
 
-          <div padding>
-            <button ion-button color="primary" block [disabled]="buttonDisabled">Registrati</button>
-          </div>
-        </ion-list>
-    </form>
-  </ion-card>
+                    <ion-item>
+                      <ion-label fixed>Email</ion-label>
+                      <ion-input type="email" [(ngModel)]="account.email" formControlName="email"></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-label fixed>Password</ion-label>
+                      <ion-input type="password" [(ngModel)]="account.password" formControlName="password"></ion-input>
+                    </ion-item>
+
+                    <div padding>
+                      <button ion-button color="primary" block [disabled]="buttonDisabled">Registrati</button>
+                    </div>
+                  </ion-list>
+              </form>
+            </ion-card>
+    </ion-row>
+  </ion-grid>
 </ion-content>

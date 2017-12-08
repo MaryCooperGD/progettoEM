@@ -12,28 +12,39 @@
 
 </ion-header>-->
 
+<ion-content>
 
-<ion-content padding class="skyline">
+    <div id="crossfade"> <!--Costrutto per immagini che appaiono-->
+      <img src="assets/img/florence-1.png" alt="Image 2" id="immagine_2">
+      <img src="assets/img/cesena-1.png" alt="Image 2" id="immagine_2">
+      <img src="assets/img/venice-1.png" alt="Image 3" id="immagine_3">
+      <img src="assets/img/rome-1.png" alt="Image 4" id="immagine_4">
+      <img src="assets/img/bologna-1.png" alt="Image 5" id="immagine_5">
+    </div>
 
-    <ion-card id = "login-card">
-        <form [formGroup]="signInForm" (submit)="doEmailPswLogin()" class="input">
-            <ion-list>
+    <ion-grid style="height: 100%">
+        <ion-row justify-content-center align-items-center style="height: 100%">
+          <ion-card id = "login-card" class="sticky_content">
+            <form [formGroup]="signInForm" (submit)="doEmailPswLogin()" class="input">
+                <ion-list>
 
-              <ion-item>
-                <ion-label fixed>Email</ion-label>
-                <ion-input type="email" [(ngModel)]="email" formControlName="email"></ion-input>
-              </ion-item>
+                  <ion-item>
+                    <ion-label fixed>Email</ion-label>
+                    <ion-input type="email" [(ngModel)]="email" formControlName="email"></ion-input>
+                  </ion-item>
 
-              <ion-item>
-                <ion-label fixed>Password</ion-label>
-                <ion-input type="password" [(ngModel)]="password" formControlName="password"></ion-input>
-              </ion-item>
+                  <ion-item>
+                    <ion-label fixed>Password</ion-label>
+                    <ion-input type="password" [(ngModel)]="password" formControlName="password"></ion-input>
+                  </ion-item>
 
-              <div padding>
-                <button ion-button color="primary" block [disabled]="buttonDisabled">Effettua il login</button>
-              </div>
+                  <div padding>
+                    <button ion-button color="primary" block [disabled]="buttonDisabled">Effettua il login</button>
+                  </div>
 
-            </ion-list>
-          </form>
-    </ion-card>
+                </ion-list>
+            </form>
+          </ion-card>
+        </ion-row>
+    </ion-grid>
 </ion-content>

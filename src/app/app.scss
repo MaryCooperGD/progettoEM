@@ -67,7 +67,7 @@
 
 
 //Serve per lo sfondo delle singole pagine. Va trovata un immagine di sfondo.
-  .skyline{  
+ /* .skyline{  
     background-image: url('../assets/img/sfondoapp.png');
     -webkit-background-image: url('../assets/img/sfondoapp.png');
     -webkit-background-size: cover;
@@ -75,7 +75,7 @@
     background-repeat: no-repeat;
     background-size:cover;
     width:100%;
-}
+}*/
 
 //--------INIZIO--------Per slide delle immagini nella welcomepage
 #crossfade > img { 
@@ -180,7 +180,9 @@
   }
   //--------fine--------Per slide delle immagini nella welcomepage
   
-  
+  .sticky_content{
+    position: sticky;
+  }
 
 
 
