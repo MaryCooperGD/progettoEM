@@ -36,8 +36,10 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File, public api:Api, public navParams: NavParams) {
     this.menuCtrl.enable(true)
-    if(this.navParams.get('route')!=null){
-      console.log("Sto entrando dalla vecchia homepage")
+    var first = this.navParams.get('firstAddress')
+    var second = this.navParams.get('secondAddress')
+    if (first !=null && second!=null){
+      console.log("Primo indirizzo " + first + " Secondo indirizzo " + second)
     }
 
     
@@ -160,7 +162,7 @@ export class HomePage {
 
       
       if(this.platform.is('core')){
-        this.withGoogle()
+        //this.withGoogle()
        //this.getFeatures()
         this.geolocate()
       } else {
@@ -297,7 +299,7 @@ export class HomePage {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address':address}, function(results, status){
       if (status === 'OK') {
-        console.log("Risultato: " + results[0].geometry.location)
+
       } else {
         console.log("Geocoding not ok")
       }
@@ -375,7 +377,7 @@ export class HomePage {
   }
 
 
-  withGoogle(){
+  withGoogle(start:string, arrival:string){
 
     var first = new google.maps.LatLng(44.1359114,12.2454082);
     var second = new google.maps.LatLng(44.1371501,12.24147);
@@ -405,8 +407,8 @@ export class HomePage {
     var waypoints= [data1,data2,data3]
     var encoded;
     this.directionsService.route({
-      origin: "Piazza Maurizio Bufalini, Cesena",
-      destination: new google.maps.LatLng(44.1374648,12.2480796),
+      origin: start,
+      destination: arrival,
       waypoints: waypoints,
       optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.WALKING,
