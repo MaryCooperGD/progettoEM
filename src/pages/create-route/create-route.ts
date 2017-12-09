@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition,MarkerOptions, Marker } from '@ionic-native/google-maps';
 
@@ -24,7 +24,7 @@ export class CreateRoutePage {
   startGecoded;
   arrivalGeocoded;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController) {
   }
 
   ionViewDidLoad() {
@@ -52,35 +52,25 @@ export class CreateRoutePage {
 
   getAddr = function(addr, f){
 
+        var self = this;
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode( { 'address': addr, }, function(results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
             f(results);
+          } else {
+            self.displayError("Routing non corretto. Controlla di aver scritto bene gli indirizzi, nella forma Via/Piazza/Strada/Luogo, Città")
           }
         });
 }
 
-  async geocode(address:string){
 
-    var self = this;
-    var uno, due, finished;
-    var geocoded1,geocoded2;
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address':address}, function(results, status){
-      if (status === 'OK') {
-        geocoded1 = results[0].geometry.location
-        console.log("Chi sarà prima")
-        return true;
-        
-      } else {
-        console.log("Chi sarà prima")
-        return false;
-      }
-    }).then(e =>{
-      console.log("Ho finito")
-    })
-    this.startGecoded = geocoded1;
-    
-  }
+displayError(messageErr: string){
+  let toast = this.toastCtrl.create({
+    message: messageErr,
+    duration: 2000,
+    position: 'top'
+  });
+  toast.present();
+}
 
 }

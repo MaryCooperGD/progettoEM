@@ -28,6 +28,9 @@ export class HomePage {
   public poiKeys:Array<any>;
   public GOOGLE_API_KEY = "AIzaSyDUKtnraJqbHqMP8jDHeGAZ75fUZZ9lLlw";
   public directionsService = new google.maps.DirectionsService();
+  start;
+  destination;
+  canCalculate = false;
   
 
   @ViewChild('map-container') mapContainer;
@@ -39,7 +42,10 @@ export class HomePage {
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
     if (first !=null && second!=null){
-      console.log("Primo indirizzo " + first + " Secondo indirizzo " + second)
+      this.start = first;
+      this.destination = second;
+      this.canCalculate = true;
+
     }
 
     
@@ -135,7 +141,10 @@ export class HomePage {
     
     //setup leaflet map
         this.initMap();
-        //this.withGoogle();
+        if(this.canCalculate){
+          this.withGoogle(this.start, this.destination);
+          
+        }
     
       }
 
@@ -160,7 +169,27 @@ export class HomePage {
       .addTo(this.map);   
 
 
-      
+      if (this.canCalculate){
+
+        var myIcon = L.icon({
+          iconUrl: "../assets/images/start.png",
+
+          iconSize: [25,41],
+          popupAnchor:  [25, 41],
+          iconAnchor: [25,41]
+        })
+         let marker = L.marker([this.start.lat(),this.start.lng()])
+        let content = `<b>Partenza</b>`;
+          marker.bindPopup(content) 
+          marker.addTo(this.map)
+         marker.openPopup()  
+        
+         let marker1 = L.marker([this.destination.lat(),this.destination.lng()], {icon: myIcon})
+         let content1 = `<b>Arrivo</b>`;
+           marker1.bindPopup(content1) 
+           marker1.addTo(this.map)
+          marker1.openPopup()
+      }
       if(this.platform.is('core')){
         //this.withGoogle()
        //this.getFeatures()
@@ -377,7 +406,19 @@ export class HomePage {
   }
 
 
-  withGoogle(start:string, arrival:string){
+  withGoogle(start, arrival){
+
+   /*  let marker = L.marker(this.start.lat(),this.start.lng())
+    let content = `Partenza`;
+      marker.bindPopup(content) 
+      marker.addTo(this.map)
+     marker.openPopup() 
+
+     let marker1 = L.marker1(this.destination.lat(),this.destination.lng())
+     let content1 = `Arrivo`;
+       marker1.bindPopup(content1) 
+       marker1.addTo(this.map)
+      marker1.openPopup() */
 
     var first = new google.maps.LatLng(44.1359114,12.2454082);
     var second = new google.maps.LatLng(44.1371501,12.24147);
