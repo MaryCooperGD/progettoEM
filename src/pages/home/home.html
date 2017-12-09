@@ -9,13 +9,18 @@
 
 <ion-content>
 
-  <!-- <div id="content"></div> -->
-   <div class="map-container">
-    <div id="map" style="width: 100%; height: 70%">
-    </div>
-  </div> 
-<div padding> 
-  <button ion-button color="primary" block (click)='planTrip()'> Pianifica il tuo percorso </button>
-</div>
+  <!--Riga per la mappa-->
+  <ion-row>
+    <div class="map-container">
+      <div id="map">
+      </div>
+    </div> 
+  </ion-row>
+
+  <!--Riga per il bottone-->
+  <ion-row>
+    <button ion-button color="primary" block (click)='planTrip()' id="button_plan"> Pianifica il tuo percorso </button>
+  </ion-row>
+
 </ion-content> 
 

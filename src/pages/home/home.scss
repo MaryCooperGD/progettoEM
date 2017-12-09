@@ -1,22 +1,27 @@
 page-home {
 
-     .map-container {
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-
-        width: 100%;
-        height: 70%;
-    }
-    
-    .marker {
+ 
+  .marker {
   background-size: cover;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   cursor: pointer;
+  
 }
 
+  #map{
+    width: 100%; 
+    height: 92%; 
+    position: absolute;
+  }
+
+  #button_plan{
+    position: fixed;
+    bottom: 0;
+    width: 100%; 
+    margin-bottom: 0px;
+  }
 
 
  
