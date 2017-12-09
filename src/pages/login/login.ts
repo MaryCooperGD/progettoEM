@@ -63,9 +63,9 @@ export class LoginPage {
           this.navCtrl.setRoot(HomePage);
           var userMail:string = this.api.replaceCharacters(firebase.auth().currentUser.email);
           console.log(userMail+"")
-          var updates = {};
-          updates['/users/'+userMail+'/phone'] = 123456789;
-          firebase.database().ref().update(updates);
+          //var updates = {};
+          //updates['/users/'+userMail+'/phone'] = 123456789;
+          //firebase.database().ref().update(updates);
 
   
       }

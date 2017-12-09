@@ -49,7 +49,15 @@ export class ProfilePage {
   public badges_utente_informatore:Array<any>;
   public badges_utente_fotografo:Array<any>;
 
-  
+  //per sapere il numero di contributi
+  numb_of_info;
+  numb_of_photo;
+  numb_og_tag;
+
+  //mi serve per mostrare a video l'avviso i badge utente
+  isEnabled : boolean = true;
+ 
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
 
@@ -107,6 +115,17 @@ export class ProfilePage {
       this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
       this.id_user = i.email_user; //Prendiamo dal forEach la mail (quella sporca che rappresenta l'id utente)
 
+      //per calcolare il numero di contributi, avendo ogni contributo un punteggio predefinito e sapendone il totale, 
+      //in questo modo posso contare quanti contributi sono stati dati dall'utente!
+      this.numb_of_info = (i.points_info / 15 );
+      this.numb_of_photo = (i.points_photos / 20 );
+      this.numb_og_tag = (i.points_tag / 5 );
+
+      if (i.total_points == 0)
+      {
+        this.isEnabled = false;
+      }
+      
       //Da qui facciamo il join per vedere le preferenze dell'utente loggato
           let userTags = [];
           var ref = firebase.database().ref('/users/'+ this.id_user +'/preferenze/') //this.id_user permette di utilizzare l'identificativo per trovare le preferenze dell'utente loggato
@@ -136,8 +155,6 @@ export class ProfilePage {
                   Nel DB infatti abbiamo "name" = "Acquedotto", ad esempio, quindi il .val() restituirà acquedotto.
                   
                   */
-
-                  
                   }
                   return false;
                  
@@ -159,9 +176,7 @@ export class ProfilePage {
               in cima alla classe. 
               Quindi, nel tuo HTML avrai un *ngFor classico per mostrare una lista di elementi che utilizzerà il vettore "tags".
               */
-              
-             
-          
+
             }) //--- fine di .then(a=>{
       //Fine parte delle preferenze dell'utente
 
@@ -206,8 +221,6 @@ export class ProfilePage {
           this.badges_utente_taggatore = userTagBadges;
           this.badges_utente_fotografo = userFotoBadges;
           this.badges_utente_informatore = userInfoBadges;
-
-         
       })
       //Fine parte dei badge
 
