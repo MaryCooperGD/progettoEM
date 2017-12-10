@@ -19,14 +19,14 @@
 <ion-content padding>
 
   <!--Se ci si scrive qualcosa e poi si manda invio darà errore perchè non è collegata a nulla-->
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+ <!-- <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list>
     <ion-item *ngFor="let item of items">
       
     </ion-item>
-  </ion-list>
+  </ion-list>-->
 
-
+  <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list *ngFor="let item of pois;">
 
       <button ion-item (click)="openPlace(item)">

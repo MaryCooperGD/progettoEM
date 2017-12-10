@@ -18,6 +18,13 @@ export class NewtagPage {
   public textSearch:any;
   poi;
 
+  //per inserire punti!
+  username:any;
+  punteggio_tag;
+  punteggio_totale;
+  public user_email: Array<any> = [];
+  public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
+  id_user;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, 
   public menuCtrl: MenuController, public toastCtrl: ToastController) {
@@ -43,6 +50,26 @@ export class NewtagPage {
 
   ionViewDidLoad() {
     this.menuCtrl.close();
+
+    if(this.api.user.displayName==null){
+      this.username = '';
+    }else {
+      this.username = this.api.user.displayName
+    }   
+     
+    this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+      this.user_email = [];
+      itemSnapshot.forEach( itemSnap => {
+        this.user_email.push(itemSnap.val());
+        return false;
+      });
+      this.user_email.forEach(i=>{
+        this.id_user = i.email_user;
+        this.punteggio_tag = i.points_tag;
+        this.punteggio_totale = i.total_points;
+
+      })
+    });
   }
 
   ionViewWillEnter() {
@@ -106,8 +133,18 @@ clickedButton(){
     var updates = {};
     updates['/tag/'+key] = tagData;
     updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + key] = "true";
+
+    //Incrementa la variabile dei punti delle informazioni
+    this.punteggio_tag = this.punteggio_tag + 5 ;
+    updates["/users/"+this.id_user+"/points_tag"]  = this.punteggio_tag;
+
+    //Incrementa la variabile dei PUNTI TOTALI
+    this.punteggio_totale = this.punteggio_totale + 5 ;
+    updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+
     firebase.database().ref().update(updates);
     this.presentToastOk();
+    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
     this.refreshItems();
     this.isEnabled = false;
   } else {
@@ -130,7 +167,6 @@ getItems(searchbar) {
     return;
   }
 
-
   this.tagList = this.tagList.filter((v) => {
     if(v.nome && q) {
       if (v.nome.toLowerCase().indexOf(q.toLowerCase()) > -1) {
@@ -147,5 +183,16 @@ getItems(searchbar) {
   }
 
  
+}
+
+
+//per il messaggio di conferma!
+displayLoginError(messageErr: string){
+  let toast = this.toastCtrl.create({
+    message: messageErr,
+    duration: 2000,
+    position: 'top'
+  });
+  toast.present();
 }
 }

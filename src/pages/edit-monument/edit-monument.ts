@@ -34,8 +34,10 @@ export class EditMonumentPage {
   id_user;
 
   //punteggio che verrà incrementato
-  punteggio;
+  punteggio_info;
   punteggio_totale;
+  punteggio_tag;
+
   public tagList: Array<any>;
   public loadedTagList: Array<any>;
 
@@ -65,8 +67,9 @@ export class EditMonumentPage {
       });
       this.user_email.forEach(i=>{
         this.id_user = i.email_user;
-        this.punteggio = i.points_info;
+        this.punteggio_info = i.points_info;
         this.punteggio_totale = i.total_points;
+        this.punteggio_tag = i.points_tag;
 
       })
     });
@@ -113,7 +116,17 @@ export class EditMonumentPage {
     var tagToAdd = this.tagList[index]; //corretto
     var updates = {};
    updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
+
+   //Incrementa la variabile dei punti delle informazioni
+   this.punteggio_tag = this.punteggio_tag + 5 ;
+   updates["/users/"+this.id_user+"/points_tag"]  = this.punteggio_tag;
+
+   //Incrementa la variabile dei PUNTI TOTALI
+   this.punteggio_totale = this.punteggio_totale + 5 ;
+   updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+
    firebase.database().ref().update(updates);
+   this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
    this.refreshTags();
  }
 
@@ -142,8 +155,8 @@ export class EditMonumentPage {
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
 
     //Incrementa la variabile dei punti delle informazioni
-    this.punteggio = this.punteggio + 15 ;
-    updates["/users/"+this.id_user+"/points_info"]  = this.punteggio;
+    this.punteggio_info = this.punteggio_info + 15 ;
+    updates["/users/"+this.id_user+"/points_info"]  = this.punteggio_info;
 
     //Incrementa la variabile dei PUNTI TOTALI
     this.punteggio_totale = this.punteggio_totale + 15 ;
@@ -151,7 +164,7 @@ export class EditMonumentPage {
 
     firebase.database().ref().update(updates);
 
-    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!") 
+    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!");
     this.navCtrl.pop(); //Bottone per tornare indietro
   }
 
