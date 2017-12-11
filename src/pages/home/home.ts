@@ -149,7 +149,7 @@ export class HomePage {
       }
 
   ionViewCanLeave(){
-    document.getElementById("map").outerHTML = "";
+    //document.getElementById("map").outerHTML = "";
   }
 
   initMap() {
@@ -175,8 +175,8 @@ export class HomePage {
           iconUrl: "../assets/images/start.png",
 
           iconSize: [25,41],
-          popupAnchor:  [25, 41],
-          iconAnchor: [25,41]
+          popupAnchor:  [1, -34],
+          iconAnchor: [12,41]
         })
          let marker = L.marker([this.start.lat(),this.start.lng()])
         let content = `<b>Partenza</b>`;
