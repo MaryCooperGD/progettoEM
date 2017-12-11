@@ -39,25 +39,28 @@ export class TutorialPage {
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   id_user; //conterrà la mail
 
+  //Mi serve per far comparire o meno la card con le preferenze da poter aggiungere
+  isEnabled : boolean = false; //Di base non si vede
+
   constructor(public navCtrl: NavController, public api: Api, public navParams: NavParams, public toastCtrl:ToastController,) {
     
     this.second = false;
+    
      this.slidess = [
       {
-        title: "Benvenuto su CesenaEsplora!",
-        description: "CesenaEsplora ti permette di organizzare il tuo viaggio culturale in giro per la città",
-        image: '',
-        
+        title: "Benvenuto su C.I.C.E.",
+        description: "C.I.C.E. ti permette di organizzare il tuo viaggio culturale in giro per la città",
+        image: 'src/assets/img/loc.png', //DEVO CAPIRE PERCHè NON VANNO
       },
       {
         title: "Organizza il tuo viaggio",
         description: "Scegli i tag che ti interessano e inizia ad esplorare",
-        image: '', 
+        image: '/assets/img/trip.png', //DEVO CAPIRE PERCHè NON VANNO
       },
       {
         title: "Contribuisci alla conoscenza",
         description: "Aggiungi foto e aneddoti dei luoghi visitati, ottieni punti e scala la classifica",
-        image: '',
+        image: '../assets/img/edit.png', //DEVO CAPIRE PERCHè NON VANNO
       }
     ]; 
   }
@@ -117,12 +120,23 @@ export class TutorialPage {
     });
   }
 
+  //Controlla il cambiamento delle slide. Utilizzo qui isEnabled
   slideChanged(){
     let currentIndex = this.slides.getActiveIndex();
+    //Se siamo nella currentIndex = 1 significa che siamo nella slide dove deve apparire la card.
     if (currentIndex == 1){
-        this.second = true;
-    } else {
+      this.isEnabled = true; //Abilito la presenza della card nell'html.
+      this.second = true;
+    } 
+    //Nelle altre 2 slide non si deve vedere quindi mantengo a false la variabile
+    else if(currentIndex == 2){
+      this.isEnabled = false;
       this.second = false;
+    }
+    else {
+      this.second = false;
+      this.isEnabled = false;
+      
     }
   }
   onSlideChangeStart(slider) {

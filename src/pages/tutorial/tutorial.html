@@ -1,20 +1,22 @@
-<ion-header no-shadow>
-  <ion-toolbar>
+<ion-header no-shadow color="primary">
+  <ion-toolbar color="primary">
     <ion-buttons end *ngIf="showSkip">
-      <button ion-button (click)="startApp()" color="primary">SKIP</button>
+      <button ion-button (click)="startApp()" color="light"><b>SKIP</b></button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content no-bounce>
+<ion-content no-bounce class="skyline">
   <ion-slides pager="true" (ionWillChange)="onSlideChangeStart($event)" (ionSlideDidChange)="slideChanged()">
 
     <ion-slide *ngFor="let slide of slidess">
-      <img [src]="slide.image" class="slide-image" />
+      <img [src]="slide.image" class="slide-image" style="height: 40px; width: 40px;"/>
       <h2 class="slide-title" [innerHTML]="slide.title"></h2>
       <p [innerHTML]="slide.description"></p>
       <h6 *ngIf="second" class="blue-title" id="riga-preferenze"> (potrai modificarli in seguito)</h6>
      
+      <!--Se isEnabled è true allora SI vede. perchè se è false rimane nascosto-->
+      <ion-card [hidden]="!isEnabled">
       <ion-scroll id="scroll-lista-tag" scrollY="true">
         <ion-list id="lista-tag" *ngIf="second">
             <button ion-item *ngFor="let pref of preferences; let i=index" (click)="addSelectedPreference(i)">
@@ -22,6 +24,7 @@
             </button>
         </ion-list>
       </ion-scroll>
+    </ion-card>
     </ion-slide>
     <!-- <ion-slide *ngFor="let slide of slides">
       <img [src]="slide.image" class="slide-image" />
