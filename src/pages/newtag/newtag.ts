@@ -18,13 +18,16 @@ export class NewtagPage {
   public textSearch:any;
   poi;
 
-  //per inserire punti!
+  
   username:any;
+  email: any;
+
+  //per inserire punti!
   punteggio_tag;
   punteggio_totale;
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
-  id_user;
+  
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, 
   public menuCtrl: MenuController, public toastCtrl: ToastController) {
@@ -53,8 +56,11 @@ export class NewtagPage {
 
     if(this.api.user.displayName==null){
       this.username = '';
+      this.email = '';
     }else {
-      this.username = this.api.user.displayName
+      this.username = this.api.user.displayName;
+      this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
+      
     }   
      
     this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
@@ -64,7 +70,6 @@ export class NewtagPage {
         return false;
       });
       this.user_email.forEach(i=>{
-        this.id_user = i.email_user;
         this.punteggio_tag = i.points_tag;
         this.punteggio_totale = i.total_points;
 
@@ -136,11 +141,22 @@ clickedButton(){
 
     //Incrementa la variabile dei punti delle informazioni
     this.punteggio_tag = this.punteggio_tag + 5 ;
-    updates["/users/"+this.id_user+"/points_tag"]  = this.punteggio_tag;
+    updates["/users/"+this.email+"/points_tag"]  = this.punteggio_tag;
 
     //Incrementa la variabile dei PUNTI TOTALI
     this.punteggio_totale = this.punteggio_totale + 5 ;
-    updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
+
+    //assegnamento badge - TAGGATORE
+    if(this.punteggio_tag >= 300){
+      updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+    }else if(this.punteggio_tag >= 180){
+      updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+    }else if(this.punteggio_tag >= 50){
+      updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+    }else if(this.punteggio_tag >= 15){
+      updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
+    }
 
     firebase.database().ref().update(updates);
     this.presentToastOk();

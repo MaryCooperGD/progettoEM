@@ -80,7 +80,7 @@ export class RegisterPage {
     //console.log(email+'')
     firebase.database().ref('users/' + email).set({
       username: name,
-      email_user: email,
+      email_user: email, //mail NON in chiaro
       clear_email: email_clear, //Registro nel db anche questa mail pulita
       data_registrazione: new Date().getTime(),
      

@@ -27,12 +27,12 @@ export class EditMonumentPage {
   public myInput;
   public poi;
   username:any;
+  email:any;
 
   //per prendere email (id dell'utente loggato) che ci serve per sapere dove aggiungere il punteggio
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
-  id_user;
-
+  
   //punteggio che verrà incrementato
   punteggio_info;
   punteggio_totale;
@@ -45,9 +45,6 @@ export class EditMonumentPage {
 
     this.poi = navParams.get('poi');
     this.refreshTags();
-
-    
-    
   }
 
   ionViewDidLoad() {
@@ -55,18 +52,20 @@ export class EditMonumentPage {
 
     if(this.api.user.displayName==null){
       this.username = '';
+      this.email = '';
     }else {
       this.username = this.api.user.displayName
+      this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente
     }   
      
-    this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+    this.user_emailRef.orderByKey().equalTo(this.email).on('value',itemSnapshot =>{
       this.user_email = [];
       itemSnapshot.forEach( itemSnap => {
         this.user_email.push(itemSnap.val());
         return false;
       });
       this.user_email.forEach(i=>{
-        this.id_user = i.email_user;
+        
         this.punteggio_info = i.points_info;
         this.punteggio_totale = i.total_points;
         this.punteggio_tag = i.points_tag;
@@ -119,11 +118,22 @@ export class EditMonumentPage {
 
    //Incrementa la variabile dei punti delle informazioni
    this.punteggio_tag = this.punteggio_tag + 5 ;
-   updates["/users/"+this.id_user+"/points_tag"]  = this.punteggio_tag;
+   updates["/users/"+this.email+"/points_tag"]  = this.punteggio_tag;
 
    //Incrementa la variabile dei PUNTI TOTALI
    this.punteggio_totale = this.punteggio_totale + 5 ;
-   updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+   updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
+
+  //assegnamento badge - TAGGATORE
+  if(this.punteggio_tag >= 300){
+    updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+  }else if(this.punteggio_tag >= 180){
+    updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+  }else if(this.punteggio_tag >= 50){
+    updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+  }else if(this.punteggio_tag >= 15){
+    updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
+  }
 
    firebase.database().ref().update(updates);
    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
@@ -156,24 +166,23 @@ export class EditMonumentPage {
 
     //Incrementa la variabile dei punti delle informazioni
     this.punteggio_info = this.punteggio_info + 40 ;
-    updates["/users/"+this.id_user+"/points_info"]  = this.punteggio_info;
+    updates["/users/"+this.email+"/points_info"]  = this.punteggio_info;
 
     //Incrementa la variabile dei PUNTI TOTALI
     this.punteggio_totale = this.punteggio_totale + 15 ;
-    updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
     //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
     //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
     if(this.punteggio_info >= 300){
-      updates["/users/"+this.id_user+"/badge/Informatore prodigio"]  = true;
+      updates["/users/"+this.email+"/badge/Informatore prodigio"]  = true;
     }else if(this.punteggio_info >= 240){
-      updates["/users/"+this.id_user+"/badge/Informatore esperto"]  = true;
+      updates["/users/"+this.email+"/badge/Informatore esperto"]  = true;
     }else if(this.punteggio_info >= 60){
-      updates["/users/"+this.id_user+"/badge/Informatore principiante"]  = true;
+      updates["/users/"+this.email+"/badge/Informatore principiante"]  = true;
     }else if(this.punteggio_info >= 15){
-      updates["/users/"+this.id_user+"/badge/Informatore novizio"]  = true;   
+      updates["/users/"+this.email+"/badge/Informatore novizio"]  = true;   
     }
-
 
     firebase.database().ref().update(updates);
 
@@ -198,6 +207,5 @@ export class EditMonumentPage {
     });
     toast.present();
   }
-
 
 }

@@ -24,10 +24,11 @@ export class ProfilePage {
 
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Preferenze";
-
   //---FINE--parte funzionamento segment
 
   username:any;
+  email:any;
+
   public myPhotosRef: any;
   public myPhoto: any;
   public myPhotoURL: any;
@@ -38,8 +39,6 @@ export class ProfilePage {
 
   correct_data; //variabile per inserire la data corretta della registrazione dell'utente.
 
-  id_user; //Siccome da noi l'utente è identificato dalla mail con i caratteri strani strani (email_user nell'albero), qui ci metteremo tale mail. es: "jerikam92@gmail%2Ecom"
-  
   //--Per mostrare le preferenze utente
   public tags:Array<any>;
 
@@ -57,10 +56,8 @@ export class ProfilePage {
   //mi serve per mostrare a video l'avviso i badge utente
   isEnabled : boolean = true;
  
-
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('photos/');
-
   }
 
   selectPhoto(){
@@ -99,27 +96,31 @@ export class ProfilePage {
   ionViewDidLoad() {
     if(this.api.user.displayName==null){
       this.username = '';
+      this.email = '';
+      
   }else {
-      this.username = this.api.user.displayName
+      this.username = this.api.user.displayName;
+      this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
   }      
 
    //----Questa query ci permette di recuperare tutte le informazioni inserite nel nodo dell'utente loggato, nella tabella users + le sue preferenze
-   this.itemRef_user_details.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
+   this.itemRef_user_details.orderByKey().equalTo(this.email).on('value',itemSnapshot =>{
     this.items_user_details = [];
     itemSnapshot.forEach( itemSnap => {
       this.items_user_details.push(itemSnap.val());
-      
       return false;
     });
     this.items_user_details.forEach(i=>{ //Dentro a questo forEach vado a recuperare informazioni che mi interessano
       this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
-      this.id_user = i.email_user; //Prendiamo dal forEach la mail (quella sporca che rappresenta l'id utente)
-
+      
       //per calcolare il numero di contributi, avendo ogni contributo un punteggio predefinito e sapendone il totale, 
       //in questo modo posso contare quanti contributi sono stati dati dall'utente!
-      this.numb_of_info = (i.points_info / 15 );
-      this.numb_of_photo = (i.points_photos / 20 );
-      this.numb_og_tag = (i.points_tag / 5 );
+
+      this.numb_of_info = Math.round(i.points_info / 15 ); //usiamo math.round per arrotondare per eccesso/difetto, dipende dal numero più vicino
+      this.numb_of_photo = Math.round(i.points_photos / 20 );
+      this.numb_og_tag = Math.round(i.points_tag / 5 );
+
+     
 
       if (i.total_points == 0)
       {
@@ -128,7 +129,7 @@ export class ProfilePage {
       
       //Da qui facciamo il join per vedere le preferenze dell'utente loggato
           let userTags = [];
-          var ref = firebase.database().ref('/users/'+ this.id_user +'/preferenze/') //this.id_user permette di utilizzare l'identificativo per trovare le preferenze dell'utente loggato
+          var ref = firebase.database().ref('/users/'+ this.email+'/preferenze/') //this.id_user permette di utilizzare l'identificativo per trovare le preferenze dell'utente loggato
           var ref1 = firebase.database().ref('/tag/');
           ref.once('value', function(preferenze){ //sto ciclando sulle preferenze dell'utente.
             preferenze.forEach(function(singolaPref){//snapshot è l'intero albero, singolaPref è la singola componente dell'albero
@@ -186,7 +187,7 @@ export class ProfilePage {
       let userFotoBadges = [];
       let userInfoBadges = [];
 
-      var ref2 = firebase.database().ref('/users/'+ this.id_user +'/badge/')
+      var ref2 = firebase.database().ref('/users/'+ this.email+'/badge/')
       var ref3 = firebase.database().ref('/badges/');
       
       ref2.once('value',function(badge){ //ciclo sui badge dell'utente

@@ -62,7 +62,10 @@ export class LoginPage {
       } else {
           this.navCtrl.setRoot(HomePage);
           var userMail:string = this.api.replaceCharacters(firebase.auth().currentUser.email);
-          console.log(userMail+"")
+          
+          //richiamando questo medoto prendo la userMail settata non in chiaro e la metto dentro le API
+          this.api.retrieveEmail(userMail);
+          
           //var updates = {};
           //updates['/users/'+userMail+'/phone'] = 123456789;
           //firebase.database().ref().update(updates);

@@ -16,6 +16,9 @@ export class Api {
   url: string = 'https://example.com/api/v1';
   public user : firebase.User;
   city: string ;
+  
+  email_id: string; //Sarà l'identificatore dell'utente (perchè le mail all'interno del db non possono essere ripetute)
+
   gpsEnabled : boolean;
   constructor(public http: Http, public afAuth: AngularFireAuth, public db: AngularFireDatabase,
               public toastCtrl:ToastController) {
@@ -72,6 +75,10 @@ export class Api {
    */
   getCity(){
     return this.city;
+  }
+
+  retrieveEmail(email){
+    this.email_id = email;
   }
 
 
