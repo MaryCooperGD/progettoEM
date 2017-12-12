@@ -67,9 +67,9 @@
 
 
 //Serve per lo sfondo delle singole pagine. Va trovata un immagine di sfondo.
-  .skyline{  
-    background-image: url('../assets/img/ciao.png');
-    -webkit-background-image: url('../assets/img/ciao.png');
+  .sfondo_content{  
+    background-image: url('../assets/img/background_app.png');
+    -webkit-background-image: url('../assets/img/background_app.png');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-repeat: no-repeat;

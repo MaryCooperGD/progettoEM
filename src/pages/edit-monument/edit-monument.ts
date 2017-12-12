@@ -155,12 +155,25 @@ export class EditMonumentPage {
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
 
     //Incrementa la variabile dei punti delle informazioni
-    this.punteggio_info = this.punteggio_info + 15 ;
+    this.punteggio_info = this.punteggio_info + 40 ;
     updates["/users/"+this.id_user+"/points_info"]  = this.punteggio_info;
 
     //Incrementa la variabile dei PUNTI TOTALI
     this.punteggio_totale = this.punteggio_totale + 15 ;
     updates["/users/"+this.id_user+"/total_points"]  = this.punteggio_totale;
+
+    //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
+    //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
+    if(this.punteggio_info >= 300){
+      updates["/users/"+this.id_user+"/badge/Informatore prodigio"]  = true;
+    }else if(this.punteggio_info >= 240){
+      updates["/users/"+this.id_user+"/badge/Informatore esperto"]  = true;
+    }else if(this.punteggio_info >= 60){
+      updates["/users/"+this.id_user+"/badge/Informatore principiante"]  = true;
+    }else if(this.punteggio_info >= 15){
+      updates["/users/"+this.id_user+"/badge/Informatore novizio"]  = true;   
+    }
+
 
     firebase.database().ref().update(updates);
 
