@@ -31,6 +31,7 @@ export class HomePage {
   start;
   destination;
   canCalculate = false;
+  public myTags:Array<any>;
   
 
   @ViewChild('map-container') mapContainer;
@@ -48,86 +49,6 @@ export class HomePage {
 
     }
 
-    
-    //Possibili template aggiunte a DB. NON CANCELLARE 
-
-
-     /* PRIMO TEMPLATE - AGGIUNTA SEMPLICE
-     In ordine, quello che si fa è :
-     1) prendere il riferimento al nodo del DB su cui intendiamo lavorare
-     2) generare la chiave (o le chiavi) per i dati da aggiungere. In questo caso, dovendo aggiungere due
-     nuove città, genero le chiavi, che mi serviranno per creare i miei nuovi sottoalberi
-     3) creo il vettore degli updates che pusherò al DB
-     4) creo i dati che vorrò pushare. In questo caso, le città hanno come campi solo "nome" e "pois"; quest'
-     ultimo verrà creato e aggiornato ogni volta che aggiungeremo punti di interesse (vedi sotto)
-     5) per aggiungere la nuova città, nel vettore updates la sintassi si riferisce a:
-        nodo di interesse (cities) + chiave da aggiungere = dati specificati
-    6) pusho al DB. L'output è quello che si vede nel nodo "cities"!
-
-     
-    1) var ref = firebase.database().ref('/cities/');
-    2)var key = firebase.database().ref().child('cities').push().key;
-    var key2 = firebase.database().ref().child('cities').push().key;
-    3)var updates = {};
-    4) var data = {
-      name: "Cesena"
-    }
-    var data2 = {
-      name: "Bologna"
-
-    }
-    5)updates['/cities/'+key] = data;
-    updates['/cities/'+key2 ] = data2;
-    6)firebase.database().ref().update(updates);*/
-    
-    
-    /*
-    SECONDO TEMPLATE - AGGIUNTA SU DUE (o più) NODI
-     In ordine, quello che si fa è :
-     1) prendere il riferimento al nodo del DB su cui intendiamo lavorare
-     2) generare la chiave (o le chiavi) per i dati da aggiungere. In questo caso stiamo aggiungendo un nuovo
-     punto di interesse, quindi genererò una sola chiave. E' ovvio che se ne devo inserire 10, ne genererò
-     altrettante. Questo processo va AUTOMATIZZATO, al momento sto cercando un modo per farlo costruendo
-     la var "data" automaticamente prendendo le info dal file json.
-     3) creo il vettore degli updates che pusherò al DB
-     4) creo i dati che vorrò pushare. In questo caso la struttura è più ricca di campi, ma il senso è sempre
-     lo stesso. La storia del voler automatizzare la raccolta di info è riferita al fatto che al momento 
-     OpenStreetMap mi dà quelle + altre informazioni, e voglio cercare il modo per estrapolare quelle utili
-     senza dover copia-incollare i dati a mano sul file JSON che si importa nel DB.... ANche perché con 20 
-     punti di interesse la storia è lunga.
-     5) la sintassi è uguale a quella precedente, ma qui si aggiungono due cose diverse: ,
-     5a) aggiungo semplicemente i miei dati del punto di interesse al nodo corrispondente, con la chiave
-     univoca generata al punto (2);
-     5b) aggiungo al nodo CITIES in corrispondenza della chiave di CESENA nel suo sottoalbero POIS la chiave
-     del mio punto di interesse che sto aggiungendo e gli setto il valore a TRUE (per dire che lo ha!).
-     L'albero visivamente sarebbe
-      - Cities
-        - Cesena
-          - pois
-            - key punto di interesse
-    6) pusho al DB. L'output è quello che si vede nel nodo "point_of_interest" e dentro "cities" 
-    alla voce "poi"!
-    
-    
-    1) var ref = firebase.database().ref('/point_of_interest/');
-    2) var key = firebase.database().ref().child('point_of_interest').push().key;
-    3)var updates = {}
-    4)var data = {
-      "description" : "",
-      "informations" : "",
-      "name" : "Biblioteca Malatestiana",
-	    "city": "Cesena",
-	    "lat": 44.1388386,
-      "lon": 12.2437070,
-	    "amenity": "library",
-	    "tourism": "attraction"
-    }
-    5a)updates['/point_of_interest/'+key] = data;
-    5b)updates['/cities/-KzZFy1JPWnrwTzRyS9R/pois/' + key] = "true";
-    6)firebase.database().ref().update(updates);*/
-
-  
-
   }
 
   
@@ -143,10 +64,14 @@ export class HomePage {
         this.initMap();
         if(this.canCalculate){
           this.withGoogle(this.start, this.destination);
-          
-        }
+        } 
+        this.getUsersPref()
     
       }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   ionViewCanLeave(){
     //document.getElementById("map").outerHTML = "";
@@ -158,7 +83,7 @@ export class HomePage {
       center: this.center,
       zoom: 16 
     });
-    L.marker(this.center).addTo(this.map)
+    //L.marker(this.center).addTo(this.map)
     this.map.panTo(this.center)
     
     //Add OSM Layer
@@ -245,7 +170,7 @@ export class HomePage {
  
 
   geolocate(){
-    this.geocode("Mastro birarrio, cesena");
+    //this.geocode("Mastro birarrio, cesena");
     this.geolocation.getCurrentPosition().then((resp) =>{
       var positionMarker: L.Marker;
       let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
@@ -271,10 +196,6 @@ export class HomePage {
             }
         }
         self.api.setCity(city.long_name);
-
-
-
-
         }
       }
       request.send();
@@ -346,42 +267,6 @@ export class HomePage {
     toast.present();
   }
 
-  findPoiByTag(tag){
-
-    var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
-      this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
-      this.file,this.api, this.navParams)
-      var found = false;
-    var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
-    var ref1 = firebase.database().ref('/point_of_interest');
-    ref.once('value', function(snapshot){
-      snapshot.forEach(function(childSnapshot){
-        ref1.once('value',function(snapshot1){
-          snapshot1.forEach(function(childSnapshot1){
-            //if(childSnapshot1.child("tipologia").val() == tag){//se è taggato come sto cercando
-            if(tag.indexOf(childSnapshot1.child("tipologia").val()) > -1){ //controllo per il vettore
-              found = true;
-              if (childSnapshot.key == childSnapshot1.key){
-                console.log("Punto taggato " + childSnapshot1.child("tipologia").val() + " è " + childSnapshot1.key)
-              }
-
-            } 
-            return false;
-          })
-        })
-
-        return false;
-      })
-
-    })
-
-      if (!found){
-        self.displayGPSError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
-        +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
-      }
-      
-    
-  }
 
   updateCityPois(){
     let poisKeys = [];
@@ -408,18 +293,6 @@ export class HomePage {
 
   withGoogle(start, arrival){
 
-   /*  let marker = L.marker(this.start.lat(),this.start.lng())
-    let content = `Partenza`;
-      marker.bindPopup(content) 
-      marker.addTo(this.map)
-     marker.openPopup() 
-
-     let marker1 = L.marker1(this.destination.lat(),this.destination.lng())
-     let content1 = `Arrivo`;
-       marker1.bindPopup(content1) 
-       marker1.addTo(this.map)
-      marker1.openPopup() */
-
     var first = new google.maps.LatLng(44.1359114,12.2454082);
     var second = new google.maps.LatLng(44.1371501,12.24147);
     var third = new google.maps.LatLng(44.136342,12.2429801);
@@ -442,8 +315,6 @@ export class HomePage {
 
     var polyUtil = require('polyline-encoded')
     var latlngs;
-  // should print '_p~iF~cn~U_ulLn{vA_mqNvxq`@'
-  //console.log("Encoded " +polyUtil.encode(latlngs));
   var newMap = this.map;
     var waypoints= [data1,data2,data3]
     var encoded;
@@ -692,7 +563,7 @@ export class HomePage {
        results.elements.forEach(e => {
         //this.saveData(e)
         if(e.type == "way"){
-            console.log('ID: ' + e.id)
+           // console.log('ID: ' + e.id)
                lat = e.center["lat"]
               lon = e.center["lon"]
               pointList.push(new L.LatLng(lat,lon));
@@ -718,17 +589,133 @@ export class HomePage {
           //marker.addTo(overlays['amenity=hospital']);
            marker.openPopup() */
           }
-          console.log('Latitudine: ' + lat + ' Longitudine: ' + lon)
+        //  console.log('Latitudine: ' + lat + ' Longitudine: ' + lon)
       
       });
   
     }).catch(error => {
       console.log(''+ error)
     });  
-    //this.graphHopper();
+
+    //var ref = firebase.database().ref('/users/'+ this.api.user+'/preferenze')    //this.graphHopper();
     var tags = ["prova"]
-    this.findPoiByTag(tags)
+    //this.findPoiByTag(tags)
 
   }
 
+  async getUsersPref(){
+
+    var self = this;
+
+    
+    var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
+    var ref = firebase.database().ref('/tag/')
+    var username;
+    if(self.api.user.displayName==null){
+      username = '';
+  }else {
+      username = self.api.user.displayName
+  }
+
+  var userTags = [];
+  var self1 = self;
+  user_pref.once('value', function(preferenze){ 
+  preferenze.forEach(function(t){
+    ref.once('value', function(tags){ 
+      tags.forEach(function (t1){
+        if(t.key == t1.key){ 
+        console.log("Found " + t1.key)
+          userTags.push(t1.key)
+        }
+        return false;
+       
+      });
+    })
+    return false;
+  });
+})
+    //await this.sleep(1000)
+    //console.log("Prova " + userTags.length)
+    this.myTags = userTags
+    this.findPoiByTag(this.myTags)
+/* .then(function(success){
+    self.myTags = userTags;
+    self.findPoiByTag(self.myTags);
+    console.log("Added all tags " + userTags.length)
+    
+  }) 
+  Promise.all(arrayPromises).then(() =>
+    console.log("Added all tags " + userTags.length)
+
+
+) */
+  }
+
+
+
+  
+
+
+  async findPoiByTag(tag){
+    //in tag ho le preferenze dell'utente
+        var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
+          this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
+          this.file,this.api, this.navParams)
+          var found = false;
+          var pois = [];
+        var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
+        var ref1 = firebase.database().ref('/point_of_interest/'); //punti di interesse generali
+        ref.once('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            ref1.once('value',function(snapshot1){
+              snapshot1.forEach(function(childSnapshot1){//ciclo sui singoli punti di interesse
+                childSnapshot1.child('tags').forEach(function(prova){//ciclo sui tag del punto di interesse
+                  if(tag.indexOf(prova.key)> -1){//se ce l'ho nell'array
+                  found = true;
+                  if(childSnapshot.key == childSnapshot1.key){
+                    pois.push({lat: childSnapshot1.child('lat').val(), lon: childSnapshot1.child('lon').val()})
+                    console.log("Il punto di interesse " + childSnapshot1.child('nome').val() + " è taggato come desiderato")
+                  }
+                  }
+                  return false;
+                })
+                /* if(tag.indexOf(childSnapshot1.child('tags').val().child('-Kzj3fNWbvTRlCLyXSWN')) > -1){ //se è nella lista dei tag inviati
+                  found = true;
+                  if (childSnapshot.key == childSnapshot1.key){
+                    console.log("Il punto di interesse " + childSnapshot1.child('città').val() + " è taggato come desiderato")
+                  }
+    
+                }  */
+                return false;
+              })
+            })
+    
+            return false;
+          })
+    
+        })
+    
+        await this.sleep(2000)
+          if (!found){
+            self.displayGPSError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
+            +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
+          } else {
+            pois.forEach(p=>{
+              console.log("Nel foreach lat " + p.lat)
+              let marker = L.marker([p.lat, p.lon])
+              let content = 'punto interesse';
+              //TODO: QUI CHIAMARE LA FUNZIONE PER IL ROUTING CON I PUNTI DI INTERESSE VOLUTI UTILIZZATI COME WAYPOINTS
+              //VA SPOSTATO IN CREATE ROUTE
+             marker.bindPopup(content) 
+           marker.addTo(this.map)
+           marker.openPopup() 
+            })
+
+          }
+          
+        
+      }
+
+
 }
+
