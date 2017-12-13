@@ -32,6 +32,7 @@ export class HomePage {
   destination;
   canCalculate = false;
   public myTags:Array<any>;
+  public waypoints:Array<any>
   
 
   @ViewChild('map-container') mapContainer;
@@ -42,12 +43,14 @@ export class HomePage {
     this.menuCtrl.enable(true)
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
-    if (first !=null && second!=null){
+    this.waypoints = this.navParams.get('waypts')
+
+    if (first !=null && second!=null && this.waypoints!=null){
       this.start = first;
       this.destination = second;
       this.canCalculate = true;
-
     }
+
 
   }
 
@@ -63,9 +66,9 @@ export class HomePage {
     //setup leaflet map
         this.initMap();
         if(this.canCalculate){
-          this.withGoogle(this.start, this.destination);
+          this.withGoogle(this.start, this.destination, this.waypoints);
         } 
-        this.getUsersPref()
+        //this.getUsersPref()
     
       }
 
@@ -114,22 +117,25 @@ export class HomePage {
            marker1.bindPopup(content1) 
            marker1.addTo(this.map)
           marker1.openPopup()
-      }
-      if(this.platform.is('core')){
-        //this.withGoogle()
-       //this.getFeatures()
-        this.geolocate()
       } else {
-        this.diagnostic.isLocationEnabled().then((state)=>{
-          if(state){
-            this.geolocate(); 
-            //this.getFeatures();
-          } else{
-            this.presentConfirm();      
-          }
-        })
+        if(this.platform.is('core')){
+          //this.withGoogle()
+         //this.getFeatures()
+          this.geolocate()
+        } else {
+          this.diagnostic.isLocationEnabled().then((state)=>{
+            if(state){
+              this.geolocate(); 
+              //this.getFeatures();
+            } else{
+              this.presentConfirm();      
+            }
+          })
+  
+        }
 
       }
+      
 
       
       
@@ -188,7 +194,7 @@ export class HomePage {
             for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
 
             //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                if (data.results[0].address_components[i].types[b] == "administrative_area_level_3") {
+                if (data.results[0].address_components[i].types[b]!=null &&  data.results[0].address_components[i].types[b]== "administrative_area_level_3") {
                     //this is the object you are looking for
                     city= data.results[0].address_components[i];
                     break;
@@ -291,37 +297,27 @@ export class HomePage {
   }
 
 
-  withGoogle(start, arrival){
+  withGoogle(start, arrival,waypoints){
 
-    var first = new google.maps.LatLng(44.1359114,12.2454082);
-    var second = new google.maps.LatLng(44.1371501,12.24147);
-    var third = new google.maps.LatLng(44.136342,12.2429801);
+    var myWayPts= []
 
-    var data1 = {
-      location: first,
-      stopover: true
-    }
-
-    var data2 = {
-      location: second,
-      stopover: true
-    }
-
-    var data3 = {
-      location:third,
-      stopover:true
-    }
-
+    waypoints.forEach(w=>{
+      var data = {
+        location: new google.maps.LatLng(w.latlng[0],w.latlng[1]),
+        stopover: true
+      }
+      myWayPts.push(data)
+    })
 
     var polyUtil = require('polyline-encoded')
     var latlngs;
   var newMap = this.map;
-    var waypoints= [data1,data2,data3]
+    //var waypoints= [data1,data2,data3]
     var encoded;
     this.directionsService.route({
       origin: start,
       destination: arrival,
-      waypoints: waypoints,
+      waypoints: myWayPts,
       optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.WALKING,
       region: "it"
@@ -345,16 +341,19 @@ export class HomePage {
 
      // console.log("Ordine " +response.routes[0].waypoint_order)
      var myRoute= response.routes[0].legs[0]
-     console.log("Prova mia" + JSON.stringify(myRoute.steps[0]))
+     /* console.log("Prova mia" + JSON.stringify(myRoute.steps[0]))
      console.log("Lunghezza: " + myRoute.steps.length)
      for(var i=0; i<myRoute.steps.length; i++){ 
        console.dir("I " + myRoute.steps[i].instructions)
-     }
+     } */
       var myArray = []
-      myArray.push([44.1359114,12.2454082,"Museo"])
+      waypoints.forEach(w=>{
+        myArray.push(w)
+      })
+      /* myArray.push([44.1359114,12.2454082,"Museo"])
       myArray.push([44.1371501,12.24147,"Cattedrale"])
       myArray.push([44.136342,12.2429801,"Ericacca"])
-
+ */
       var newArray =[]
 
       response.routes[0].waypoint_order.forEach(o=>{
@@ -362,8 +361,9 @@ export class HomePage {
       })
       let index = 1;
       myArray.forEach(p =>{
-        let marker = L.marker([p[0],p[1]])
-        let content = `<b>Nome</b>: ${p[2]}<br/>`+"Posizione " + index;
+        let marker = L.marker([p.latlng[0],p.latlng[1]])
+        //let content = `<b>Nome</b>: ${p[2]}<br/>`+"Posizione " + index;
+        let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
           marker.bindPopup(content) 
           marker.addTo(newMap)
          marker.openPopup() 
@@ -388,7 +388,7 @@ export class HomePage {
         //console.log("Encoded " +encoded);
          
       } else {
-        window.alert('Directions request failed due to ');
+        this.displayGPSError("Non è stato possibile pianificare il tuo percorso. Controlla che l'indirizzo di arrivo e partenza siano ben formattati")
       }
     })
 
@@ -602,120 +602,5 @@ export class HomePage {
     //this.findPoiByTag(tags)
 
   }
-
-  async getUsersPref(){
-
-    var self = this;
-
-    
-    var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
-    var ref = firebase.database().ref('/tag/')
-    var username;
-    if(self.api.user.displayName==null){
-      username = '';
-  }else {
-      username = self.api.user.displayName
-  }
-
-  var userTags = [];
-  var self1 = self;
-  user_pref.once('value', function(preferenze){ 
-  preferenze.forEach(function(t){
-    ref.once('value', function(tags){ 
-      tags.forEach(function (t1){
-        if(t.key == t1.key){ 
-        console.log("Found " + t1.key)
-          userTags.push(t1.key)
-        }
-        return false;
-       
-      });
-    })
-    return false;
-  });
-})
-    //await this.sleep(1000)
-    //console.log("Prova " + userTags.length)
-    this.myTags = userTags
-    this.findPoiByTag(this.myTags)
-/* .then(function(success){
-    self.myTags = userTags;
-    self.findPoiByTag(self.myTags);
-    console.log("Added all tags " + userTags.length)
-    
-  }) 
-  Promise.all(arrayPromises).then(() =>
-    console.log("Added all tags " + userTags.length)
-
-
-) */
-  }
-
-
-
-  
-
-
-  async findPoiByTag(tag){
-    //in tag ho le preferenze dell'utente
-        var self = new HomePage(this.navCtrl,this.menuCtrl,this.geolocation,
-          this.toastCtrl, this.diagnostic, this.platform, this.alertCtrl,
-          this.file,this.api, this.navParams)
-          var found = false;
-          var pois = [];
-        var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
-        var ref1 = firebase.database().ref('/point_of_interest/'); //punti di interesse generali
-        ref.once('value', function(snapshot){
-          snapshot.forEach(function(childSnapshot){
-            ref1.once('value',function(snapshot1){
-              snapshot1.forEach(function(childSnapshot1){//ciclo sui singoli punti di interesse
-                childSnapshot1.child('tags').forEach(function(prova){//ciclo sui tag del punto di interesse
-                  if(tag.indexOf(prova.key)> -1){//se ce l'ho nell'array
-                  found = true;
-                  if(childSnapshot.key == childSnapshot1.key){
-                    pois.push({lat: childSnapshot1.child('lat').val(), lon: childSnapshot1.child('lon').val()})
-                    console.log("Il punto di interesse " + childSnapshot1.child('nome').val() + " è taggato come desiderato")
-                  }
-                  }
-                  return false;
-                })
-                /* if(tag.indexOf(childSnapshot1.child('tags').val().child('-Kzj3fNWbvTRlCLyXSWN')) > -1){ //se è nella lista dei tag inviati
-                  found = true;
-                  if (childSnapshot.key == childSnapshot1.key){
-                    console.log("Il punto di interesse " + childSnapshot1.child('città').val() + " è taggato come desiderato")
-                  }
-    
-                }  */
-                return false;
-              })
-            })
-    
-            return false;
-          })
-    
-        })
-    
-        await this.sleep(2000)
-          if (!found){
-            self.displayGPSError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
-            +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
-          } else {
-            pois.forEach(p=>{
-              console.log("Nel foreach lat " + p.lat)
-              let marker = L.marker([p.lat, p.lon])
-              let content = 'punto interesse';
-              //TODO: QUI CHIAMARE LA FUNZIONE PER IL ROUTING CON I PUNTI DI INTERESSE VOLUTI UTILIZZATI COME WAYPOINTS
-              //VA SPOSTATO IN CREATE ROUTE
-             marker.bindPopup(content) 
-           marker.addTo(this.map)
-           marker.openPopup() 
-            })
-
-          }
-          
-        
-      }
-
-
 }
 

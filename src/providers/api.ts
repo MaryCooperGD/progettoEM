@@ -74,7 +74,11 @@ export class Api {
    * A method that returns the city where the user is currently in
    */
   getCity(){
-    return this.city;
+    if (this.city!=null){
+      return this.city;
+    } else {
+      return null;
+    }
   }
 
   retrieveEmail(email){
