@@ -55,14 +55,25 @@
                   
       <ion-list *ngSwitchCase="'Tag'">
         <ion-card-content style="text-align: center;">
+
+          <!--SE sono presenti tag allora vedo questo box-->
+           <!--Se isEnabled è true allora sta nascosto-->
           <ion-scroll id="scroll_preferenze" scrollY="true">
+
             <ion-row id ="tag-row" justify-content-center align-items-center>
+
               <ion-list *ngFor="let tag of poiTags" id="tag_list"> <!-- Lista di badge -->
                 <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
                 <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
+
               </ion-list>
             </ion-row>
+
           </ion-scroll>
+
+      
+
+
         </ion-card-content>
       </ion-list>
     </div>
@@ -76,6 +87,7 @@
     </ion-card-header>
   
     <ion-card-content>
+        <ion-scroll id="scroll_preferenze" scrollY="true"> 
         <ion-grid>
           <ion-list *ngFor="let d of descriptions" class="giustificato">
               <ion-row>
@@ -83,6 +95,7 @@
                 </ion-row>
           </ion-list>
           </ion-grid>
+        </ion-scroll>
     </ion-card-content>
   </ion-card>
 

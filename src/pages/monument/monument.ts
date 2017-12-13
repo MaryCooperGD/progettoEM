@@ -80,6 +80,7 @@ export class MonumentPage {
     this.poiTags = tagShow;
   }
  
+  
 
 
   refreshList(){

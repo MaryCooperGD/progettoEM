@@ -23,18 +23,18 @@
 	</ion-card-header>
 
 	<div id="table">
-		<div class="row header">
-	        <div class="col classifica"> <b class="voci_table_header"> Posizione</b></div>
-	        <div class="col classifica"> <b class="voci_table_header"> Username</b></div>
-	        <div class="col classifica"> <b class="voci_table_header"> Punti</b></div>
-	          
-	    </div>
+		<div class="row header" >
+	        <div class="col classifica"> <b class="voci_table_header"> Rank</b></div>
+	        <div class="col classifica"> <b class="voci_table_header"> User</b></div>
+					<div class="col classifica"> <b class="voci_table_header"> Punti</b></div>     
+	  </div>
 
-	    <div class="row" *ngFor="let item of items; let i = index">
+	  <div class="row" *ngFor="let item of items; let i = index">
 	        <div class="col classifica">{{ i + 1 }}</div>
 	        <div class="col classifica">{{ item.username }} </div>
-	        <div class="col classifica">{{ item.total_points }} </div>
-	    </div>
+					<!--<div class="col classifica">{{ item.total_points }} </div>-->
+					<div class="col classifica"><span class="points">{{ item.total_points }}</span></div>	
+	  </div>
 	    
     </div>
 </ion-card>

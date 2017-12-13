@@ -124,16 +124,8 @@ export class EditMonumentPage {
    this.punteggio_totale = this.punteggio_totale + 5 ;
    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
-  //assegnamento badge - TAGGATORE
-  if(this.punteggio_tag >= 300){
-    updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
-  }else if(this.punteggio_tag >= 180){
-    updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
-  }else if(this.punteggio_tag >= 50){
-    updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
-  }else if(this.punteggio_tag >= 15){
-    updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
-  }
+  this.setTagBadges(updates)
+  this.setMinscBadges(updates);
 
    firebase.database().ref().update(updates);
    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
@@ -165,7 +157,7 @@ export class EditMonumentPage {
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
 
     //Incrementa la variabile dei punti delle informazioni
-    this.punteggio_info = this.punteggio_info + 40 ;
+    this.punteggio_info = this.punteggio_info + 15 ;
     updates["/users/"+this.email+"/points_info"]  = this.punteggio_info;
 
     //Incrementa la variabile dei PUNTI TOTALI
@@ -174,15 +166,8 @@ export class EditMonumentPage {
 
     //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
     //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
-    if(this.punteggio_info >= 300){
-      updates["/users/"+this.email+"/badge/Informatore prodigio"]  = true;
-    }else if(this.punteggio_info >= 240){
-      updates["/users/"+this.email+"/badge/Informatore esperto"]  = true;
-    }else if(this.punteggio_info >= 60){
-      updates["/users/"+this.email+"/badge/Informatore principiante"]  = true;
-    }else if(this.punteggio_info >= 15){
-      updates["/users/"+this.email+"/badge/Informatore novizio"]  = true;   
-    }
+    this.setInfoBadges(updates);
+    this.setMinscBadges(updates);
 
     firebase.database().ref().update(updates);
 
@@ -207,5 +192,44 @@ export class EditMonumentPage {
     });
     toast.present();
   }
+
+  setTagBadges(updates){
+      if(this.punteggio_tag >= 300){
+        updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+      }else if(this.punteggio_tag >= 180){
+        updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+      }else if(this.punteggio_tag >= 50){
+        updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+      }else if(this.punteggio_tag >= 15){
+        updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
+      }
+  }
+
+  setInfoBadges(updates){
+    if(this.punteggio_info >= 300){
+      updates["/users/"+this.email+"/badge/Informatore prodigio"]  = true;
+    }else if(this.punteggio_info >= 240){
+      updates["/users/"+this.email+"/badge/Informatore esperto"]  = true;
+    }else if(this.punteggio_info >= 60){
+      updates["/users/"+this.email+"/badge/Informatore principiante"]  = true;
+    }else if(this.punteggio_info >= 15){
+      updates["/users/"+this.email+"/badge/Informatore novizio"]  = true;   
+    }
+  }
+
+  setMinscBadges(updates){
+    if(this.punteggio_totale >= 1000){
+      updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
+    }else if(this.punteggio_totale >= 500){
+      updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
+    }else if(this.punteggio_totale >= 350){
+      updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
+    }else if(this.punteggio_totale >= 200){
+      updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;   
+    }else if(this.punteggio_totale >= 50){
+      updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;   
+    }
+  }
+
 
 }

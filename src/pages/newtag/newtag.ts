@@ -147,18 +147,11 @@ clickedButton(){
     this.punteggio_totale = this.punteggio_totale + 5 ;
     updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
-    //assegnamento badge - TAGGATORE
-    if(this.punteggio_tag >= 300){
-      updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
-    }else if(this.punteggio_tag >= 180){
-      updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
-    }else if(this.punteggio_tag >= 50){
-      updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
-    }else if(this.punteggio_tag >= 15){
-      updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
-    }
+    this.setTagBadges(updates)
+    this.setMinscBadges(updates);
 
     firebase.database().ref().update(updates);
+    
     this.presentToastOk();
     this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
     this.refreshItems();
@@ -211,4 +204,39 @@ displayLoginError(messageErr: string){
   });
   toast.present();
 }
+
+
+
+setTagBadges(updates){
+      if(this.punteggio_tag >= 300){
+        updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+      }else if(this.punteggio_tag >= 180){
+        updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+      }else if(this.punteggio_tag >= 50){
+        updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+      }else if(this.punteggio_tag >= 15){
+        updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
+      }
+  }
+
+
+  setMinscBadges(updates){
+     if(this.punteggio_totale >= 1000){
+       updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
+     }else if(this.punteggio_totale >= 500){
+       updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
+     }else if(this.punteggio_totale >= 350){
+       updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
+     }else if(this.punteggio_totale >= 200){
+       updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;   
+     }else if(this.punteggio_totale >= 50){
+       updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;   
+     }
+   }
+
+
+
+
+
 }
+
