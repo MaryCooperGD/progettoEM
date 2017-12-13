@@ -38,9 +38,10 @@ export class CreateRoutePage {
       var ref = firebase.database().ref('/cities/')
       var self = this;
       if (this.city != null){
+        console.log("La città non è null")
         ref.once('value', function(snapshot){
           snapshot.forEach(function(childSnapshot){
-            if(childSnapshot.child("name") == self.city){
+            if(childSnapshot.child("name").val() == "Cesena"){
               self.city_key = childSnapshot.key;
             }
             return false;
@@ -157,12 +158,42 @@ async findPoiByTag(tag){
     }
 
     async getUsersPref(){
-      
+      console.log("This city key " + this.city_key)
       if(this.city_key!=null){
-        var self = this;
+         var self = this;
+
+        var userTags = [];
+       /* var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
+        var ref = firebase.database().ref('/tag/')
+        var username;
+        if(self.api.user.displayName==null){
+          username = '';
+      }else {
+          username = self.api.user.displayName
+      }
+
+      var promises = [];
+      user_pref.once('value', function(preferenze) { 
         
-            
-            var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
+        preferenze.forEach(function(t) {
+          promises.push(ref.child(t.key).once('value').then(function(s){
+            console.log("Prova " + s.key)
+          }));
+          return false;
+        });
+        
+      });
+      Promise.all(promises).then(function(snapshots) {
+        snapshots.forEach(function(snapshot) {
+          if (snapshot.exists()) {
+            userTags.push(snapshot.key);
+          }
+        });
+      })
+      this.myTags = userTags
+      this.findPoiByTag(this.myTags) //method I have to call when finished */
+        
+             var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
             var ref = firebase.database().ref('/tag/')
             var username;
             if(self.api.user.displayName==null){
@@ -171,7 +202,6 @@ async findPoiByTag(tag){
               username = self.api.user.displayName
           }
         
-          var userTags = [];
           var self1 = self;
           user_pref.once('value', function(preferenze){ 
           preferenze.forEach(function(t){
