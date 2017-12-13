@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -82,22 +82,25 @@
 
 <!--Card informazioni utenti-->
 <ion-card>
-    <ion-card-header class="blue-title">
-          Informazioni dagli utenti
-    </ion-card-header>
-  
-    <ion-card-content>
-        <ion-scroll id="scroll_preferenze" scrollY="true"> 
-        <ion-grid>
-          <ion-list *ngFor="let d of descriptions" class="giustificato">
-              <ion-row>
-                  <ion-col col-12>"{{d.text}}" - {{d.user}}</ion-col>
-                </ion-row>
-          </ion-list>
-          </ion-grid>
-        </ion-scroll>
-    </ion-card-content>
-  </ion-card>
+  <ion-card-header class="blue-title">
+        Informazioni dagli utenti
+  </ion-card-header>
+
+  <!--CODICE FUNZIONANTE ATTUALE-->
+  <ion-card-content>
+      <ion-scroll id="scroll_preferenze" scrollY="true"> 
+      <ion-grid>
+        <ion-list *ngFor="let d of descriptions" class="giustificato">
+            <ion-row>
+                <ion-col col-12>"{{d.text}}" - {{d.user}}</ion-col>
+                
+              </ion-row>
+        </ion-list>
+        </ion-grid>
+      </ion-scroll>
+  </ion-card-content>
+
+</ion-card>
 
 <!--Card foto utenti-->
 <ion-card>
