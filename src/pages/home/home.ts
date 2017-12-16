@@ -99,20 +99,30 @@ export class HomePage {
 
       if (this.canCalculate){
 
-        var myIcon = L.icon({
+        var startIcon = L.icon({
           iconUrl: "../assets/images/start.png",
 
-          iconSize: [25,41],
-          popupAnchor:  [1, -34],
-          iconAnchor: [12,41]
+          iconSize: [30,30],
+          popupAnchor:  [1, -14],
+          iconAnchor: [15,30]
         })
-         let marker = L.marker([this.start.lat(),this.start.lng()])
+
+        var endIcon = L.icon({
+          iconUrl: "../assets/images/end.png",
+          
+          iconSize: [30,30],
+          popupAnchor:  [1, -14],
+          iconAnchor: [15,30]
+        })
+
+
+         let marker = L.marker([this.start.lat(),this.start.lng()], {icon: startIcon})
         let content = `<b>Partenza</b>`;
           marker.bindPopup(content) 
           marker.addTo(this.map)
          marker.openPopup()  
         
-         let marker1 = L.marker([this.destination.lat(),this.destination.lng()], {icon: myIcon})
+         let marker1 = L.marker([this.destination.lat(),this.destination.lng()], {icon: endIcon} )
          let content1 = `<b>Arrivo</b>`;
            marker1.bindPopup(content1) 
            marker1.addTo(this.map)
@@ -176,7 +186,6 @@ export class HomePage {
  
 
   geolocate(){
-    //this.geocode("Mastro birarrio, cesena");
     this.geolocation.getCurrentPosition().then((resp) =>{
       var positionMarker: L.Marker;
       let latlng = {lat: resp.coords.latitude, lng: resp.coords.longitude}
@@ -240,16 +249,20 @@ export class HomePage {
       if(!this.platform.is('core')){
         let watch = this.geolocation.watchPosition();
         watch.subscribe((data)=>{
+          this.displayGPSError("La posizione è cambiata")
           
         }, error => {
           this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
-        })         
+        })
+        
+        
       }
       
     }).catch((err) =>{
       this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
     })
   }
+
 
   geocode(address:string){
     var geocoder = new google.maps.Geocoder();
@@ -311,8 +324,7 @@ export class HomePage {
 
     var polyUtil = require('polyline-encoded')
     var latlngs;
-  var newMap = this.map;
-    //var waypoints= [data1,data2,data3]
+    var newMap = this.map;
     var encoded;
     this.directionsService.route({
       origin: start,
@@ -346,6 +358,12 @@ export class HomePage {
      for(var i=0; i<myRoute.steps.length; i++){ 
        console.dir("I " + myRoute.steps[i].instructions)
      } */
+     var lunghezza = 0;
+     for(var i=0; i<myRoute.steps.length; i++){ 
+       lunghezza+=myRoute.steps[i].distance.value
+    }
+
+
       var myArray = []
       waypoints.forEach(w=>{
         myArray.push(w)
@@ -362,7 +380,6 @@ export class HomePage {
       let index = 1;
       myArray.forEach(p =>{
         let marker = L.marker([p.latlng[0],p.latlng[1]])
-        //let content = `<b>Nome</b>: ${p[2]}<br/>`+"Posizione " + index;
         let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
           marker.bindPopup(content) 
           marker.addTo(newMap)
@@ -370,6 +387,8 @@ export class HomePage {
          index++;
 
       })
+
+      this.map.setZoom(18)
      
 
         /* var routingLayer = L.geoJSON().addTo(newMap) ;
