@@ -50,17 +50,17 @@ export class TutorialPage {
       {
         title: "Benvenuto su C.I.C.E.",
         description: "C.I.C.E. ti permette di organizzare il tuo viaggio culturale in giro per la città",
-        image: '../src/assets/img/loc.png', //DEVO CAPIRE PERCHè NON VANNO
+        image: 'assets/img/loc.png', 
       },
       {
         title: "Organizza il tuo viaggio",
         description: "Scegli i tag che ti interessano e inizia ad esplorare",
-        image: '/assets/img/trip.png', //DEVO CAPIRE PERCHè NON VANNO
+        image: 'assets/img/trip.png', 
       },
       {
         title: "Contribuisci alla conoscenza",
         description: "Aggiungi foto e aneddoti dei luoghi visitati, ottieni punti e scala la classifica",
-        image: '../assets/img/edit.png', //DEVO CAPIRE PERCHè NON VANNO
+        image: 'assets/img/edit.png', 
       }
     ]; 
   }
