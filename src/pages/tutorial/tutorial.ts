@@ -50,7 +50,7 @@ export class TutorialPage {
       {
         title: "Benvenuto su C.I.C.E.",
         description: "C.I.C.E. ti permette di organizzare il tuo viaggio culturale in giro per la città",
-        image: 'src/assets/img/loc.png', //DEVO CAPIRE PERCHè NON VANNO
+        image: '../src/assets/img/loc.png', //DEVO CAPIRE PERCHè NON VANNO
       },
       {
         title: "Organizza il tuo viaggio",
