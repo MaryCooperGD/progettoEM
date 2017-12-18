@@ -44,13 +44,18 @@
               <!--<ion-row>-->
                 <div *ngFor="let item of items_user_details;">
                   <p><b>Punti totali:</b> {{item.total_points}}</p> 
-                  <p><b>N° foto:</b> {{numb_of_photo}}</p> 
-                  <p><b>N° info:</b> {{numb_of_info}}</p>
-                  <p><b>N° tag:</b> {{numb_og_tag}}</p>
+                  <p><b>N° foto:</b> {{item.num_of_photo}}</p> 
+                  <p><b>N° info:</b> {{item.num_of_info}}</p>
+                  <p><b>N° tag:</b> {{item.num_of_tag}}</p>
                 </div>
               <!--</ion-row>-->
             </ion-col>
         </ion-row>
+
+        <ion-row>
+          <button ion-button class="card-button" (click)=openAchievementsPage() > <ion-icon name="apps" class="icona-bottone"></ion-icon>Achievements</button>
+        </ion-row>
+
       </ion-grid>
     </ion-card-content>
   </ion-card>

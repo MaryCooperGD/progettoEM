@@ -5,6 +5,7 @@ import { Camera } from "@ionic-native/camera";
 import * as firebase from 'firebase/app';
 import { FirebaseApp } from "angularfire2";
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AchievementsPage } from "../achievements/achievements";
 
 /**
  * Generated class for the ProfilePage page.
@@ -49,9 +50,9 @@ export class ProfilePage {
   public badges_utente_fotografo:Array<any>;
 
   //per sapere il numero di contributi
-  numb_of_info;
-  numb_of_photo;
-  numb_og_tag;
+  num_of_info;
+  num_of_photo;
+  num_of_tag;
 
   //mi serve per mostrare a video l'avviso i badge utente
   isEnabled : boolean = true;
@@ -116,9 +117,12 @@ export class ProfilePage {
       //per calcolare il numero di contributi, avendo ogni contributo un punteggio predefinito e sapendone il totale, 
       //in questo modo posso contare quanti contributi sono stati dati dall'utente!
 
-      this.numb_of_info = Math.round(i.points_info / 15 ); //usiamo math.round per arrotondare per eccesso/difetto, dipende dal numero più vicino
-      this.numb_of_photo = Math.round(i.points_photos / 20 );
-      this.numb_og_tag = Math.round(i.points_tag / 5 );
+     // this.numb_of_info = Math.round(i.points_info / 15 ); //usiamo math.round per arrotondare per eccesso/difetto, dipende dal numero più vicino
+     // this.numb_of_photo = Math.round(i.points_photos / 20 );
+     // this.numb_of_tag = Math.round(i.points_tag / 5 );
+     this.num_of_info = i.num_of_info;
+     this.num_of_photo = i.num_of_photo;
+     this.num_of_tag = i.num_of_tag;
 
      
 
@@ -187,7 +191,7 @@ export class ProfilePage {
       let userFotoBadges = [];
       let userInfoBadges = [];
 
-      var ref2 = firebase.database().ref('/users/'+ this.email+'/badge/')
+      var ref2 = firebase.database().ref('/users/'+ this.email+'/badge/');
       var ref3 = firebase.database().ref('/badges/');
       
       ref2.once('value',function(badge){ //ciclo sui badge dell'utente
@@ -233,6 +237,10 @@ export class ProfilePage {
 
 
   } //--Fine ionViewDidLoad
+
+  openAchievementsPage(){
+    this.navCtrl.push(AchievementsPage)
+  }
 
 
 

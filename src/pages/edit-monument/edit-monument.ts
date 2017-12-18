@@ -41,6 +41,10 @@ export class EditMonumentPage {
   public tagList: Array<any>;
   public loadedTagList: Array<any>;
 
+  //per ach
+  num_of_tag;
+  num_of_info;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
 
     this.poi = navParams.get('poi');
@@ -69,6 +73,14 @@ export class EditMonumentPage {
         this.punteggio_info = i.points_info;
         this.punteggio_totale = i.total_points;
         this.punteggio_tag = i.points_tag;
+
+        //numero contributi
+        this.num_of_tag = i.num_of_tag;
+        this.num_of_info = i.num_of_info;
+
+
+        
+        
 
       })
     });
@@ -124,8 +136,16 @@ export class EditMonumentPage {
    this.punteggio_totale = this.punteggio_totale + 5 ;
    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
-  this.setTagBadges(updates)
-  this.setMinscBadges(updates);
+   this.num_of_tag = this.num_of_tag + 1;
+   updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
+
+  
+
+    this.setTagBadges(updates)
+    this.setMinscBadges(updates);
+
+    this.setTagAchievements(updates);
+    
 
    firebase.database().ref().update(updates);
    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
@@ -164,10 +184,16 @@ export class EditMonumentPage {
     this.punteggio_totale = this.punteggio_totale + 15 ;
     updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
+    //incrementa la variabile del numero delle info inserite 
+    this.num_of_info = this.num_of_info + 1;
+    updates["/users/"+this.email+"/num_of_info"]  = this.num_of_info;
+   
     //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
     //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
     this.setInfoBadges(updates);
     this.setMinscBadges(updates);
+
+    this.setInfoAchievements(updates);
 
     firebase.database().ref().update(updates);
 
@@ -228,6 +254,38 @@ export class EditMonumentPage {
       updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;   
     }else if(this.punteggio_totale >= 50){
       updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;   
+    }
+  }
+
+  setTagAchievements(updates){
+    
+    if(this.num_of_tag == "1"){
+      updates["/users/"+this.email+"/achievement/1 tag"]  = true;
+      
+    }else if(this.num_of_tag == "20"){
+      updates["/users/"+this.email+"/achievement/20 tag"]  = true;
+      
+    }else if(this.num_of_tag == "100"){
+      updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+
+    }else if(this.num_of_tag == "300"){
+      updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+    }
+    
+  }
+
+  setInfoAchievements(updates){
+    if(this.num_of_info == "1"){
+      updates["/users/"+this.email+"/achievement/1 info"]  = true;
+      
+    }else if(this.num_of_info == "10"){
+      updates["/users/"+this.email+"/achievement/10 info"]  = true;
+      
+    }else if(this.num_of_info == "50"){
+      updates["/users/"+this.email+"/achievement/50 info"]  = true;
+
+    }else if(this.num_of_info == "150"){
+      updates["/users/"+this.email+"/achievement/150 info"]  = true;
     }
   }
 

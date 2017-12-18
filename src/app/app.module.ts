@@ -31,7 +31,7 @@ import { EditPreferencesPage } from "../pages/edit-preferences/edit-preferences"
 import { TutorialPage } from "../pages/tutorial/tutorial";
 import { CreditsPage } from "../pages/credits/credits";
 import {NewtagPage} from "../pages/newtag/newtag";
-
+import { AchievementsPage } from "../pages/achievements/achievements";
 
 export const firebaseConfig = {
   
@@ -60,7 +60,8 @@ export const firebaseConfig = {
     EditPreferencesPage,
     TutorialPage,
     CreditsPage,
-    NewtagPage
+    NewtagPage,
+    AchievementsPage
   ],
   imports: [
     BrowserModule,
@@ -92,7 +93,8 @@ export const firebaseConfig = {
     EditPreferencesPage,
     TutorialPage,
     CreditsPage, 
-    NewtagPage
+    NewtagPage,
+    AchievementsPage,
   ],
   providers: [
     StatusBar,

@@ -22,6 +22,9 @@ export class NewtagPage {
   username:any;
   email: any;
 
+  //per ach
+  num_of_tag;
+
   //per inserire punti!
   punteggio_tag;
   punteggio_totale;
@@ -147,8 +150,13 @@ clickedButton(){
     this.punteggio_totale = this.punteggio_totale + 5 ;
     updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
+    this.num_of_tag = this.num_of_tag + 1;
+    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
+
     this.setTagBadges(updates)
     this.setMinscBadges(updates);
+
+    this.setTagAchievements(updates);
 
     firebase.database().ref().update(updates);
     
@@ -234,6 +242,22 @@ setTagBadges(updates){
      }
    }
 
+   setTagAchievements(updates){
+    
+    if(this.num_of_tag == "1"){
+      updates["/users/"+this.email+"/achievement/1 tag"]  = true;
+      
+    }else if(this.num_of_tag == "20"){
+      updates["/users/"+this.email+"/achievement/20 tag"]  = true;
+      
+    }else if(this.num_of_tag == "100"){
+      updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+
+    }else if(this.num_of_tag == "300"){
+      updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+    }
+    
+  }
 
 
 
