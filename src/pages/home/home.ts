@@ -322,6 +322,10 @@ export class HomePage {
       myWayPts.push(data)
     })
 
+    myWayPts.shift();
+
+    console.log("Lunghezza waypoints: " + myWayPts.length)
+
     var polyUtil = require('polyline-encoded')
     var latlngs;
     var newMap = this.map;
@@ -351,7 +355,7 @@ export class HomePage {
       });
       firstpolyline.addTo(newMap);
 
-     // console.log("Ordine " +response.routes[0].waypoint_order)
+      console.log("Ordine " +response.routes[0].waypoint_order)
      var myRoute= response.routes[0].legs[0]
      /* console.log("Prova mia" + JSON.stringify(myRoute.steps[0]))
      console.log("Lunghezza: " + myRoute.steps.length)
@@ -359,9 +363,15 @@ export class HomePage {
        console.dir("I " + myRoute.steps[i].instructions)
      } */
      var lunghezza = 0;
+     var duration = 0;
      for(var i=0; i<myRoute.steps.length; i++){ 
        lunghezza+=myRoute.steps[i].distance.value
+       duration+=myRoute.steps[i].duration.value
+      console.log("Step " + i + " lat long " + myRoute.steps[i].end_location.lat() + " " + myRoute.steps[i].end_location.lng())
     }
+    console.log("Numero di steps: " + myRoute.steps.length)
+    console.log("Lunghezza percorso: " + lunghezza + " durata percorso: " + duration)
+
 
 
       var myArray = []

@@ -25,6 +25,8 @@ export class CreateRoutePage {
 
   myInputPartenza: string;
   myInputArrivo: string;
+  length: string;
+  duration: string;
   startGecoded;
   arrivalGeocoded;
   waypoints =[];
@@ -115,17 +117,27 @@ displayError(messageErr: string){
         var promises = [];
         preferenze.forEach(function(t) {
           promises.push(ref1.child(t.key).once('value'));//aggiungo il mio poi
+          //ho aggiunto tutti e solo i punti di interesse di Cesena
           return false;
         });
         Promise.all(promises).then(function(snapshots) {
           snapshots.forEach(function(snapshot) {
             if (snapshot.exists()) {
-              snapshot.child('tags').forEach(function(tags){
-                if(tag.indexOf(tags.key)>-1){
+              snapshot.child('tags').forEach(function(tags){ //per ogni tag del punto di interesse
+                if(tag.indexOf(tags.key)>-1){//se nei tag dell'utente esiste il tag del poi
                   found = true;
+                  var exists = false;
+                  for (var i = 0; i<pois.length; i++){
+                    if(pois[i].nome == snapshot.child('nome').val()){
+                      exists = true;
+                      break;
+                    }
+                  }
+                  if(!exists){
                   console.log("Ho trovato il punto di interesse " + snapshot.key + " found vale " + found)
-                  pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})
+                  pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})     
                 }
+              }
               })
               
             }
