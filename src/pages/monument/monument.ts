@@ -32,6 +32,17 @@ export class MonumentPage {
   poiTags;
   
   
+
+   //per le info e i tagdel poi
+   public poi_NUMEROINFO: Array<any> = [];
+  // public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
+   numero_info_POI;
+
+   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
+    isEnabled_info : boolean = true;
+    isEnabled_tag : boolean = true;
+   
+  
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
@@ -43,15 +54,48 @@ export class MonumentPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MonumentPage');
-
+    this.pageDetailsRefresh()
+    
 
   }
 
   ionViewWillEnter(){
+    
     this.refreshList()
     this.refreshTags()
+    
   }
 
+  pageDetailsRefresh(){
+    
+    
+    var poi_ref = firebase.database().ref("/point_of_interest/");
+
+    this.poi_NUMEROINFO = [];
+    poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
+      
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_NUMEROINFO.push(itemSnap.val());
+        return false;
+      });
+      this.poi_NUMEROINFO.forEach(i=>{
+        
+        if(i.numero_tag == 0) //Se non ho tag devo nascondere l'elenco vuoto e mostro il messaggio
+        {
+         this.isEnabled_tag = false;
+          console.log("VALORE ISENABLED_INFO"+this.isEnabled_tag);
+        }
+
+        if (i.numero_informazioni == 0) //Se non ho info devo nascondere l'elenco vuoto e mostro il messaggio
+        {
+          this.isEnabled_info = false;
+          console.log("VALORE ISENABLED_INFO"+this.isEnabled_info);
+        }
+
+        console.log("DENTRO NUMERO CONTRIBUTI POI ")
+      })
+    });
+  }
 
   refreshTags(){
     var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
@@ -84,6 +128,10 @@ export class MonumentPage {
 
 
   refreshList(){
+    console.log("dentro refresh list dopo aver aggiunto info")
+
+    this.isEnabled_info= true; //Mi serve perchè quando refresho la pagina mi fa subito comparire i commenti inseriti
+    console.log("isenabled: "+this.isEnabled_info)
 
     var ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/description/");
     var ref1 = firebase.database().ref("/descriptions/")

@@ -92,7 +92,7 @@ export class RegisterPage {
       points_info: 0 , //Punti per assegnare badge informazioni
 
       //Per il numero di contributi
-      num_of_tags: 0,
+      num_of_tag: 0,
       num_of_photo : 0,
       num_of_info : 0,
 

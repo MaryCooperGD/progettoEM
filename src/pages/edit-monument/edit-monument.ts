@@ -31,9 +31,16 @@ export class EditMonumentPage {
 
   //per prendere email (id dell'utente loggato) che ci serve per sapere dove aggiungere il punteggio
   public user_email: Array<any> = [];
-  public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
+  public user_informations_Ref: firebase.database.Reference = firebase.database().ref('/users/');
+
+  //per le info e i tag
+  public poi_NUMEROINFO: Array<any> = [];
+  public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
+
+  numero_info_POI;
+  numero_tag_POI;
   
-  //punteggio che verrà incrementato
+  //punteggi che verranno incrementati
   punteggio_info;
   punteggio_totale;
   punteggio_tag;
@@ -41,11 +48,13 @@ export class EditMonumentPage {
   public tagList: Array<any>;
   public loadedTagList: Array<any>;
 
-  //per ach
+  //Variabili necessarie per assegnare gli achievements
   num_of_tag;
   num_of_info;
   data_ach;
   sum_of_total_contr;
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
 
@@ -64,7 +73,7 @@ export class EditMonumentPage {
       this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente
     }   
      
-    this.user_emailRef.orderByKey().equalTo(this.email).on('value',itemSnapshot =>{
+    this.user_informations_Ref.orderByKey().equalTo(this.email).on('value',itemSnapshot =>{
       this.user_email = [];
       itemSnapshot.forEach( itemSnap => {
         this.user_email.push(itemSnap.val());
@@ -79,15 +88,21 @@ export class EditMonumentPage {
         //numero contributi
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
+      })
+    });
 
+    this.poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
+      this.poi_NUMEROINFO = [];
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_NUMEROINFO.push(itemSnap.val());
+        return false;
+      });
+      this.poi_NUMEROINFO.forEach(i=>{
         
-        
-
-        
-
-        
-        
-
+        this.numero_info_POI = i.numero_informazioni;
+        this.numero_tag_POI = i.numero_tag;
+        console.log("Numero contributi POI "+this.numero_info_POI);
+        console.log("Numero tag POI "+this.numero_tag_POI);
       })
     });
 
@@ -146,7 +161,12 @@ export class EditMonumentPage {
    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
    this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+   updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
    console.log("Dentro addSelectedTag: "+this.sum_of_total_contr);
+
+   //Incremento il numero di tag che il POI possiede
+    this.numero_tag_POI ++;
+    updates["/point_of_interest/"+this.poi.chiave+"/numero_tag/"] = this.numero_tag_POI;
 
     this.setTagBadges(updates)
     this.setMinscBadges(updates);
@@ -183,8 +203,7 @@ export class EditMonumentPage {
     var updates = {}
     updates["/descriptions/"+key] = data;
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
-   
-    
+
 
     //Incrementa la variabile dei punti delle informazioni
     this.punteggio_info = this.punteggio_info + 15 ;
@@ -199,7 +218,11 @@ export class EditMonumentPage {
     updates["/users/"+this.email+"/num_of_info"]  = this.num_of_info;
    
     this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+    updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr
     console.log("Dentro addInfo: "+this.sum_of_total_contr);
+
+    this.numero_info_POI ++;
+    updates["/point_of_interest/"+this.poi.chiave+"/numero_informazioni/"] = this.numero_info_POI;
     //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
     //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
     this.setInfoBadges(updates);
@@ -211,8 +234,11 @@ export class EditMonumentPage {
     firebase.database().ref().update(updates);
 
     this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!");
-    this.navCtrl.pop(); //Bottone per tornare indietro
+    
+   this.navCtrl.pop(); //Bottone per tornare indietro
   }
+
+  
 
 
   openAddNewTagPage(){
@@ -232,6 +258,7 @@ export class EditMonumentPage {
     toast.present();
   }
 
+  
   setTagBadges(updates){
       if(this.punteggio_tag >= 300){
         updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
@@ -273,19 +300,19 @@ export class EditMonumentPage {
   setTagAchievements(updates){
     
     if(this.num_of_tag == "1"){
-      updates["/users/"+this.email+"/achievement/1 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/1 tag"];
       updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "20"){
-      updates["/users/"+this.email+"/achievement/20 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/20 tag"];
       updates["/users/"+this.email+"/achievement/20 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "100"){
-      updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/100 tag"];
       updates["/users/"+this.email+"/achievement/100 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "300"){
-      updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/300 tag"];
       updates["/users/"+this.email+"/achievement/300 tag/data"] = new Date().getTime();
     }
     

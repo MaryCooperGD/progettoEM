@@ -33,6 +33,10 @@ export class NewtagPage {
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   
+   //per le info e i tag
+   public poi_NUMEROINFO: Array<any> = [];
+   public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
+  numero_tag_POI; //numero di tag del punto di interesse
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, 
   public menuCtrl: MenuController, public toastCtrl: ToastController) {
@@ -81,6 +85,20 @@ export class NewtagPage {
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
 
+      })
+    });
+
+
+    this.poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
+      this.poi_NUMEROINFO = [];
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_NUMEROINFO.push(itemSnap.val());
+        return false;
+      });
+      this.poi_NUMEROINFO.forEach(i=>{
+         
+        this.numero_tag_POI = i.numero_tag;
+        console.log("Numero tag POI "+this.numero_tag_POI);
       })
     });
   }
@@ -159,6 +177,12 @@ clickedButton(){
     updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
     this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+    updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
+
+     //Incremento il numero di tag che il POI possiede
+     this.numero_tag_POI ++;
+     console.log(this.numero_tag_POI);
+     updates["/point_of_interest/"+this.poi.chiave+"/numero_tag/"] = this.numero_tag_POI;
 
     this.setTagBadges(updates)
     this.setMinscBadges(updates);
@@ -235,7 +259,7 @@ setTagBadges(updates){
   }
 
 
-  setMinscBadges(updates){
+setMinscBadges(updates){
      if(this.punteggio_totale >= 1000){
        updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
      }else if(this.punteggio_totale >= 500){
@@ -249,22 +273,22 @@ setTagBadges(updates){
      }
    }
 
-   setTagAchievements(updates){
+setTagAchievements(updates){
     
     if(this.num_of_tag == "1"){
-      updates["/users/"+this.email+"/achievement/1 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/1 tag"];
       updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "20"){
-      updates["/users/"+this.email+"/achievement/20 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/20 tag"];
       updates["/users/"+this.email+"/achievement/20 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "100"){
-      updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/100 tag"];
       updates["/users/"+this.email+"/achievement/100 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "300"){
-      updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/300 tag"];
       updates["/users/"+this.email+"/achievement/300 tag/data"] = new Date().getTime();
     }
     

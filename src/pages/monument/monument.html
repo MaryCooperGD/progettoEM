@@ -58,7 +58,7 @@
 
           <!--SE sono presenti tag allora vedo questo box-->
            <!--Se isEnabled è true allora sta nascosto-->
-          <ion-scroll id="scroll_preferenze" scrollY="true">
+          <ion-scroll id="scroll_preferenze" scrollY="true" [hidden]="!isEnabled_tag">
 
             <ion-row id ="tag-row" justify-content-center align-items-center>
 
@@ -69,6 +69,10 @@
               </ion-list>
             </ion-row>
 
+          </ion-scroll>
+
+          <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_tag" scrollY="true" text-justify >
+            <p>Aggiungi per primo un tag a questo punto di interesse!</p>
           </ion-scroll>
 
       
@@ -87,21 +91,17 @@
   </ion-card-header>
 
   <!--CODICE FUNZIONANTE ATTUALE-->
-  <ion-card-content>
-      <ion-scroll id="scroll_preferenze" scrollY="true">
-      <ion-grid>
-       <ion-list *ngFor="let d of descriptions" class="giustificato">
-            <ion-row>
-                <ion-col col-12>"{{d.text}}" - {{d.user}} - {{d.data_ins | date: 'dd/MM/yyyy'}}</ion-col>
-                
+  <ion-card-content text-justify>
+      <ion-scroll id="scroll_preferenze" scrollY = "true" [hidden]="!isEnabled_info" >
+      <ion-item *ngFor="let d of descriptions" style="border-bottom: 1px solid #ebebe0;">
+          <h2 text-wrap><b>"{{d.text}}"</b></h2>
+          <h3>{{d.user}} - {{d.data_ins | date: 'dd/MM/yyyy'}}</h3>
+      </ion-item>
+    
+    </ion-scroll>
 
-              
-                
-              </ion-row>
-        </ion-list>
-
-      
-        </ion-grid>
+    <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_info" scrollY="true" text-justify >
+        <p>Aggiungi per primo un'informazione!</p>
       </ion-scroll>
   </ion-card-content>
 
