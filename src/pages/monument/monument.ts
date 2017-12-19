@@ -93,7 +93,8 @@ export class MonumentPage {
         ref1.once('value', function(descs){ 
           descs.forEach(function(d){
             if(singleD.key == d.key){
-               var data = {text: d.child("testo").val(), user: d.child("username_utente").val()}
+              //Per comporre la descrizione completa pushamo il testo, l'username di chi lo ha scritto e la data di inserimento del commento
+               var data = {text: d.child("testo").val(), user: d.child("username_utente").val(), data_ins : d.child("insert_data").val()}
                descpts.push(data);
             }
             return false;

@@ -24,6 +24,8 @@ export class NewtagPage {
 
   //per ach
   num_of_tag;
+  num_of_info;
+  sum_of_total_contr;
 
   //per inserire punti!
   punteggio_tag;
@@ -75,6 +77,9 @@ export class NewtagPage {
       this.user_email.forEach(i=>{
         this.punteggio_tag = i.points_tag;
         this.punteggio_totale = i.total_points;
+
+        this.num_of_tag = i.num_of_tag;
+        this.num_of_info = i.num_of_info;
 
       })
     });
@@ -152,6 +157,8 @@ clickedButton(){
 
     this.num_of_tag = this.num_of_tag + 1;
     updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
+
+    this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
 
     this.setTagBadges(updates)
     this.setMinscBadges(updates);
@@ -246,19 +253,42 @@ setTagBadges(updates){
     
     if(this.num_of_tag == "1"){
       updates["/users/"+this.email+"/achievement/1 tag"]  = true;
-      
+      updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
+
     }else if(this.num_of_tag == "20"){
       updates["/users/"+this.email+"/achievement/20 tag"]  = true;
-      
+      updates["/users/"+this.email+"/achievement/20 tag/data"] = new Date().getTime();
+
     }else if(this.num_of_tag == "100"){
       updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/100 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "300"){
       updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/300 tag/data"] = new Date().getTime();
     }
     
   }
 
+  setMinscAchievements(updates){
+    if(this.sum_of_total_contr == "1"){
+      updates["/users/"+this.email+"/achievement/1 misto"];
+      updates["/users/"+this.email+"/achievement/1 misto/data"] = new Date().getTime();
+
+    }else if(this.sum_of_total_contr == "50"){
+      updates["/users/"+this.email+"/achievement/50 misto"];
+      updates["/users/"+this.email+"/achievement/50 misto/data"] = new Date().getTime();
+
+    }else if(this.sum_of_total_contr == "150"){
+      updates["/users/"+this.email+"/achievement/150 misto"];
+      updates["/users/"+this.email+"/achievement/150 misto/data"] = new Date().getTime();
+
+    }else if(this.sum_of_total_contr == "300"){
+      updates["/users/"+this.email+"/achievement/300 misto"];
+      updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
+      
+    }
+  }
 
 
 

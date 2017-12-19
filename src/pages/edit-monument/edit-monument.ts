@@ -44,6 +44,8 @@ export class EditMonumentPage {
   //per ach
   num_of_tag;
   num_of_info;
+  data_ach;
+  sum_of_total_contr;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
 
@@ -78,6 +80,10 @@ export class EditMonumentPage {
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
 
+        
+        
+
+        
 
         
         
@@ -139,13 +145,14 @@ export class EditMonumentPage {
    this.num_of_tag = this.num_of_tag + 1;
    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
-  
+   this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+   console.log("Dentro addSelectedTag: "+this.sum_of_total_contr);
 
     this.setTagBadges(updates)
     this.setMinscBadges(updates);
 
     this.setTagAchievements(updates);
-    
+    this.setMinscAchievements(updates);
 
    firebase.database().ref().update(updates);
    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
@@ -170,11 +177,14 @@ export class EditMonumentPage {
     var data = {
       testo: this.myInput,
       username_utente: this.username,
+      insert_data : new Date().getTime()
     }
 
     var updates = {}
     updates["/descriptions/"+key] = data;
     updates["/point_of_interest/"+this.poi.chiave+"/description/" + key ] = true;
+   
+    
 
     //Incrementa la variabile dei punti delle informazioni
     this.punteggio_info = this.punteggio_info + 15 ;
@@ -188,12 +198,15 @@ export class EditMonumentPage {
     this.num_of_info = this.num_of_info + 1;
     updates["/users/"+this.email+"/num_of_info"]  = this.num_of_info;
    
+    this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+    console.log("Dentro addInfo: "+this.sum_of_total_contr);
     //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
     //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
     this.setInfoBadges(updates);
     this.setMinscBadges(updates);
 
     this.setInfoAchievements(updates);
+    this.setMinscAchievements(updates);
 
     firebase.database().ref().update(updates);
 
@@ -261,33 +274,61 @@ export class EditMonumentPage {
     
     if(this.num_of_tag == "1"){
       updates["/users/"+this.email+"/achievement/1 tag"]  = true;
-      
+      updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
+
     }else if(this.num_of_tag == "20"){
       updates["/users/"+this.email+"/achievement/20 tag"]  = true;
-      
+      updates["/users/"+this.email+"/achievement/20 tag/data"] = new Date().getTime();
+
     }else if(this.num_of_tag == "100"){
       updates["/users/"+this.email+"/achievement/100 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/100 tag/data"] = new Date().getTime();
 
     }else if(this.num_of_tag == "300"){
       updates["/users/"+this.email+"/achievement/300 tag"]  = true;
+      updates["/users/"+this.email+"/achievement/300 tag/data"] = new Date().getTime();
     }
     
   }
 
   setInfoAchievements(updates){
     if(this.num_of_info == "1"){
-      updates["/users/"+this.email+"/achievement/1 info"]  = true;
+      updates["/users/"+this.email+"/achievement/1 info"];
+      updates["/users/"+this.email+"/achievement/1 info/data"] = new Date().getTime();
       
     }else if(this.num_of_info == "10"){
-      updates["/users/"+this.email+"/achievement/10 info"]  = true;
+      updates["/users/"+this.email+"/achievement/10 info"];
+      updates["/users/"+this.email+"/achievement/10 info/data"] = new Date().getTime();
       
     }else if(this.num_of_info == "50"){
-      updates["/users/"+this.email+"/achievement/50 info"]  = true;
+      updates["/users/"+this.email+"/achievement/50 info"];
+      updates["/users/"+this.email+"/achievement/50 info/data"] = new Date().getTime();
 
     }else if(this.num_of_info == "150"){
-      updates["/users/"+this.email+"/achievement/150 info"]  = true;
+      updates["/users/"+this.email+"/achievement/150 info"];
+      updates["/users/"+this.email+"/achievement/150 info/data"] = new Date().getTime();
     }
   }
 
+  setMinscAchievements(updates){
+    if(this.sum_of_total_contr == "1"){
+      updates["/users/"+this.email+"/achievement/1 misto"];
+      updates["/users/"+this.email+"/achievement/1 misto/data"] = new Date().getTime();
 
+    }else if(this.sum_of_total_contr == "50"){
+      updates["/users/"+this.email+"/achievement/50 misto"];
+      updates["/users/"+this.email+"/achievement/50 misto/data"] = new Date().getTime();
+
+    }else if(this.sum_of_total_contr == "150"){
+      updates["/users/"+this.email+"/achievement/150 misto"];
+      updates["/users/"+this.email+"/achievement/150 misto/data"] = new Date().getTime();
+
+    }else if(this.sum_of_total_contr == "300"){
+      updates["/users/"+this.email+"/achievement/300 misto"];
+      updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
+      
+    }
+  }
+
+ 
 }

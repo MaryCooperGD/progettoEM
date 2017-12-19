@@ -88,14 +88,19 @@
 
   <!--CODICE FUNZIONANTE ATTUALE-->
   <ion-card-content>
-      <ion-scroll id="scroll_preferenze" scrollY="true"> 
+      <ion-scroll id="scroll_preferenze" scrollY="true">
       <ion-grid>
-        <ion-list *ngFor="let d of descriptions" class="giustificato">
+       <ion-list *ngFor="let d of descriptions" class="giustificato">
             <ion-row>
-                <ion-col col-12>"{{d.text}}" - {{d.user}}</ion-col>
+                <ion-col col-12>"{{d.text}}" - {{d.user}} - {{d.data_ins | date: 'dd/MM/yyyy'}}</ion-col>
+                
+
+              
                 
               </ion-row>
         </ion-list>
+
+      
         </ion-grid>
       </ion-scroll>
   </ion-card-content>

@@ -30,6 +30,8 @@ export class AchievementsPage {
   public achievements_PHOTO:Array<any>;
   public achievements_MINSC:Array<any>;
 
+  public achievements_INFO_data:Array<any>;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,  public api: Api) {
   }
 
@@ -53,8 +55,12 @@ export class AchievementsPage {
     let userPhotoACH = []; //qui mettiamo tutti gli achievements sulle foto
     let userMinscACH = []; //qui mettiamo tutti gli achievements generali
 
+    let data  = [];
+
     var ref_utente = firebase.database().ref('/users/'+ this.email+'/achievement/');
     var ref_ach = firebase.database().ref('/achievements/');
+
+    
 
     ref_utente.once('value',function(achievement){
         achievement.forEach(function(singolo_ach){
@@ -63,19 +69,30 @@ export class AchievementsPage {
 
               if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "tag")){
 
-                userTagACH.push(singolo_ACH.child("descr").val())
+                //Per ogni achievement memorizziamo la descrizione e quando è stato sbloccato
+                var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
+                userTagACH.push(prova);
+                
               }
               if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "photo")){
                 
-                userPhotoACH.push(singolo_ACH.child("descr").val())
+                //Per ogni achievement memorizziamo la descrizione e quando è stato sbloccato
+                var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
+                userPhotoACH.push(prova);
               }
               if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "info")){
                 
-                userInfoACH.push(singolo_ACH.child("descr").val())
+                //Per ogni achievement memorizziamo la descrizione e quando è stato sbloccato
+                var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
+                userInfoACH.push(prova);
+                //userInfoACH.push(singolo_ACH.child("descr").val())
+                //data.push(singolo_ach.child("data").val()) //devo riuscire a farla funzionare
               }
               if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "misto")){
-                
-                userMinscACH.push(singolo_ACH.child("descr").val())
+
+                //Per ogni achievement memorizziamo la descrizione e quando è stato sbloccato
+                var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
+                userMinscACH.push(prova);
               }
 
               return false;
@@ -91,6 +108,7 @@ export class AchievementsPage {
       this.achievements_PHOTO = userPhotoACH;
       this.achievements_MINSC = userMinscACH;
          
+      
    })
 
   
