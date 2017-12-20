@@ -40,7 +40,6 @@ export class CreateRoutePage {
       var ref = firebase.database().ref('/cities/')
       var self = this;
       if (this.city != null){
-        console.log("La città non è null")
         ref.once('value', function(snapshot){
           snapshot.forEach(function(childSnapshot){
             if(childSnapshot.child("name").val() == "Cesena"){
@@ -72,7 +71,9 @@ export class CreateRoutePage {
           self1.navCtrl.setRoot(HomePage, {
             firstAddress: self1.startGecoded,
             secondAddress: self1.arrivalGeocoded,
-            waypts: self1.waypoints
+            waypts: self1.waypoints,
+            maxDuration: self1.duration,
+            maxLength: self1.length
           })
         })
   
@@ -134,7 +135,6 @@ displayError(messageErr: string){
                     }
                   }
                   if(!exists){
-                  console.log("Ho trovato il punto di interesse " + snapshot.key + " found vale " + found)
                   pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})     
                 }
               }
@@ -210,6 +210,7 @@ displayError(messageErr: string){
     }
 
     getUsersPref(){
+      console.log("Max lenght vale " + this.length)
 
       if(this.myInputArrivo!=null && this.myInputPartenza!=null){
       console.log("This city key " + this.city_key)
@@ -235,7 +236,6 @@ displayError(messageErr: string){
             });
           }).then(a=>{
             self.myTags = userTags
-            console.log("usertags è lungo " + userTags.length)
             self.findPoiByTag(self.myTags) //method I have to call when finished
           })
           

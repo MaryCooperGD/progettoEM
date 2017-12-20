@@ -33,6 +33,8 @@ export class HomePage {
   canCalculate = false;
   public myTags:Array<any>;
   public waypoints:Array<any>
+  maxLength;
+  maxTime;
   
 
   @ViewChild('map-container') mapContainer;
@@ -44,6 +46,9 @@ export class HomePage {
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
     this.waypoints = this.navParams.get('waypts')
+    this.maxLength = this.navParams.get('maxLength')
+    this.maxTime = this.navParams.get('maxDuration')
+
 
     if (first !=null && second!=null && this.waypoints!=null){
       this.start = first;
@@ -323,7 +328,6 @@ export class HomePage {
     })
 
 
-    console.log("Lunghezza waypoints: " + myWayPts.length)
 
     var polyUtil = require('polyline-encoded')
     var latlngs;
@@ -354,7 +358,7 @@ export class HomePage {
       firstpolyline.addTo(newMap);
 
 
-      this.calculateMinimumLength(response, 300);
+      //this.calculateMinimumLength(response, 300);
 
 
       console.log("Ordine " +response.routes[0].waypoint_order)
@@ -363,14 +367,35 @@ export class HomePage {
      var lunghezza = 0;
      var duration = 0;
      var myLegs = response.routes[0].legs
-     for(var i=0; i<myRoute.steps.length; i++){ 
-       lunghezza+=myRoute.steps[i].distance.value
-       duration+=myRoute.steps[i].duration.value
+     for(var i=0; i<myLegs.length; i++){ 
+       lunghezza+=myLegs[i].distance.value
+       duration+=myLegs[i].duration.value
     }
     console.log("Numero di legs: " + myLegs.length)
     for (var i = 0; i<myLegs.length; i++){
       console.log("Leg " + i + " Start " + myLegs[i].start_address + " end " + myLegs[i].end_address)
       
+    }
+
+    
+    if(this.maxLength!=null && this.maxTime!=null){
+      console.log("nessuno dei due è null")
+      
+      var lengthRes = this.calculateMinimumLength(response,this.maxLength)
+      var timeRes = this.calculateMinimumTime(response,this.maxTime)
+      for(var r=0; r<lengthRes.length; r++){
+        console.log("Res length " + lengthRes[r] )
+        for(var r1=0; r1<timeRes.length; r1++){
+          console.log("Time res " + timeRes[r1])
+        }
+      }
+
+    } else if (this.maxLength != null){
+      console.log("Solo length è diverso da null")
+    } else if(this.maxTime!=null){
+      console.log("Solo time è diverso da null")
+    } else {
+      console.log("Sono entrambi null")
     }
 
     console.log("Lunghezza percorso: " + lunghezza + " durata percorso: " + duration)
@@ -433,128 +458,60 @@ export class HomePage {
     var length = 0;
     var items = [];
     for (var i=0; i<myLegs.length; i++){
-      console.log("Leg "+ i + " length " + myLegs[i].distance.value)
       items.push(myLegs[i].distance.value)
+      console.log("Leg " + i + " lunghezza  " + myLegs[i].distance.value) 
       if(myLegs[i].distance.value > length){
         longest = i;
         length = myLegs[i].distance.value
       }
     }
 
-
-
-    this.subset(items, 10, maxLength)
-
-
+    console.log("Risultato " + this.getCombinations(items,maxLength)[0])
+    return this.getCombinations(items,maxLength)[0]
+    //
 
   }
 
-   
-  subset(people, min, max)
-  {
-    var subsets = [];
-    subsets[0] = '';
-  
-    for (var person in people)
-    {
-      for (var s = min-1; s >= 0; --s)
-      {
-        if (s in subsets)
-        {
-          var sum = s + person;
-  
-          if (!(sum in subsets))
-          {
-            subsets[sum] = subsets[s] + ' ' + person;
-  
-          }
+  calculateMinimumTime(response:any, maxTime){
+    var myLegs = response.routes[0].legs;
+    var items = []
+    for (var i=0; i<myLegs.length; i++){
+      items.push(myLegs[i].duration.value)
+    }
+
+    console.log("Risultato time " + this.getCombinations(items,maxTime)[0])
+    return this.getCombinations(items,maxTime)[0]
+  }
+
+
+  getCombinations(array, sum) {
+    function add(a, b) { return a + b; }
+
+    function fork(i, t) {
+        var r = (result[0] || []).reduce(add, 0),
+            s = t.reduce(add, 0);
+        if (i === array.length || s > sum) {
+            if (s <= sum && t.length && r <= s) {
+                if (r < s) {
+                    result = [];
+                }
+                result.push(t);
+            }
+            return;
         }
-      }
+        fork(i + 1, t.concat([array[i]]));
+        fork(i + 1, t);
     }
-    
-    console.log("Prova " + subsets[sum])
-  }
+
+    var result = [];
+    fork(0, []);
+    return result;
+}
   
 
-  /* 0-1 knapsack problem
-For an overall introduction to knapsack problem, see https://en.wikipedia.org/wiki/Knapsack_problem
-Function name: knapsack
-Param: 
-  items: an array of {w: v:} (where 'w' stands for weight, and 'v' stands for value)
-  capacity: a positive integer number
-Will return max sum value that can reach, and the chosen subset to add up to the value.
-Example:
-var items = [{w:3,b:10},{w:1,b:3},{w:2,b:9},{w:2,b:5},{w:1,b:6}];
-var capacity = 6;
-console.log(knapsack(items, capacity));
-will return 
-{ maxValue: 25,
-  subset: [ { w: 1, v: 6 }, { w: 2, v: 9 }, { w: 3, v: 10 } ] }
-*/
 
-knapsack(items, capacity){
-  // This implementation uses dynamic programming.
-  // Variable 'memo' is a grid(2-dimentional array) to store optimal solution for sub-problems,
-  // which will be later used as the code execution goes on.
-  // This is called memoization in programming.
-  // The cell will store best solution objects for different capacities and selectable items.
-  var memo = [];
 
-  // Filling the sub-problem solutions grid.
-  for (var i = 0; i < items.length; i++) {
-    // Variable 'cap' is the capacity for sub-problems. In this example, 'cap' ranges from 1 to 6.
-    var row = [];
-    for (var cap = 1; cap <= capacity; cap++) {
-      row.push(getSolution(i,cap));
-    }
-    memo.push(row);
-  }
 
-  // The right-bottom-corner cell of the grid contains the final solution for the whole problem.
-  return(getLast());
-
-  function getLast(){
-    var lastRow = memo[memo.length - 1];
-    return lastRow[lastRow.length - 1];
-  }
-
-  function getSolution(row,cap){
-    const NO_SOLUTION = {maxValue:0, subset:[]};
-    // the column number starts from zero.
-    var col = cap - 1;
-    var lastItem = items[row];
-    // The remaining capacity for the sub-problem to solve.
-    var remaining = cap - lastItem.w;
-
-    // Refer to the last solution for this capacity,
-    // which is in the cell of the previous row with the same column
-    var lastSolution = row > 0 ? memo[row - 1][col] || NO_SOLUTION : NO_SOLUTION;
-    // Refer to the last solution for the remaining capacity,
-    // which is in the cell of the previous row with the corresponding column
-    var lastSubSolution = row > 0 ? memo[row - 1][remaining - 1] || NO_SOLUTION : NO_SOLUTION;
-
-    // If any one of the items weights greater than the 'cap', return the last solution
-    if(remaining < 0){
-      return lastSolution;
-    }
-
-    // Compare the current best solution for the sub-problem with a specific capacity
-    // to a new solution trial with the lastItem(new item) added
-    var lastValue = lastSolution.maxValue;
-    var lastSubValue = lastSubSolution.maxValue;
-
-    var newValue = lastSubValue + lastItem.v;
-    if(newValue >= lastValue){
-      // copy the subset of the last sub-problem solution
-      var _lastSubSet = lastSubSolution.subset.slice();
-      _lastSubSet.push(lastItem);
-      return {maxValue: newValue, subset:_lastSubSet};
-    }else{
-      console.log("SOlution " + lastSolution)
-      return lastSolution;
-    }
-  }
-}
 
   graphHopper(){
     

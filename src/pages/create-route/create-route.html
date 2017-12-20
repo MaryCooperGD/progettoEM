@@ -58,13 +58,11 @@
       
       <ion-card-content>
           <ion-item>
-              <ion-label fixed>Durata massima</ion-label>
-              <ion-input [(ngModel)]="duration" type="text" value=""></ion-input>
+            <ion-textarea [(ngModel)]="duration"  placeholder="Durata massima (minuti o secondi)"></ion-textarea>
           </ion-item>
 
           <ion-item>
-                <ion-label fixed>Lunghezza massima (in metri)</ion-label>
-                <ion-input [(ngModel)]="length" type="text" value=""></ion-input>
+            <ion-textarea [(ngModel)]="length"  placeholder="Lunghezza massima (metri)"></ion-textarea>
           </ion-item>
 
           <ion-item>
