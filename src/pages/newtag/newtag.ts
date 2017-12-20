@@ -33,31 +33,28 @@ export class NewtagPage {
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   
-   //per le info e i tag
-   public poi_NUMEROINFO: Array<any> = [];
-   public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
+  //per le info e i tag
+  public poi_NUMEROINFO: Array<any> = [];
+  public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
   numero_tag_POI; //numero di tag del punto di interesse
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, 
   public menuCtrl: MenuController, public toastCtrl: ToastController) {
  
     this.poi = navParams.get('poi')
-      
       var ref1 = firebase.database().ref('/tag/'); //prendo tutti i tag esistenti
-
-      
       //creo la lista di tag
-       ref1.once('value', tagList => {
-      let tags = [];
-      tagList.forEach( poi => {
-        tags.push(poi.val());
-        return false;
+      ref1.once('value', tagList => {
+        let tags = [];
+        tagList.forEach( poi => {
+          tags.push(poi.val());
+          return false;
+        });
+
+        this.tagList = tags;
+        this.loadedTagList = tags;
       });
 
-      this.tagList = tags;
-      this.loadedTagList = tags;
-    });
-        
   }
 
   ionViewDidLoad() {
@@ -217,6 +214,7 @@ getItems(searchbar) {
 
   this.tagList = this.tagList.filter((v) => {
     if(v.nome && q) {
+      
       if (v.nome.toLowerCase().indexOf(q.toLowerCase()) > -1) {
         return true;
       }
