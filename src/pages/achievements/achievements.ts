@@ -21,9 +21,6 @@ export class AchievementsPage {
   username:any;
   email:any;
 
-  number;
-
-
   //--Per mostrare gli achievements dell'utente
   public achievements_TAG:Array<any>;
   public achievements_INFO:Array<any>;
@@ -47,7 +44,12 @@ export class AchievementsPage {
         this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
     }      
 
-    
+    this.showAchievements();
+
+  } //ionViewDidLoad
+
+
+  showAchievements(){
 
     //Inizio recupero achivements utente
     let userTagACH = []; //qui mettiamo tutti gli achievements sui tag
@@ -55,12 +57,8 @@ export class AchievementsPage {
     let userPhotoACH = []; //qui mettiamo tutti gli achievements sulle foto
     let userMinscACH = []; //qui mettiamo tutti gli achievements generali
 
-    let data  = [];
-
     var ref_utente = firebase.database().ref('/users/'+ this.email+'/achievement/');
     var ref_ach = firebase.database().ref('/achievements/');
-
-    
 
     ref_utente.once('value',function(achievement){
         achievement.forEach(function(singolo_ach){
@@ -110,8 +108,6 @@ export class AchievementsPage {
          
       
    })
-
-  
-  } //ionViewDidLoad
+  }
 
 } //AchievementsPage

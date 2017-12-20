@@ -31,43 +31,33 @@ export class MonumentPage {
   descriptions;
   poiTags;
   
-  
-
-   //per le info e i tagdel poi
+  //per le info e i tag del POI
    public poi_NUMEROINFO: Array<any> = [];
-  // public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
    numero_info_POI;
 
-   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
+  //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
     isEnabled_info : boolean = true;
     isEnabled_tag : boolean = true;
-   
-  
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
     this.poiTags = this.poi.tipo
     this.refreshList();
     this.refreshTags();
-   
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MonumentPage');
     this.pageDetailsRefresh()
-    
-
   }
 
   ionViewWillEnter(){
-    
     this.refreshList()
     this.refreshTags()
-    
   }
 
   pageDetailsRefresh(){
-    
     
     var poi_ref = firebase.database().ref("/point_of_interest/");
 
@@ -80,13 +70,13 @@ export class MonumentPage {
       });
       this.poi_NUMEROINFO.forEach(i=>{
         
-        if(i.numero_tag == 0) //Se non ho tag devo nascondere l'elenco vuoto e mostro il messaggio
-        {
-         this.isEnabled_tag = false;
-          console.log("VALORE ISENABLED_INFO"+this.isEnabled_tag);
-        }
+       // if(i.numero_tag == 0) //Se non ho tag devo nascondere l'elenco vuoto e mostro il messaggio
+        //{
+         //this.isEnabled_tag = false;
+          //console.log("VALORE ISENABLED_INFO"+this.isEnabled_tag);
+        //}
 
-        if (i.numero_informazioni == 0) //Se non ho info devo nascondere l'elenco vuoto e mostro il messaggio
+        if (i.numero_informazioni == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         {
           this.isEnabled_info = false;
           console.log("VALORE ISENABLED_INFO"+this.isEnabled_info);
@@ -124,9 +114,6 @@ export class MonumentPage {
     this.poiTags = tagShow;
   }
  
-  
-
-
   refreshList(){
     console.log("dentro refresh list dopo aver aggiunto info")
 
@@ -153,9 +140,6 @@ export class MonumentPage {
     })
 
     this.descriptions = descpts;
-
-
-
   }
 
   openUploadPhotoPage(){
@@ -166,8 +150,7 @@ export class MonumentPage {
 
   openEditMonumentPage(){
     this.navCtrl.push(EditMonumentPage, {
-      poi: this.poi,
-      
+      poi: this.poi,  
     })
   } 
 

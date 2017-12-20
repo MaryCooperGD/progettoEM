@@ -5,131 +5,120 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar color="primary">
    <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{poiName}}</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding class="sfondo_content">
 
-<!--Card nome e foto-->
-<ion-card>
-  <ion-card-header class="blue-title">
-    {{poiName}}
-  </ion-card-header>
+    <!--Card nome e foto-->
+    <ion-card>
+      <ion-card-header class="blue-title">
+        {{poiName}}
+      </ion-card-header>
 
-  <ion-card-content>
-    <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
-  </ion-card-content>
-</ion-card>
+      <ion-card-content>
+        <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+      </ion-card-content>
+    </ion-card>
 
-<!--Card descrizione e tag-->
-<ion-card>
-  <ion-segment [(ngModel)]="menu">
-    <ion-segment-button value="Descrizione" style="border-radius:0px !important">
-      Descrizione
-    </ion-segment-button>
+    <!--Card descrizione e tag-->
+    <ion-card>
+      <!--Sezioni del menù-->
+      <ion-segment [(ngModel)]="menu"> 
+        <ion-segment-button value="Descrizione" style="border-radius:0px !important">
+          Descrizione
+        </ion-segment-button>
+        <ion-segment-button value="Tag" style="border-radius:0px !important">
+          Tag
+        </ion-segment-button>     
+      </ion-segment>
 
-    <ion-segment-button value="Tag" style="border-radius:0px !important">
-      Tag
-    </ion-segment-button>     
-  </ion-segment>
+      <ion-card-content>
+        <div [ngSwitch]="menu">
+          <ion-list *ngSwitchCase="'Descrizione'">
+            <ion-card-content style="text-align: center;">
+              <ion-scroll id="scroll_preferenze" scrollY="true">
+                  <p class="giustificato">
+                      La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
+                  </p>
+              </ion-scroll>
+            </ion-card-content>  
+          </ion-list>
+                      
+          <ion-list *ngSwitchCase="'Tag'">
+            <ion-card-content style="text-align: center;">
+              <!--SE sono presenti tag allora vedo questo box | Se isEnabled è true allora sta nascosto-->
+              <ion-scroll id="scroll_preferenze" scrollY="true" [hidden]="!isEnabled_tag">
+                <ion-row id ="tag-row" justify-content-center align-items-center>
 
-  <ion-card-content>
-    <div [ngSwitch]="menu">
-      <ion-list *ngSwitchCase="'Descrizione'">
-        <ion-card-content style="text-align: center;">
-          <ion-scroll id="scroll_preferenze" scrollY="true">
-              <p class="giustificato">
-                  La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
-              </p>
+                  <ion-list *ngFor="let tag of poiTags" id="tag_list"> <!-- Lista di badge -->
+                    <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
+                    <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
+                  </ion-list>
+                </ion-row>
+              </ion-scroll>
+
+              <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_tag" scrollY="true" text-justify >
+                <p>Aggiungi per primo un tag a questo punto di interesse!</p>
+              </ion-scroll>
+
+            </ion-card-content>
+          </ion-list>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!--Card informazioni utenti-->
+    <ion-card>
+      <ion-card-header class="blue-title">
+            Informazioni dagli utenti
+      </ion-card-header>
+
+      <ion-card-content text-justify>
+          <ion-scroll id="scroll_preferenze" scrollY = "true" [hidden]="!isEnabled_info" >
+            <ion-item *ngFor="let d of descriptions" style="border-bottom: 1px solid #ebebe0;">
+                <h2 text-wrap><b>"{{d.text}}"</b></h2>
+                <h3>{{d.user}} - {{d.data_ins | date: 'dd/MM/yyyy'}}</h3>
+            </ion-item>
           </ion-scroll>
-        </ion-card-content>  
-      </ion-list>
-                  
-      <ion-list *ngSwitchCase="'Tag'">
-        <ion-card-content style="text-align: center;">
 
-          <!--SE sono presenti tag allora vedo questo box-->
-           <!--Se isEnabled è true allora sta nascosto-->
-          <ion-scroll id="scroll_preferenze" scrollY="true" [hidden]="!isEnabled_tag">
-
-            <ion-row id ="tag-row" justify-content-center align-items-center>
-
-              <ion-list *ngFor="let tag of poiTags" id="tag_list"> <!-- Lista di badge -->
-                <!-- <ion-badge class="tag-local" color="secondary">{{tag.val().nome}}</ion-badge> -->
-                <ion-badge class="tag-local" color="secondary">{{tag}}</ion-badge>
-
-              </ion-list>
-            </ion-row>
-
+          <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_info" scrollY="true" text-justify >
+            <p>Aggiungi per primo un'informazione!</p>
           </ion-scroll>
+      </ion-card-content>
 
-          <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_tag" scrollY="true" text-justify >
-            <p>Aggiungi per primo un tag a questo punto di interesse!</p>
-          </ion-scroll>
+    </ion-card>
 
-      
+    <!--Card foto utenti-->
+    <ion-card>
+      <ion-card-header class="blue-title">
+            Foto utenti
+      </ion-card-header>
 
+      <ion-card-content>
+        <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+      </ion-card-content>
+    </ion-card>
 
-        </ion-card-content>
-      </ion-list>
-    </div>
-  </ion-card-content>
-</ion-card>
+    <!--Card con i bottoni per l'edit e il caricamento delle foto-->
+    <ion-card>
+      <ion-card-content>
+        <!--Cliccando sul bottone si apre la pagina per la modifica del monumento-->
+        <ion-row>
+            <button ion-button class="card-button" (click)=openEditMonumentPage() > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>  Contribuisci</button>
+        </ion-row>
 
-<!--Card informazioni utenti-->
-<ion-card>
-  <ion-card-header class="blue-title">
-        Informazioni dagli utenti
-  </ion-card-header>
-
-  <!--CODICE FUNZIONANTE ATTUALE-->
-  <ion-card-content text-justify>
-      <ion-scroll id="scroll_preferenze" scrollY = "true" [hidden]="!isEnabled_info" >
-      <ion-item *ngFor="let d of descriptions" style="border-bottom: 1px solid #ebebe0;">
-          <h2 text-wrap><b>"{{d.text}}"</b></h2>
-          <h3>{{d.user}} - {{d.data_ins | date: 'dd/MM/yyyy'}}</h3>
-      </ion-item>
-    
-    </ion-scroll>
-
-    <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_info" scrollY="true" text-justify >
-        <p>Aggiungi per primo un'informazione!</p>
-      </ion-scroll>
-  </ion-card-content>
-
-</ion-card>
-
-<!--Card foto utenti-->
-<ion-card>
-  <ion-card-header class="blue-title">
-        Foto utenti
-  </ion-card-header>
-
-  <ion-card-content>
-    <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
-  </ion-card-content>
-</ion-card>
-
-<ion-card>
-    <ion-card-content>
-      <!--Cliccando sul bottone si apre la pagina per la modifica del monumento-->
-      <ion-row>
-        <button ion-button class="card-button" (click)=openEditMonumentPage() > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>  Contribuisci</button>
-      </ion-row>
-      <!--Cliccando sul bottone si apre la pagina per il caricamento della foto-->
-      <ion-row>
-        <button ion-button class="card-button" (click)=openUploadPhotoPage()  color="secondary" > <ion-icon name="images" class="icona-bottone"></ion-icon>Carica foto</button>
-      </ion-row>
-    </ion-card-content>
-</ion-card>
+        <!--Cliccando sul bottone si apre la pagina per il caricamento della foto-->
+        <ion-row>
+            <button ion-button class="card-button" (click)=openUploadPhotoPage()  color="secondary" > <ion-icon name="images" class="icona-bottone"></ion-icon>Carica foto</button>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
 
 
 
