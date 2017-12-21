@@ -49,6 +49,16 @@ export class CreateRoutePage {
   
           })
         })
+      } else {
+        ref.once('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            if(childSnapshot.child("name").val() == "Cesena"){
+              self.city_key = childSnapshot.key;
+            }
+            return false;
+  
+          })
+        })
       }
       
 
