@@ -426,9 +426,14 @@ export class HomePage {
           
           
         }else */ if(chosen=="time"){ // ho chiesto per il tempo
-          if(duration>(this.maxTime-myLegs[myLegs.length-1].duration.value)){
-            this.calculateMinimumTime(response,this.maxTime,waypoints)
+          if(duration>(this.maxTime/*-myLegs[myLegs.length-1].duration.value*/)){
+            //this.calculateMinimumTime(response,this.maxTime,waypoints)
+            console.log("Lunghezza waypoints " + waypoints.length)
+            var random = this.getRandomNumber(0, waypoints.length-1)
+            waypoints.splice(random,1) //elimino un elemento all'indice random
+            console.log("Lunghezza waypoints " + waypoints.length)            
             console.log("Il tempo sta ancora calcolando")
+            this.googleRouting(start,arrival,waypoints,"time")
   
           } else {
             /* if(this.both){
@@ -484,6 +489,14 @@ export class HomePage {
 
       }
     })
+  }
+
+  getRandomNumber(min, max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    var random = Math.floor(Math.random()*(max-min+1)+min)
+    console.log("Numero random generato " + random)
+    return random
   }
 
   withGoogle(start, arrival,waypoints){
@@ -583,7 +596,10 @@ export class HomePage {
         this.time = true;
         var newT = this.maxTime - myLegs[myLegs.length-1].duration.value //ho tolto l'ultimo elemento del vettore perché
         //rappresenta l'ultimo passo. 
-        var timeRes = this.calculateMinimumTime(response,newT, newArray)
+        this.distanceAPI(start,arrival,waypoints);
+        //console.log("La distanza tra arrivo e partenza è  " + time)
+       // this.googleRouting(start,arrival,waypoints,"time"); //chiamo google routing con il time
+        //var timeRes = this.calculateMinimumTime(response,newT, newArray)
       } else { //non ho limiti, quindi posso calcolare il mio percorso
         console.log("Sono entrambi null")
         let index = 1;
@@ -626,6 +642,45 @@ export class HomePage {
     
 
 
+  }
+
+  distanceAPI(start,arrival,waypoints){
+    var service = new google.maps.DistanceMatrixService();
+    var self = this;
+    service.getDistanceMatrix(
+      {
+        origins: [start],
+        destinations: [arrival],
+        travelMode: google.maps.TravelMode.WALKING,
+      }, (response, status) => {
+        if(status=="OK"){
+          var origins = response.originAddresses;
+          var destinations = response.destinationAddresses;
+
+          console.log("Lunghezza origins " + origins.length)
+          var distance = 0;
+          var duration = 0;
+          for (var i = 0; i < origins.length; i++) {
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+              var element = results[j];
+              distance = element.distance.value;
+              duration = element.duration.value;
+              var from = origins[i];
+              var to = destinations[j];
+            }
+          }
+          console.log("Durata: " + duration)
+          if(duration>this.maxTime){
+            self.displayGPSError("Ci dispiace, il punto di partenza e quello di arrivo sono troppo lontani per i limiti inseriti!")
+          } else {
+            self.googleRouting(start,arrival,waypoints,"time");
+          }
+        } else{
+          console.log("Problems calculating distances")
+        }
+
+      })
   }
 
   calculateMinimumLength(response:any, maxLength, wayPts){
