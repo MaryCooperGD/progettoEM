@@ -27,8 +27,6 @@ export class AchievementsPage {
   public achievements_PHOTO:Array<any>;
   public achievements_MINSC:Array<any>;
 
-  public achievements_INFO_data:Array<any>;
-
   constructor(public navCtrl: NavController, public navParams: NavParams,  public api: Api) {
   }
 
