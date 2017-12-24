@@ -136,16 +136,19 @@ export class EditMonumentPage {
       })
     }).then(a=>{
       this.tagList = tagShow;
+ 
     this.loadedTagList = tagShow;
     })
 
     this.tagList = tagShow;
+    console.log("Tags finali(che l'utente non ha)  "+this.tagList)
     this.loadedTagList = tagShow;
   }
 
 
   addSelectedTag(index){
     var tagToAdd = this.tagList[index]; //corretto
+   
     var updates = {};
    updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
 
