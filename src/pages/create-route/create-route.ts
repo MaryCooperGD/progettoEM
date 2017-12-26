@@ -33,7 +33,7 @@ export class CreateRoutePage {
   public myTags:Array<any>;
   city;
   city_key;
-  
+  isAccessibilityOn;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api) {
       this.city = this.api.getCity();
@@ -144,7 +144,13 @@ displayError(messageErr: string){
                     }
                   }
                   if(!exists){
-                  pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})     
+                    if(self.isAccessibilityOn){
+                       if(snapshot.child('accessibilità').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+                    } else {
+                      pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
+                    }
                 }
               }
               })
@@ -152,7 +158,7 @@ displayError(messageErr: string){
             }
           });
         }).then(a=>{
-          if (!found){
+        if (pois.length==0/*!found*/){
             self.displayError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
             +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
           } else {
@@ -299,49 +305,6 @@ displayError(messageErr: string){
           })
           
         });
-        
-            /*  var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
-            var ref = firebase.database().ref('/tag/')
-            var username;
-            if(self.api.user.displayName==null){
-              username = '';
-          }else {
-              username = self.api.user.displayName
-          }
-        
-          var self1 = self;
-          user_pref.once('value', function(preferenze){ 
-          preferenze.forEach(function(t){
-            ref.once('value', function(tags){ 
-              tags.forEach(function (t1){
-                if(t.key == t1.key){ 
-                console.log("Found " + t1.key)
-                  userTags.push(t1.key)
-                }
-                return false;
-               
-              });
-            })
-            return false;
-          });
-        })
-            await this.sleep(1000)
-            //console.log("Prova " + userTags.length)
-            this.myTags = userTags
-            this.findPoiByTag(this.myTags) */
-        /* .then(function(success){
-            self.myTags = userTags;
-            self.findPoiByTag(self.myTags);
-            console.log("Added all tags " + userTags.length)
-            
-          }) 
-          Promise.all(arrayPromises).then(() =>
-            console.log("Added all tags " + userTags.length)
-        
-        
-        ) */
-
-
       } else {
         this.displayError("Ci dispiace, non ci sono punti di interesse registrati per la tua città. Contattaci per aggiungerli!")
       }

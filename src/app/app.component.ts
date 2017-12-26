@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform,AlertController } from 'ionic-angular';
+import { Nav, Platform,AlertController, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Observable } from 'rxjs/Observable';
@@ -32,7 +32,7 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,public api:Api,
-    public alertCtrl:AlertController) {
+    public alertCtrl:AlertController, public app:App) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -58,7 +58,13 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    
+    if(this.nav.getActive().name=="HomePage" && page.title=="Home"){
+      
+    }else {
+      this.nav.setRoot(page.component);
+    }
+    
   }
 
   presentConfirm() {

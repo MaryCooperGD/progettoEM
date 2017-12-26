@@ -9,18 +9,26 @@
 
 <ion-content class="sfondo_content">
 
-  <!--Riga per la mappa-->
-  <ion-row>
+  <ion-grid>
+<!--Riga per la mappa-->
+<ion-row>
     <div class="map-container">
       <div id="map">
       </div>
     </div> 
   </ion-row>
 
+  <ion-row>
+      <button ion-button color="primary" block (click)='planTrip()' id="button_plan"> Pianifica il tuo percorso </button>
+      
+  </ion-row>
+
   <!--Riga per il bottone-->
   <ion-row>
     <button ion-button color="primary" block (click)='planTrip()' id="button_plan"> Pianifica il tuo percorso </button>
   </ion-row>
+  </ion-grid>
+  
 
 </ion-content> 
 

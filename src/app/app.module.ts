@@ -32,6 +32,7 @@ import { TutorialPage } from "../pages/tutorial/tutorial";
 import { CreditsPage } from "../pages/credits/credits";
 import {NewtagPage} from "../pages/newtag/newtag";
 import { AchievementsPage } from "../pages/achievements/achievements";
+import { NavController } from 'ionic-angular/navigation/nav-controller';
 
 export const firebaseConfig = {
   

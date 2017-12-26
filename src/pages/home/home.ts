@@ -67,18 +67,21 @@ export class HomePage {
 
 
   }
-
-  
-  
-
+ 
+  ionViewWillEnter(){
+  //  document.getElementById("map").outerHTML = " <div class='map-container'> <div id='map' style: width: 100%;  height:100%;     position: fixed;>    </div> </div> "  
+  }
+ 
   ionViewDidLoad() {
-
     //set map center
     this.center = [44.13832, 12.2447 ]; 
     
     
     //setup leaflet map
-        this.initMap();
+  
+     this.initMap();
+
+        
         if(this.canCalculate){
           this.withGoogle(this.start, this.destination, this.waypoints);
         } 
@@ -92,7 +95,7 @@ export class HomePage {
 
   ionViewCanLeave(){
     //document.getElementById("map").outerHTML = "";
-  }
+    }
 
   initMap() {
 
