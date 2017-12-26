@@ -21,7 +21,7 @@
   <!--Partenza-->
   <ion-card>
     <ion-card-header class="blue-title">
-    Partenza
+    Partenza (obbligatorio)
     </ion-card-header>
     
     <ion-card-content>
@@ -38,7 +38,7 @@
   <!--Arrivo--> 
   <ion-card>
     <ion-card-header class="blue-title">
-    Arrivo
+    Arrivo (obbligatorio)
     </ion-card-header>
     
     <ion-card-content>
@@ -58,12 +58,12 @@
       
       <ion-card-content>
           <ion-item>
-            <ion-textarea [(ngModel)]="duration"  placeholder="Durata massima (minuti o secondi)"></ion-textarea>
+            <ion-textarea [(ngModel)]="duration"  placeholder="Durata massima (minuti o secondi - esempio: 24m / 24s)"></ion-textarea>
           </ion-item>
 
           <ion-item>
             <ion-textarea [(ngModel)]="length"  placeholder="Lunghezza massima (metri)"></ion-textarea>
-          </ion-item>
+          </ion-item> 
 
           <ion-item>
               <ion-label> Accessibilità</ion-label>
@@ -72,6 +72,6 @@
       </ion-card-content>
     </ion-card>
 
-    <button ion-button class="card-button" (click)="getUsersPref()"> <ion-icon name="play" class="icona-bottone"></ion-icon>Calcola percorso</button>
+    <button ion-button class="card-button" (click)="checkInput()"> <ion-icon name="play" class="icona-bottone"></ion-icon>Calcola percorso</button>
 
 </ion-content>

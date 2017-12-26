@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, MenuController, ToastController, Platform, AlertController} from 'ionic-angular';
+import { NavController, MenuController, ToastController, Platform, AlertController, LoadingController} from 'ionic-angular';
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
@@ -39,19 +39,24 @@ export class HomePage {
   both = false;
   timeDone = false;
   lengthDone = false;
+  first = true;
+  loading;
   
 
   @ViewChild('map-container') mapContainer;
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
-  public file:File, public api:Api, public navParams: NavParams) {
+  public file:File, public api:Api, public navParams: NavParams, public loadingController:LoadingController) {
     this.menuCtrl.enable(true)
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
     this.waypoints = this.navParams.get('waypts')
     this.maxLength = this.navParams.get('maxLength')
     this.maxTime = this.navParams.get('maxDuration')
+
+    this.loading = this.loadingController.create({content: "Attendi mentre calcoliamo il percorso ...", spinner:"crescent"})
+
 
 
     if (first !=null && second!=null && this.waypoints!=null){
@@ -233,9 +238,6 @@ export class HomePage {
       this.map.panTo(latlng)
       this.getFeatures()
       var self = this;
-      var x = new HomePage(this.navCtrl, this.menuCtrl,this.geolocation,
-        this.toastCtrl,this.diagnostic, this.platform, this.alertCtrl,
-        this.file,this.api, this.navParams);
      this.map.addEventListener('dragend', function(e){
        if(self.getMapZoom()>=16){
         self.getFeatures()
@@ -368,30 +370,7 @@ export class HomePage {
         response.routes[0].waypoint_order.forEach(o=>{
           newArray.push(myArray[o])
         })
-
-        var arrayTime = [];
-        var arrayLength = [];
-
-        if(this.both){
-          if(chosen=="time"){
-            console.log("Il tempo sta riempiendo")
-            response.routes[0].waypoint_order.forEach(o=>{
-              arrayTime.push(myArray[o])
-            })
-
-          }else if(chosen=="length"){
-            console.log("La lunghezza sta riempiendo")
-            response.routes[0].waypoint_order.forEach(o=>{
-              arrayLength.push(myArray[o])
-            })
-
-          }
-        }
-
-
-
-        
-
+     
         var duration = 0;
         var lunghezza = 0;
         var myLegs = response.routes[0].legs
@@ -400,50 +379,36 @@ export class HomePage {
           lunghezza+=myLegs[i].distance.value
         }
 
-        /* if(this.both){ //ho chiesto per entrambi
-          console.log("Ho chiesto per entrambi")
-            if(duration>(this.maxTime-myLegs[myLegs.length-1].duration.value)){
-            this.calculateMinimumTime(response,this.maxTime,waypoints)
+         if(chosen=="both"){ //ho chiesto per entrambi
+          this.loading.present()
+          if(duration>this.maxTime || lunghezza>this.maxLength){
+            waypoints =this.deleteWaypoint(waypoints)
+            this.googleRouting(start,arrival,waypoints,"both")
           } else {
-            this.timeDone = true;
-          }
-          if(lunghezza>(this.maxLength-myLegs[myLegs.length-1].distance.value)){         
-            this.calculateMinimumLength(response,this.maxLength,waypoints)
-          }else {
-            this.lengthDone = true;
-          }
-
-          if(this.lengthDone && this.timeDone){//se hanno finito entrambi
-            console.log("Hanno finito entrambi di calcolare")
-            arrayTime.forEach(p=>{
-              console.log("Nome tempo " +p.nome)
+            this.loading.dismiss()
+            let index = 1;
+            newArray.forEach(p =>{
+              let marker = L.marker([p.latlng[0],p.latlng[1]])
+              let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
+              marker.bindPopup(content) 
+              marker.addTo(newMap)
+              marker.openPopup() 
+              index++;
+            
             })
-
-            arrayLength.forEach(p=>{
-              console.log("Nome lunghezza " +p.nome)
-            })
+            firstpolyline.addTo(newMap); 
           }  
-          
-          
-        }else */ if(chosen=="time"){ // ho chiesto per il tempo
-          if(duration>(this.maxTime/*-myLegs[myLegs.length-1].duration.value*/)){
-            //this.calculateMinimumTime(response,this.maxTime,waypoints)
-            console.log("Lunghezza waypoints " + waypoints.length)
-            var random = this.getRandomNumber(0, waypoints.length-1)
-            waypoints.splice(random,1) //elimino un elemento all'indice random
-            console.log("Lunghezza waypoints " + waypoints.length)            
+        }else  if(chosen=="time"){ // ho chiesto per il tempo
+          this.loading.present()
+          if(duration>(this.maxTime)){
+            console.log("Lunghezza waypoints prima " + waypoints.length)
+            waypoints = this.deleteWaypoint(waypoints)
+            console.log("Lunghezza waypoints dopo " + waypoints.length)            
             console.log("Il tempo sta ancora calcolando")
             this.googleRouting(start,arrival,waypoints,"time")
   
           } else {
-            /* if(this.both){
-              console.log("Il tempo non fa niente")
-              arrayTime.forEach(t=>{
-                console.log("Punto scelto dal tempo " + t.nome)
-              })
-
-
-            } else { */
+            this.loading.dismiss()
               let index = 1;
               newArray.forEach(p =>{
                 let marker = L.marker([p.latlng[0],p.latlng[1]])
@@ -455,22 +420,17 @@ export class HomePage {
               
               })
               firstpolyline.addTo(newMap); 
-           // }
             
           }
         } else if(chosen=="length"){//ho chiesto per la lunghezza
-          if(lunghezza>(this.maxLength-myLegs[myLegs.length-1].distance.value)){     
-            this.calculateMinimumLength(response,this.maxLength,waypoints)
+          this.loading.present()
+          if(lunghezza>this.maxLength){   
+            waypoints = this.deleteWaypoint(waypoints)  
+            this.googleRouting(start,arrival,waypoints,"length")
   
           } else {
-            /* if(this.both){
-              console.log("La lunghezza non fa niente")
-              arrayLength.forEach(t=>{
-                console.log("Punto scelto dalla lunghezza " + t.nome)
-              })
-
-            } else {
- */              let index = 1;
+            this.loading.dismiss()
+               let index = 1;
               newArray.forEach(p =>{
                 let marker = L.marker([p.latlng[0],p.latlng[1]])
                 let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
@@ -481,12 +441,12 @@ export class HomePage {
               
               })
               firstpolyline.addTo(newMap); 
-           // }
-            
           }
         }
         
 
+      }  else {
+        this.displayGPSError("Non è stato possibile pianificare il tuo percorso. Controlla che l'indirizzo di arrivo e partenza siano ben formattati")
       }
     })
   }
@@ -495,8 +455,20 @@ export class HomePage {
     min = Math.ceil(min);
     max = Math.floor(max);
     var random = Math.floor(Math.random()*(max-min+1)+min)
-    console.log("Numero random generato " + random)
     return random
+  }
+
+  deleteWaypoint(waypoints){
+    if (this.first){
+      this.first = false;
+      waypoints.shift()
+      return waypoints
+    } else {
+      this.first = true;
+      waypoints.pop()
+      return waypoints
+    }
+
   }
 
   withGoogle(start, arrival,waypoints){
@@ -540,11 +512,6 @@ export class HomePage {
           smoothFactor: 1
       });
       
-
-
-      //this.calculateMinimumLength(response, 300);
-
-
     //console.log("Ordine " +response.routes[0].waypoint_order)
      var myRoute= response.routes[0].legs[0]
     //console.dir("I " + myRoute.steps[i].instructions)
@@ -558,10 +525,10 @@ export class HomePage {
     
 
 
-    for (var i = 0; i<myLegs.length; i++){
+    /* for (var i = 0; i<myLegs.length; i++){
       console.log("Leg " + i + " Start " + myLegs[i].start_address + " end " + myLegs[i].end_address)
       
-    }
+    } */
 
       var myArray = []
       waypoints.forEach(w=>{
@@ -578,30 +545,16 @@ export class HomePage {
 
 
       if(this.maxLength!=null && this.maxTime!=null){
-        console.log("nessuno dei due è null")
         this.both = true;
-        var newL = this.maxLength - myLegs[myLegs.length-1].distance.value
-        var newT = this.maxTime - myLegs[myLegs.length-1].duration.value
-         //this.googleRouting(start, arrival, waypoints,"time")
-        //this.googleRouting(start, arrival, waypoints,"length") 
-        this.calculateMinimumLength(response,newL, newArray)
-        this.calculateMinimumTime(response,newT, newArray)
+        this.distanceAPI(start,arrival,waypoints)
       } else if (this.maxLength != null && !this.both){
-        console.log("Ho scritto una max length")
         this.time = false;
-        var newL = this.maxLength - myLegs[myLegs.length-1].distance.value
-        this.calculateMinimumLength(response,newL, newArray)
+        //var newL = this.maxLength - myLegs[myLegs.length-1].distance.value
+        this.distanceAPI(start,arrival,waypoints);   
       } else if(this.maxTime!=null && !this.both){
-        console.log("Ho scritto un maxTime")
         this.time = true;
-        var newT = this.maxTime - myLegs[myLegs.length-1].duration.value //ho tolto l'ultimo elemento del vettore perché
-        //rappresenta l'ultimo passo. 
         this.distanceAPI(start,arrival,waypoints);
-        //console.log("La distanza tra arrivo e partenza è  " + time)
-       // this.googleRouting(start,arrival,waypoints,"time"); //chiamo google routing con il time
-        //var timeRes = this.calculateMinimumTime(response,newT, newArray)
       } else { //non ho limiti, quindi posso calcolare il mio percorso
-        console.log("Sono entrambi null")
         let index = 1;
         newArray.forEach(p =>{
           let marker = L.marker([p.latlng[0],p.latlng[1]])
@@ -657,7 +610,6 @@ export class HomePage {
           var origins = response.originAddresses;
           var destinations = response.destinationAddresses;
 
-          console.log("Lunghezza origins " + origins.length)
           var distance = 0;
           var duration = 0;
           for (var i = 0; i < origins.length; i++) {
@@ -670,12 +622,29 @@ export class HomePage {
               var to = destinations[j];
             }
           }
-          console.log("Durata: " + duration)
-          if(duration>this.maxTime){
-            self.displayGPSError("Ci dispiace, il punto di partenza e quello di arrivo sono troppo lontani per i limiti inseriti!")
-          } else {
-            self.googleRouting(start,arrival,waypoints,"time");
+
+          if(this.both){
+            if (duration>this.maxTime || distance>this.maxLength){
+              self.displayGPSError("Ci dispiace, il punto di partenza e quello di arrivo sono troppo lontani per i limiti inseriti!")
+            }else{
+              self.googleRouting(start,arrival,waypoints,"both")
+            }
+
+          }else if(this.time &&!this.both){
+            if(duration>this.maxTime){
+              self.displayGPSError("Ci dispiace, il punto di partenza e quello di arrivo sono troppo lontani per i limiti inseriti!")
+            } else {
+              self.googleRouting(start,arrival,waypoints,"time");
+            }
+          } else if(!this.time && !this.both){
+            if(distance>this.maxLength){
+              self.displayGPSError("Ci dispiace, il punto di partenza e quello di arrivo sono troppo lontani per i limiti inseriti!")
+            } else {
+              self.googleRouting(start,arrival,waypoints,"length");
+            }
           }
+
+          
         } else{
           console.log("Problems calculating distances")
         }

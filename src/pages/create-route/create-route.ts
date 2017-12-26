@@ -25,8 +25,8 @@ export class CreateRoutePage {
 
   myInputPartenza: string;
   myInputArrivo: string;
-  length: string;
-  duration: string;
+  length;
+  duration;
   startGecoded;
   arrivalGeocoded;
   waypoints =[];
@@ -72,7 +72,6 @@ export class CreateRoutePage {
 
   calculateRoute(){
     var self = this;
-    console.log("INput " + this.myInputPartenza)
       this.getAddr(this.myInputPartenza, function(res){
         self.startGecoded =  res[0].geometry.location
         var self1 = self;
@@ -219,10 +218,60 @@ displayError(messageErr: string){
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+
+    checkInput(){
+      if(this.myInputArrivo==null || this.myInputPartenza==null){
+        this.displayError("Specifica i campi obbligatori per inviare la tua richiesta. ")
+      }else{
+        if(this.duration==null && this.length == null){
+          this.getUsersPref()
+        } else if (this.duration==null || this.duration == ""){ //sto guardando la lunghezza
+         var len = this.checkLength()
+         if(len){
+           this.getUsersPref()
+         }
+        } else if (this.length == null || this.length == ""){ //sto guardando la durata
+          var dur = this.checkDuration()
+          if(dur){
+            this.getUsersPref()
+          }
+        } else { //sto guardando entrambi
+          var dur = this.checkDuration()
+          var len = this.checkLength()       
+          if(dur && len){
+            this.getUsersPref()
+          }
+        } 
+      }
+    }
+
+    checkDuration(){
+      var regSec = /([0-9]+)[s]/;
+      var regMin = /([0-9]+)[m]/
+      if(regSec.test(this.duration)){
+        this.duration = this.duration.match(/\d+/).map(String).join("")
+        return true;
+      } else if(regMin.test(this.duration)){
+        this.duration = Number(this.duration.match(/\d+/).map(String).join(""))*60;
+        return true;
+      }else {
+        this.displayError("La durata inserita non è corretta.")
+      }
+    }
+
+    checkLength(){
+      var reg = /^\d+$/;
+      if(reg.test(this.length)){
+        return true;
+      } else {
+        this.displayError("La lunghezza inserita non è valida.")
+      }
+    }
+
     getUsersPref(){
-      console.log("Max lenght vale " + this.length)
 
       if(this.myInputArrivo!=null && this.myInputPartenza!=null){
+        //this.checkInput();
       console.log("This city key " + this.city_key)
       if(this.city_key!=null){
          var self = this;
