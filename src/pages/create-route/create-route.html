@@ -72,6 +72,6 @@
       </ion-card-content>
     </ion-card>
 
-    <button ion-button class="card-button" (click)="checkInput()"> <ion-icon name="play" class="icona-bottone"></ion-icon>Calcola percorso</button>
+    <button ion-button class="card-button" [disabled]="!isEnabled" (click)="checkInput()"> <ion-icon name="play" class="icona-bottone"></ion-icon>Calcola percorso</button>
 
 </ion-content>

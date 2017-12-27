@@ -41,6 +41,8 @@ export class HomePage {
   lengthDone = false;
   first = true;
   loading;
+  routeDisplayed = false;
+  instructions: Array<any>;
   
 
   @ViewChild('map-container') mapContainer;
@@ -63,14 +65,12 @@ export class HomePage {
       this.start = first;
       this.destination = second;
       this.canCalculate = true;
+      this.routeDisplayed = true;
     }
 
 
   }
  
-  ionViewWillEnter(){
-  //  document.getElementById("map").outerHTML = " <div class='map-container'> <div id='map' style: width: 100%;  height:100%;     position: fixed;>    </div> </div> "  
-  }
  
   ionViewDidLoad() {
     //set map center
@@ -487,7 +487,7 @@ export class HomePage {
     })
 
 
-
+    var self = this;
     var polyUtil = require('polyline-encoded')
     var latlngs;
     var newMap = this.map;
@@ -569,6 +569,12 @@ export class HomePage {
   
         })
         firstpolyline.addTo(newMap);
+        this.instructions = [];
+        var myRoute= response.routes[0].legs[0]
+        for(var i =0; i<myRoute.steps.length; i++){
+          this.instructions.push(myRoute.steps[i].instructions)
+        }
+        //console.dir("I " + myRoute.steps[i].instructions)
       }
   
 

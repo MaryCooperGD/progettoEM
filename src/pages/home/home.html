@@ -23,18 +23,18 @@
  
 
 
-  <!--Riga per il bottone e la cavolo di lista, dannatissima-->
-  <ion-row style="position:fixed; bottom: 0; width: 100%;">
+  <!--Riga per il bottone e lista-->
+  <ion-row  style="position:fixed; bottom: 0; width: 100%;">
     
-        <ion-scroll scrollY="true" style="width:100%; height:100px; border: 1px solid grey;  background-color:white; ">
+        <ion-scroll *ngIf="routeDisplayed" scrollY="true" style="width:100%; height:150px; border: 1px solid grey;  background-color:white; ">
          
-                <ion-list style="padding-left: 10px;">
+                <ion-list *ngFor="let i of instructions" style="padding-left: 10px;">
+                  <p [innerHtml]="i" style="border-bottom: 1px solid #ebebe0;"></p>
+                  <!-- <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
                   <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
                   <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
                   <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
-                  <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
-                  <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
-                  <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p>
+                  <p style="border-bottom: 1px solid #ebebe0;">dddddddddddddddddddddddddddddddddddd</p> -->
                 </ion-list>
     </ion-scroll>
   

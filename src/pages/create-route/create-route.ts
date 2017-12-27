@@ -34,6 +34,7 @@ export class CreateRoutePage {
   city;
   city_key;
   isAccessibilityOn;
+  isEnabled = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api) {
       this.city = this.api.getCity();
@@ -99,6 +100,7 @@ export class CreateRoutePage {
             f(results);
           } else {
             console.log("Status " + status)
+            self.isEnabled = true;
             self.displayError("Routing non corretto. Controlla di aver scritto bene gli indirizzi, nella forma Via/Piazza/Strada/Luogo, Città")
           }
         });
@@ -161,6 +163,7 @@ displayError(messageErr: string){
         if (pois.length==0/*!found*/){
             self.displayError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
             +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
+            self.isEnabled = true;
           } else {
             
             pois.forEach(p=>{
@@ -226,8 +229,10 @@ displayError(messageErr: string){
 
 
     checkInput(){
+      this.isEnabled = false;
       if(this.myInputArrivo==null || this.myInputPartenza==null){
         this.displayError("Specifica i campi obbligatori per inviare la tua richiesta. ")
+        this.isEnabled = true;
       }else{
         if(this.duration==null && this.length == null){
           this.getUsersPref()
@@ -262,6 +267,7 @@ displayError(messageErr: string){
         return true;
       }else {
         this.displayError("La durata inserita non è corretta.")
+        this.isEnabled = true;
       }
     }
 
@@ -271,6 +277,7 @@ displayError(messageErr: string){
         return true;
       } else {
         this.displayError("La lunghezza inserita non è valida.")
+        this.isEnabled = true;
       }
     }
 
@@ -306,10 +313,12 @@ displayError(messageErr: string){
           
         });
       } else {
+        this.isEnabled = true;
         this.displayError("Ci dispiace, non ci sono punti di interesse registrati per la tua città. Contattaci per aggiungerli!")
       }
 
     } else {
+      this.isEnabled = true;
       this.displayError("Specifica tutti i campi per inviare la tua richiesta. ")
     }
           
