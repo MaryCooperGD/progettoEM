@@ -24,10 +24,10 @@
         </ion-card-header>
     
         <ion-card-content>
-          <ion-scroll style="width:100%; height:200px;" scrollY="true">
+          <ion-scroll class="box_dimension" scrollY="true">
             <ion-list>
               <button ion-item *ngFor="let tag of preferenze_not_user; let i=index" (click)="addSelectedPreferences(i)" >
-                <h2 style="border-bottom: 1px solid #f3f3ed;"> {{tag.val().nome}}</h2> <!--Se stampassi solo tag, al momento non mi mostrerebbe niente perchè tag è oggetto-->
+                <h2 class="border_tag_list"> {{tag.val().nome}}</h2> <!--Se stampassi solo tag, al momento non mi mostrerebbe niente perchè tag è oggetto-->
               </button>
             </ion-list>
           </ion-scroll>
@@ -40,10 +40,10 @@
       </ion-card-header>
   
       <ion-card-content>
-        <ion-scroll style="width:100%; height:200px" scrollY="true">
+        <ion-scroll class="box_dimension" scrollY="true">
           <ion-list>
             <button ion-item *ngFor="let pref of tags; let i=index" (click)="deleteSelectedPreferences(i)" >
-              <h2 style="border-bottom: 1px solid #f3f3ed;"> {{pref.val().nome}}</h2> <!--Se stampassi solo tag, al momento non mi mostrerebbe niente perchè tag è oggetto-->
+              <h2 class="border_tag_list"> {{pref.val().nome}}</h2> <!--Se stampassi solo tag, al momento non mi mostrerebbe niente perchè tag è oggetto-->
             </button>
           </ion-list>
         </ion-scroll>

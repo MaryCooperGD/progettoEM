@@ -16,11 +16,7 @@ page-home {
     position: fixed;
   }
 
-  #prova{
-    position:fixed;
-    width:100%;
-    height: 50%;
-  }
+
 
   #button_plan{
     //position: fixed;
@@ -28,8 +24,42 @@ page-home {
     width: 100%; 
     margin-bottom: 0px;
   }
+  
+  #griglia_home{
+    padding: 0px !important;
+  }
 
+  #row_button_list{
+    position:fixed; 
+    bottom: 0; 
+    width: 100%;
+  }
 
+  #div_button_list{
+    width: 100%;
+    background-color:white;
+  }
+
+  .icon_style{
+    margin-left: 10px; 
+    margin-right: 10px; 
+    font-size: 30px; 
+    color:#488AFF;
+  }
+
+  #lista_lista{
+    border: 1px solid #f3f3ed; 
+    background-color:white; 
+    margin-bottom: -4px; height: 150px;
+  }
+
+  .member_list{
+    padding-left: 10px;
+  }
+
+  .p_list{
+    border-bottom: 1px solid #ebebe0;
+  }
  
 
 
