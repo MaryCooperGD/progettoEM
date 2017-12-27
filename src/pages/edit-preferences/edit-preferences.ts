@@ -26,31 +26,8 @@ export class EditPreferencesPage {
   username:any;
   email:any;
   
-  
-
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
     
-    /* CODICE PER CHECKBOX VECCHIO
-    let tagName = []
-    var ref = firebase.database().ref('/tag/')
-    ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag
-      snapshot.forEach(function(childSnapshot){
-        tagName.push(childSnapshot.child("nome").val())
-        return false;
-      })
-
-    }).then(v => {
-      this.tags = tagName;
-
-      var j = 0;
-      this.tags.forEach(i=>{
-        j++;
-        
-          this.number_of_preferences = j;
-          console.log("NUMERO PREFERENZE_"+this.number_of_preferences);
-      })
-
-    })*/
   }
 
   ionViewDidLoad() {
@@ -62,11 +39,9 @@ export class EditPreferencesPage {
       this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente
     }   
 
-    this.showMissingPreferences(); //Mi mostra i tag che l'utente non ha scelto e non possiede!
-    this.showUserPreferences();
+    this.showMissingPreferences(); //Mi mostra le preferenze che l'utente non ha scelto e non possiede!
+    this.showUserPreferences(); //Mi mostra le preferenze che l'utente possiede e può togliere!
   }
-
-  
 
   //Mi mostra i tag che l'utente non ha scelto e non possiede!
   showMissingPreferences() { 
@@ -75,7 +50,7 @@ export class EditPreferencesPage {
 
     preferencesRef.once('value')
         .then(userPrefSnap => {
-            //Salvi i tag utente all'interno di una MAP
+            //Salvo i tag utente all'interno di una MAP
             let userPrefMap: { [key: string]: boolean } = {}
             userPrefSnap.forEach(userTagSnap => {
                 userPrefMap[userTagSnap.key] = true
@@ -85,9 +60,8 @@ export class EditPreferencesPage {
                 .then((tagsSnap) => {
                     let missingTags = []
                     tagsSnap.forEach(tagSnap => {
-                        //Pusha i tag che non sono nel map.
+                        //Pusho i tag che non sono nel map.
                         if(!userPrefMap[tagSnap.key]) {
-
                           // missingTags.push(tagSnap.child("nome").val()) -> così facendo inserirei il nome del tag, ma dopo ho un problema di retrieve quando clicco
                           missingTags.push(tagSnap) //--> in questo modo mi inserisce l'oggetto da cui posso prendere la chiave, il nome e tutto il resto
                           //console.log("Intero elenco dei tag   "+tagSnap.child("nome").val()); //mi restituisce l'intero elenco dei tag (albero) -> NOME
@@ -111,7 +85,9 @@ export class EditPreferencesPage {
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai inserito una nuova preferenza") ;
 
-    this.showMissingPreferences(); //La richiamiamo per refreshare i tag!!!
+    //Richiamo queste due funzioni per refreshare le liste che mostrano i tag che l'utente ha e non ha!
+    this.showUserPreferences(); 
+    this.showMissingPreferences(); 
   }
 
   //per il messaggio di conferma!
@@ -152,10 +128,33 @@ export class EditPreferencesPage {
     //console.log("this.tags[index] "+this.preferenze_not_user[index])
     var updates = {};
 
-    updates["/users/"+this.email+"/preferenze/"+tagToDelete.key]  = "false"; //DEVO FARE IL DELETE!!!!!!! NON SO FARE. INFORMARSI
+    updates["/users/"+this.email+"/preferenze/"+tagToDelete.key]  = null; //questo mi rimuove il record!!
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai eliminato una preferenza") ;
 
-    this.showUserPreferences(); //La richiamiamo per refreshare i tag!!!
+    //Richiamo queste due funzioni per refreshare le liste che mostrano i tag che l'utente ha e non ha!
+    this.showUserPreferences(); 
+    this.showMissingPreferences(); 
   }
 }
+
+    /* CODICE PER CHECKBOX VECCHIO -> da riesumare in caso vogliami adottare questo approccio
+    let tagName = []
+    var ref = firebase.database().ref('/tag/')
+    ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag
+      snapshot.forEach(function(childSnapshot){
+        tagName.push(childSnapshot.child("nome").val())
+        return false;
+      })
+
+    }).then(v => {
+      this.tags = tagName;
+
+      var j = 0;
+      this.tags.forEach(i=>{
+        j++;
+        
+          this.number_of_preferences = j;
+          console.log("NUMERO PREFERENZE_"+this.number_of_preferences);
+      })
+    })*/
