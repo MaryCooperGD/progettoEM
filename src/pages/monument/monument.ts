@@ -33,7 +33,7 @@ export class MonumentPage {
 
   //per la descrizione e l'immagine di copertina del POI
   descrizione_poi;
-  
+  foto_url;
 
   //per le info e i tag del POI
    public poi_NUMEROINFO: Array<any> = [];
@@ -72,8 +72,9 @@ export class MonumentPage {
         this.poi_NUMEROINFO.push(itemSnap.val());
         return false;
       });
-      this.poi_NUMEROINFO.forEach(i=>{
+      this.poi_NUMEROINFO.forEach(i=>{ //Retrieve the details, also the image url
         this.descrizione_poi = i.descrizione;
+        this.foto_url = i.photo_url;
 
        // if(i.numero_tag == 0) //Se non ho tag devo nascondere l'elenco vuoto e mostro il messaggio
         //{
@@ -84,10 +85,8 @@ export class MonumentPage {
         if (i.numero_informazioni == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         {
           this.isEnabled_info = false;
-          console.log("VALORE ISENABLED_INFO"+this.isEnabled_info);
-        }
 
-        console.log("DENTRO NUMERO CONTRIBUTI POI ")
+        }
       })
     });
   }

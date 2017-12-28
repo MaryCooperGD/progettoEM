@@ -53,7 +53,7 @@ export class SearchPlacePage {
           //var data = { myPoi: singlepoi, tipo:tagsList }
 
           //Per chi ce l'ha, stampo anche a video l'indirizzo
-          var data = {myPoi: singlepoi.val(), tipo: tagsList, chiave: singlepoi.key, address: singlepoi.child("indirizzo").val()}
+          var data = {myPoi: singlepoi.val(), tipo: tagsList, chiave: singlepoi.key, address: singlepoi.child("indirizzo").val(), foto_POI: singlepoi.child("photo_url").val()}
       
           list.push(data);
         }

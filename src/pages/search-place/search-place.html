@@ -31,7 +31,7 @@
       <ion-card *ngFor="let item of poisList;">
         <button ion-item (click)="openPlace(item)">
 
-              <img src="assets/img/fontanamasini.jpg"/>
+              <img src="{{item.foto_POI}}"/>
               <ion-card-content>
                   <ion-card-title text-wrap id="titolo_card">{{item.myPoi.nome}}</ion-card-title >
                    <p text-center>{{item.address}}</p>
