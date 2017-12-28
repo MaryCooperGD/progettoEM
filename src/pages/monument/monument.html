@@ -21,8 +21,8 @@
         {{poiName}}
       </ion-card-header>
 
-      <ion-card-content>
-        <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+      <ion-card-content *ngFor="let foto of poi_NUMEROINFO">
+        <img width="200" height="200" src="assets/img/poi_images/biblioteca_malatestiana.jpg"/> <!--Devo sostituire il link dal database-->
       </ion-card-content>
     </ion-card>
 
@@ -43,8 +43,8 @@
           <ion-list *ngSwitchCase="'Descrizione'">
             <ion-card-content style="text-align: center;">
               <ion-scroll id="scroll_preferenze" scrollY="true">
-                  <p class="giustificato">
-                      La Biblioteca Malatestiana di Cesena è una biblioteca monastica di particolare importanza storica. Fondata alla metà del XV secolo, detiene due primati assoluti: è stata la prima biblioteca civica d'Italia e d'Europa; è l'unico esempio di biblioteca monastica umanistica giunta fino a noi perfettamente conservata nell'edificio, negli arredi e nella dotazione libraria.
+                  <p class="giustificato" *ngFor="let descrizione of poi_NUMEROINFO">
+                     {{descrizione.descrizione}}
                   </p>
               </ion-scroll>
             </ion-card-content>  
