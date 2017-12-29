@@ -27,7 +27,6 @@ export class EditPreferencesPage {
   email:any;
   
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
-    
   }
 
   ionViewDidLoad() {
@@ -82,6 +81,7 @@ export class EditPreferencesPage {
     var updates = {};
 
     updates["/users/"+this.email+"/preferenze/"+tagToAdd.key]  = "true";
+    
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai inserito una nuova preferenza") ;
 
@@ -137,24 +137,3 @@ export class EditPreferencesPage {
     this.showMissingPreferences(); 
   }
 }
-
-    /* CODICE PER CHECKBOX VECCHIO -> da riesumare in caso vogliami adottare questo approccio
-    let tagName = []
-    var ref = firebase.database().ref('/tag/')
-    ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag
-      snapshot.forEach(function(childSnapshot){
-        tagName.push(childSnapshot.child("nome").val())
-        return false;
-      })
-
-    }).then(v => {
-      this.tags = tagName;
-
-      var j = 0;
-      this.tags.forEach(i=>{
-        j++;
-        
-          this.number_of_preferences = j;
-          console.log("NUMERO PREFERENZE_"+this.number_of_preferences);
-      })
-    })*/

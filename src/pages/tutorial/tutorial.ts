@@ -33,11 +33,13 @@ export class TutorialPage {
   showSkip = true;
   second =false;
   
-  username:any;
+  email:any;
   //per prendere email (id dell'utente loggato) in modo da poter avere il riferimento dell'utente
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   id_user; //conterrà la mail
+
+  public preferenze_not_user: Array<any>;
 
   //Mi serve per far comparire o meno la card con le preferenze da poter aggiungere
   isEnabled : boolean = false; //Di base non si vede
@@ -66,50 +68,68 @@ export class TutorialPage {
   }
 
   ionViewDidLoad() {
-    //Tiro fuori tutti i tag presenti nel database, che in questo caso diventano le preferenze dell'utente
-    let pref_List = []
-    var ref = firebase.database().ref('/tag/')
-    ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag/preferenze
-      snapshot.forEach(function(childSnapshot){
-        var childKey = childSnapshot.key;
-        pref_List.push(childSnapshot)
-        return false;
-      })
-    }).then(v => {
-      this.preferences = pref_List;
-    })
+    this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente a cui aggiungere le preferenze
+    this.showUserPref_Registration();
 
   } // fine --  ionViewDidLoad()
 
+  showUserPref_Registration(){
+
+    var preferencesRef = firebase.database().ref('/users/'+this.email+'/preferenze/') 
+    var tagsRef = firebase.database().ref('/tag/');
+
+    preferencesRef.once('value')
+        .then(userPrefSnap => {
+            //Salvo i tag utente all'interno di una MAP
+            let userPrefMap: { [key: string]: boolean } = {}
+            userPrefSnap.forEach(userTagSnap => {
+                userPrefMap[userTagSnap.key] = true
+                //console.log("Tag che l'utente possiede  "+userPrefMap[userTagSnap.key]); //mi restituisce true per tutti i tag che l'utente possiede
+            })
+            return tagsRef.once('value')
+                .then((tagsSnap) => {
+                    let missingTags = []
+                    tagsSnap.forEach(tagSnap => {
+                        //Pusho i tag che non sono nel map.
+                        if(!userPrefMap[tagSnap.key]) {
+                          // missingTags.push(tagSnap.child("nome").val()) -> così facendo inserirei il nome del tag, ma dopo ho un problema di retrieve quando clicco
+                          missingTags.push(tagSnap) //--> in questo modo mi inserisce l'oggetto da cui posso prendere la chiave, il nome e tutto il resto
+                          //console.log("Intero elenco dei tag   "+tagSnap.child("nome").val()); //mi restituisce l'intero elenco dei tag (albero) -> NOME
+                        }
+                    })
+                    return missingTags;     
+                })
+        })
+        .then(missingTags => {
+            this.preferenze_not_user = missingTags
+            //console.log("Tags finali(che l'utente non ha)  "+this.preferenze_not_user)
+        })
+  }
+  /*showUserPref_Registration(){
+    console.log("DENTRO IL REFRESH DELLE PREFERENZE")
+     //Tiro fuori tutti i tag presenti nel database, che in questo caso diventano le preferenze dell'utente
+     let pref_List = []
+     var ref = firebase.database().ref('/tag/')
+     ref.orderByChild("nome").once('value',function(snapshot){ //ciclo sui tag/preferenze
+       snapshot.forEach(function(childSnapshot){
+         var childKey = childSnapshot.key;
+         pref_List.push(childSnapshot)
+         return false;
+       })
+     }).then(v => {
+       this.preferences = pref_List;
+     })
+  }*/
+
   addSelectedPreference(index){
-    //prendo l'username per la query sottostante
-    if(this.api.user.displayName==null){
-      this.username = '';
-    }else {
-      this.username = this.api.user.displayName
-    }   
-    
-    //prendo la mail del tizio 
-    this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
-      this.user_email = [];
-      itemSnapshot.forEach( itemSnap => {
-        this.user_email.push(itemSnap.val());
-        return false;
-      });
-      this.user_email.forEach(i=>{
-        this.id_user = i.email_user;
 
-        //una volta che ho la mail posso inserire la preferenza correttamente
-        var prefToAdd = this.preferences[index]; //preferenza
-        var updates = {};
-        updates['/users/'+this.id_user+'/preferenze/'+prefToAdd.key] ="true";
+    //una volta che ho la mail (presa dalle API) posso inserire la preferenza correttamente
+    var prefToAdd = this.preferenze_not_user[index]; //preferenza
+    var updates = {};
+    updates["/users/"+this.email+"/preferenze/"+prefToAdd.key] ="true";
         
-       firebase.database().ref().update(updates);
-       
-      })
-      
-    }); // fine --- this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
-
+    firebase.database().ref().update(updates);
+    this.showUserPref_Registration(); //Mi refresha ad ogni click la lista delle preferenze.
     this.displayLoginError("Hai aggiunto il tag alle tue preferenze") ;
  }
 
@@ -136,7 +156,6 @@ export class TutorialPage {
     else {
       this.second = false;
       this.isEnabled = false;
-      
     }
   }
   onSlideChangeStart(slider) {

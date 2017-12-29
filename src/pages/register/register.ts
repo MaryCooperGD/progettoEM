@@ -56,6 +56,7 @@ export class RegisterPage {
         this.buttonDisabled = true;
   
       var result : any = this.api.doSignUp(this.account.email, this.account.password,this.account.name);
+      console.log("this.account.name"+this.account.name);
       let res = Observable.fromPromise(result);
       res.subscribe(res => {
         if (res instanceof Error){
@@ -77,14 +78,15 @@ export class RegisterPage {
   writeUserData(email:string, name) {
     var email_clear = email; //Memorizzo la mail prima di togliere i caratteri non ammessi. Mi serve per stamparla correttamente a video.
     email = this.api.replaceCharacters(email); 
-    //console.log(email+'')
+
+    this.api.retrieveEmail(email); //Inserisco fin da subito nelle Api la mail altrimenti non so a che utente aggiungere le preferenze nel tutorial.ts
+
     firebase.database().ref('users/' + email).set({
       username: name,
       email_user: email, //mail NON in chiaro
       clear_email: email_clear, //Registro nel db anche questa mail pulita
       data_registrazione: new Date().getTime(),
      
-
       //Punti che mi servono per classifica e badge
       total_points: 0, //Punti totali, per classifica
       points_photos: 0, //Punti per assegnare badge foto
@@ -95,7 +97,6 @@ export class RegisterPage {
       num_of_tag: 0,
       num_of_photo : 0,
       num_of_info : 0,
-
     });
   }
 
@@ -107,7 +108,5 @@ export class RegisterPage {
     });
     toast.present();
   }
-
-
 
 } //Fine classe RegisterPage
