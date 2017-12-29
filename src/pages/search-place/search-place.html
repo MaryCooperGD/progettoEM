@@ -15,31 +15,18 @@
   
   </ion-header>
   
-  
   <ion-content padding class="sfondo_content">
-  
-    <!--Se ci si scrive qualcosa e poi si manda invio darà errore perchè non è collegata a nulla-->
-   <!-- <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar>
-    <ion-list>
-      <ion-item *ngFor="let item of items">
-        
-      </ion-item>
-    </ion-list>-->
-  
     <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar>
     <ion-list>
       <ion-card *ngFor="let item of poisList;">
         <button ion-item (click)="openPlace(item)">
 
-              <img src="{{item.foto_POI}}"/>
+              <img class="image_style" src="{{item.foto_POI}}" />
               <ion-card-content>
                   <ion-card-title text-wrap id="titolo_card">{{item.myPoi.nome}}</ion-card-title >
-                   <p text-center>{{item.address}}</p>
-                  <!--Eviterei di mettere i tag perchè col fatto che non si può mettere la scroll (in quanto il tutto essendo un bottone non la farebbe andare)verrebbe una lista super lunga-->
-                  <!--<ion-list *ngFor="let tag of item.tipo"><p>{{tag}}</p></ion-list>-->
-            
+                   <p text-center>{{item.address}}</p>            
               </ion-card-content>
-            
+           
           </button> 
         </ion-card>
     </ion-list>

@@ -27,8 +27,13 @@ page-monument {
 
 	#scroll_preferenze{
 		height: 150px;
-		}
+	}
 	
-
-		
+	.image_style{
+		width: 200px !important;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		border: 2px solid #e0e0e0;
+	}
 }
