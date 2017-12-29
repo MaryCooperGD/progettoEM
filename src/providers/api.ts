@@ -153,7 +153,7 @@ export class Api {
 
     replaceCharacters(strng : string){
 
-     var str:string= strng.replace('.','%2E').replace('#','%23').replace('$','%24').replace('[','%5B').replace(']','%5D');
+     var str:string= strng.replace(/\./g,'%2E').replace(/\#/g,'%23').replace(/\$/g,'%24').replace(/\[/g,'%5B').replace(/\]/g,'%5D');
       return str;
     }
 

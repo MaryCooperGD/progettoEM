@@ -153,6 +153,7 @@ export class EditMonumentPage {
    updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
 
    //Incrementa la variabile dei punti delle informazioni
+   
    this.punteggio_tag = this.punteggio_tag + 5 ;
    updates["/users/"+this.email+"/points_tag"]  = this.punteggio_tag;
 
@@ -160,6 +161,7 @@ export class EditMonumentPage {
    this.punteggio_totale = this.punteggio_totale + 5 ;
    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
 
+   
    this.num_of_tag = this.num_of_tag + 1;
    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
