@@ -51,6 +51,14 @@ export class HomePage {
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
   public file:File, public api:Api, public navParams: NavParams, public loadingController:LoadingController) {
     this.menuCtrl.enable(true)
+
+    var storage = firebase.storage();
+    var pathReference = storage.ref();
+    pathReference.child('photos_POIS/biblioteca_malatestiana.jpg').getDownloadURL().then(function(url) {
+      console.log("Url è " + url)
+    }).catch(function(error){
+      console.log("Errore nel retrieve")
+    })
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
     this.waypoints = this.navParams.get('waypts')
