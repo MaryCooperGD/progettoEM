@@ -30,18 +30,17 @@ export class ProfilePage {
   username:any;
   email:any;
 
+  //Per l'upload dell'avatar
   public myPhotosRef: any;
-  public myPhoto: any;
+  public myAvatar: any;
   public myPhotoURL: any;
 
+  
   //--Per mostrare punti utente e altre informazioni
   public items_user_details: Array<any> = [];
   public itemRef_user_details: firebase.database.Reference = firebase.database().ref('/users/');
-
   correct_data; //variabile per inserire la data corretta della registrazione dell'utente.
-
-  //--Per mostrare le preferenze utente
-  public tags:Array<any>;
+  public tags:Array<any>; //--Per mostrare le preferenze utente
 
   //--Per mostrare i badge dell'utente
   public badges_utente_misto:Array<any>;
@@ -53,46 +52,16 @@ export class ProfilePage {
   num_of_info;
   num_of_photo;
   num_of_tag;
-
+  
   //mi serve per mostrare a video l'avviso i badge utente
   isEnabled : boolean = true;
  
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
-  this.myPhotosRef = firebase.storage().ref('photos/');
-  }
-
-  selectPhoto(){
-    this.camera.getPicture({
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      quality: 100,
-      encodingType: this.camera.EncodingType.PNG,
-    }).then(imageData => {
-      this.myPhoto = imageData;
-      this.uploadPhoto();
-    }, error => {
-      console.log("ERROR -> " + JSON.stringify(error));
-    });
+  this.myPhotosRef = firebase.storage().ref('avatars/');
 
   }
 
-  uploadPhoto(): void {
-    this.myPhotosRef.child(this.generateUUID()).child('myPhoto.png')
-      .putString(this.myPhoto, 'base64', { contentType: 'image/png' })
-      .then((savedPicture) => {
-        this.myPhotoURL = savedPicture.downloadURL;
-      });
-  }
 
-  generateUUID(): any {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-    return uuid;
-  }
 
   ionViewDidLoad() {
     if(this.api.user.displayName==null){
@@ -115,9 +84,9 @@ export class ProfilePage {
       this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
       
       //numero di contributi dell'utente
-      this.num_of_info = i.num_of_info;
+      /*this.num_of_info = i.num_of_info;
       this.num_of_photo = i.num_of_photo;
-      this.num_of_tag = i.num_of_tag;
+      this.num_of_tag = i.num_of_tag;*/
 
       if (i.total_points == 0)
       {
@@ -238,5 +207,36 @@ export class ProfilePage {
     })
     //Fine parte dei badge
   }
+
+    //Per scegliere l'avatar dalla galleria del cellulare
+    selectPhoto(){
+      this.camera.getPicture({
+        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        quality: 100,
+        encodingType: this.camera.EncodingType.PNG,
+      }).then(imageData => {
+        this.myAvatar = imageData;
+        this.uploadPhoto();
+      }, error => {
+        console.log("ERROR -> " + JSON.stringify(error));
+      });
+  
+    }
+  
+    //Per caricare la foto sullo storage
+    uploadPhoto(): void {
+      this.myPhotosRef.child("avatar_"+this.email).child('myAvatar.png')
+        .putString(this.myAvatar, 'base64', { contentType: 'image/png' })
+        .then((savedPicture) => {
+          this.myPhotoURL = savedPicture.downloadURL;
+          //console.log("url avatar appena caricato"+this.myPhotoURL);
+  
+          //Salvo url su database
+          var updates = {};
+          updates['/users/'+this.email+'/avatar'] = this.myPhotoURL;
+          firebase.database().ref().update(updates);
+        });    
+    }
 
 }

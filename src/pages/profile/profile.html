@@ -17,39 +17,40 @@
   
   <!--Card per avatar, punti e livello-->
   <ion-card>
-    <ion-card-header class="blue-title ">
-      <b>{{username}}</b>
-    </ion-card-header>
 
     <ion-card-content>
       <ion-grid style="padding: 0px !important">
         <ion-row>
-            <ion-col col-12 style="text-align: center;">
-              <button ion-button (click)="selectPhoto()" color="light" id="profilo_Avatar">
-                  <img src="assets/img/user.png"> <!--All'upload dell'avatar, questo link dovrà cambiare per mostrare la nuova foto -->
+            <ion-col col-6 style="text-align: center;">
+              <button ion-button (click)="selectPhoto()" color="light" id="profilo_Avatar" >
+                  <img *ngFor="let item of items_user_details;" src="{{item.avatar}}"> <!--All'upload dell'avatar, questo link dovrà cambiare per mostrare la nuova foto -->
               </button>
-            </ion-col>
-           
-            <ion-col col-6>
-              <!--<ion-row>-->
-                <div *ngFor="let item of items_user_details;">
-                  <p><b>Registrazione:</b> {{correct_data | date: 'dd/MM/yyyy'}}</p>
-                  <p><b>Email:</b> {{item.clear_email}}</p>
-        
-                </div>
-              <!--</ion-row>-->
             </ion-col>
 
             <ion-col col-6>
               <!--<ion-row>-->
+                  <b  class="blue-title ">{{username}}</b>
                 <div *ngFor="let item of items_user_details;">
-                  <p><b>Punti totali:</b> {{item.total_points}}</p> 
                   <p><b>N° foto:</b> {{item.num_of_photo}}</p> 
                   <p><b>N° info:</b> {{item.num_of_info}}</p>
                   <p><b>N° tag:</b> {{item.num_of_tag}}</p>
                 </div>
               <!--</ion-row>-->
             </ion-col>
+
+            <ion-col col-12>
+              <!--<ion-row>-->
+                <div *ngFor="let item of items_user_details;">
+                  <p><b>Registrazione:</b> {{correct_data | date: 'dd/MM/yyyy'}}</p>
+                  <p><b>Email:</b> {{item.clear_email}}</p>
+                  <p><b>Punti totali:</b> {{item.total_points}}</p> 
+                  <p><b>Num achievements:</b> {{item.num_ach}}/16</p>
+                  <p><b>Num badge:</b> {{item.num_badge}}/17</p>
+                </div>
+              <!--</ion-row>-->
+            </ion-col>
+
+            
         </ion-row>
 
         <ion-row>

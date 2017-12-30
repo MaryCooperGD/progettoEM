@@ -97,6 +97,11 @@ export class RegisterPage {
       num_of_tag: 0,
       num_of_photo : 0,
       num_of_info : 0,
+      num_ach : 0,
+      sum_contributi: 0,
+
+      //Inserisco il placeholder dell'avatar
+      avatar: "https://firebasestorage.googleapis.com/v0/b/cesenaesploraem-f4694.appspot.com/o/avatars%2Fuser.png?alt=media&token=05f5fca2-2dde-4002-b10c-5fefe2d08fd1",
     });
   }
 
