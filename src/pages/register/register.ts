@@ -98,6 +98,7 @@ export class RegisterPage {
       num_of_photo : 0,
       num_of_info : 0,
       num_ach : 0,
+      num_badge : 0,
       sum_contributi: 0,
 
       //Inserisco il placeholder dell'avatar
