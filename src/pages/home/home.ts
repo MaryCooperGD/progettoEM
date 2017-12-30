@@ -52,6 +52,7 @@ export class HomePage {
   public file:File, public api:Api, public navParams: NavParams, public loadingController:LoadingController) {
     this.menuCtrl.enable(true)
 
+    /*Metodo per prenderd l'URL delle foto caricate*/
     var storage = firebase.storage();
     var pathReference = storage.ref();
     pathReference.child('photos_POIS/biblioteca_malatestiana.jpg').getDownloadURL().then(function(url) {
