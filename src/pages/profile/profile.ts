@@ -55,19 +55,20 @@ export class ProfilePage {
   
   //mi serve per mostrare a video l'avviso i badge utente
   isEnabled : boolean = true;
- 
+
+  //Mi servono per gestire l'achievement di cambiamento avatar
+  oldAvatar : boolean = false; 
+  avatar_placeholder;
+  num_ach;
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
   this.myPhotosRef = firebase.storage().ref('avatars/');
-
   }
-
-
 
   ionViewDidLoad() {
     if(this.api.user.displayName==null){
       this.username = '';
       this.email = '';
-      
     }else {
           this.username = this.api.user.displayName;
           this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
@@ -82,15 +83,18 @@ export class ProfilePage {
     });
     this.items_user_details.forEach(i=>{ //Dentro a questo forEach vado a recuperare informazioni che mi interessano
       this.correct_data = new Date(i.data_registrazione); //Serve per recuperare la data corretta dal costrutto Data. poi su html viene convertita in DD/MM/YY
-      
-      //numero di contributi dell'utente
-      /*this.num_of_info = i.num_of_info;
-      this.num_of_photo = i.num_of_photo;
-      this.num_of_tag = i.num_of_tag;*/
+
+      this.num_ach = i.num_ach;
 
       if (i.total_points == 0)
       {
         this.isEnabled = false;
+      }
+
+      //Controllo che l'avatar sia uguale al placeholder iniziale
+      this.avatar_placeholder = i.avatar;
+      if(this.avatar_placeholder == "https://firebasestorage.googleapis.com/v0/b/cesenaesploraem-f4694.appspot.com/o/avatars%2Fuser.png?alt=media&token=05f5fca2-2dde-4002-b10c-5fefe2d08fd1"){ 
+        this.oldAvatar = true; //In tal caso dico che è vero che ho l'avatar di partenza
       }
      
     }) //foreach dei dettagli utente
@@ -236,6 +240,15 @@ export class ProfilePage {
           var updates = {};
           updates['/users/'+this.email+'/avatar'] = this.myPhotoURL;
           firebase.database().ref().update(updates);
+
+          //Se l'avatar che avevo prima del cambiamento è quello di placeholder allora inserisco l'achievement!!
+          if(this.oldAvatar == true){
+            var updates = {};
+            updates["/users/"+this.email+"/achievement/avatar_up"];
+            updates["/users/"+this.email+"/achievement/avatar_up/data"] = new Date().getTime();
+            updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+            firebase.database().ref().update(updates);
+          }
         });    
     }
 

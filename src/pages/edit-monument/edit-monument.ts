@@ -320,8 +320,6 @@ export class EditMonumentPage {
 
   setTagAchievements(updates){
 
-    
-    
     if(this.num_of_tag == "1"){
       updates["/users/"+this.email+"/achievement/1 tag"];
       updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
