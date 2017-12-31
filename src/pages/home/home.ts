@@ -270,11 +270,13 @@ export class HomePage {
      })
 
       
-
+     //se non sono su browser
       if(!this.platform.is('core')){
         let watch = this.geolocation.watchPosition();
         watch.subscribe((data)=>{
-          this.displayGPSError("La posizione è cambiata")
+          data.coords.latitude
+          data.coords.longitude
+          //this.displayGPSError("La posizione è cambiata")
           
         }, error => {
           this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")

@@ -35,12 +35,12 @@
 
         <ion-col width-50 style="text-align: left">
           <!--Bottone per scattare foto live-->
-          <button ion-button round large color="danger"><ion-icon name="camera"></ion-icon></button>
+          <button ion-button round large color="danger" (click)="selectPhoto_camera()" ><ion-icon name="camera"></ion-icon></button>
         </ion-col>
       </ion-row>
 
   <!--Pulsante per caricare foto-->  
-  <button ion-button class="card-button" (click)="uploadPhoto()">Carica foto</button>
+  <button ion-button class="card-button" [disabled]="!isEnabled" (click)="uploadPhoto()">Carica foto</button>
     </ion-card-content>
   </ion-card>
 
