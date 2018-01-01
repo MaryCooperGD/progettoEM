@@ -70,11 +70,12 @@ export class AchievementsPage {
                 userTagACH.push(prova);
                 
               }
-              if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "photo")){
+              if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "foto")){
                 
                 //Per ogni achievement memorizziamo la descrizione e quando è stato sbloccato
                 var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
                 userPhotoACH.push(prova);
+
               }
               if((singolo_ach.key == singolo_ACH.key) && (singolo_ACH.child("tipologia").val()== "info")){
                 

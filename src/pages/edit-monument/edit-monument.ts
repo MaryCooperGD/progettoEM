@@ -53,6 +53,7 @@ export class EditMonumentPage {
   num_of_info;
   data_ach;
   sum_of_total_contr;
+  num_of_photo;
 
   num_ach;
   num_badge;
@@ -89,6 +90,7 @@ export class EditMonumentPage {
         //numero contributi
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
+        this.num_of_photo = i.num_of_photo;
 
         this.num_ach = i.num_ach;
         this.num_badge = i.num_badge;
@@ -169,7 +171,7 @@ export class EditMonumentPage {
    this.num_of_tag = this.num_of_tag + 1;
    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
-   this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+   this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo;
    updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
    console.log("Dentro addSelectedTag: "+this.sum_of_total_contr);
 
@@ -268,28 +270,40 @@ export class EditMonumentPage {
 
   
   setTagBadges(updates){
-      if(this.punteggio_tag >= 300){
-        updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
-      }else if(this.punteggio_tag >= 180){
-        updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
-      }else if(this.punteggio_tag >= 50){
-        updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
-      }else if(this.punteggio_tag >= 15){
-        updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;   
-      }
+    if(this.punteggio_tag >= 300){
+      updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.punteggio_tag >= 180){
+      updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.punteggio_tag >= 50){
+      updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.punteggio_tag >= 15){
+      updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }
   }
 
+
   setInfoBadges(updates){
-    if(this.punteggio_info >= 300){
+    if(this.punteggio_info >= 390){
       updates["/users/"+this.email+"/badge/Informatore prodigio"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-    }else if(this.punteggio_info >= 240){
+
+    }else if(this.punteggio_info >= 225){
       updates["/users/"+this.email+"/badge/Informatore esperto"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-    }else if(this.punteggio_info >= 60){
+
+    }else if(this.punteggio_info >= 120){
       updates["/users/"+this.email+"/badge/Informatore principiante"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-    }else if(this.punteggio_info >= 15){
+      
+    }else if(this.punteggio_info >= 45){
       updates["/users/"+this.email+"/badge/Informatore novizio"]  = true;  
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1; 
     }
@@ -300,26 +314,25 @@ export class EditMonumentPage {
       updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
 
-    }else if(this.punteggio_totale >= 500){
+    }else if(this.punteggio_totale >= 680){
       updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
 
-    }else if(this.punteggio_totale >= 350){
+    }else if(this.punteggio_totale >= 450){
       updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
       
-    }else if(this.punteggio_totale >= 200){
+    }else if(this.punteggio_totale >= 300){
       updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;  
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1; 
 
-    }else if(this.punteggio_totale >= 50){
+    }else if(this.punteggio_totale >= 60){
       updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;  
       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1; 
     }
   }
 
   setTagAchievements(updates){
-
     if(this.num_of_tag == "1"){
       updates["/users/"+this.email+"/achievement/1 tag"];
       updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();

@@ -28,6 +28,7 @@ export class NewtagPage {
   sum_of_total_contr;
   num_ach;
   num_badge;
+  num_of_photo;
 
   //per inserire punti!
   punteggio_tag;
@@ -83,6 +84,7 @@ export class NewtagPage {
 
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
+        this.num_of_photo = i.num_of_photo;
 
         this.num_ach = i.num_ach;
         this.num_badge = i.num_badge;
@@ -178,7 +180,7 @@ clickedButton(){
     this.num_of_tag = this.num_of_tag + 1;
     updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
-    this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+    this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo;
     updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
 
      //Incremento il numero di tag che il POI possiede
@@ -190,6 +192,7 @@ clickedButton(){
     this.setMinscBadges(updates);
 
     this.setTagAchievements(updates);
+    this.setMinscAchievements(updates);
 
     firebase.database().ref().update(updates);
     

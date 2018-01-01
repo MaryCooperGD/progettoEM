@@ -36,19 +36,41 @@ export class UploadPhotoPage {
   public myPhoto: any;
   public myPhotoURL: any;
 
+  //Per prendere i dati dal profilo utente
+  public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
+  public user_email: Array<any> = [];
+  num_of_photo;
+  points_photos;
+  punteggio_totale;
+  sum_contributi;
+  num_of_info; 
+  num_of_tag;
+  sum_of_total_contr;
+  num_badge;
+  num_ach;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera,
   public toastCtrl:ToastController) {
       this.poi = navParams.get('poi')
       this.poiName = this.poi.myPoi.nome
       this.poiKey = this.poi.chiave;
       var num_photos_ref = firebase.database().ref('point_of_interest/'+this.poiKey+'/numero_foto/')
+
+      //Per memorizzare le foto nel POI
       var ref = firebase.database().ref('/point_of_interest/'+this.poiKey+'/photos/');
       var key = firebase.database().ref().child('point_of_interest').push().key; 
+
+      //Per memorizzare le foto nell'utente
+      var ref = firebase.database().ref('/users/'+this.email+'/photos/');
+      var key = firebase.database().ref().child('users').push().key; 
+
       num_photos_ref.on('value',snapshot=>{
         this.num_of_photos = snapshot.val()
       })
       //Riferimento alla cartella principale dove voglio mettere le foto
       this.myPhotosRef = firebase.storage().ref('usersPhotos/');
+
+      
 
   }
 
@@ -62,8 +84,25 @@ export class UploadPhotoPage {
           this.username = this.api.user.displayName;
           this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
     }
-
-  }
+    
+    this.user_emailRef.orderByChild("email_user").equalTo(this.email).on('value',itemSnapshot =>{
+      this.user_email = [];
+      itemSnapshot.forEach( itemSnap => {
+        this.user_email.push(itemSnap.val());
+        return false;
+      });
+      this.user_email.forEach(i=>{
+        this.num_of_photo = i.num_of_photo;
+        this.points_photos = i.points_photos;
+        this.punteggio_totale = i.total_points;
+        this.sum_contributi = i.sum_contributi;
+        this.num_of_info = i.num_of_info;
+        this.num_of_tag = i.num_of_tag;
+        this.num_badge = i.num_badge;
+        this.num_ach = i.num_ach;
+      })
+    });
+  } // fine ionViewDidLoad()
 
   //Per scegliere l'avatar dalla galleria del cellulare
   selectPhoto_phone(){
@@ -83,6 +122,7 @@ export class UploadPhotoPage {
     });
   }
 
+  //Per scegliere l'avatar da una foto appena scattata
   selectPhoto_camera(){
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.CAMERA, 
@@ -101,7 +141,6 @@ export class UploadPhotoPage {
 
   }
   
-  
   //Per caricare la foto sullo storage - si attiva dal pulsante carica foto!
   uploadPhoto(): void {
     this.myPhotosRef.child("photo_"+this.poiName).child(this.generateUUID()+'.png') //dare un nome univoco
@@ -114,6 +153,25 @@ export class UploadPhotoPage {
           var key = firebase.database().ref().child('/point_of_interest/'+this.poiKey+'/photos/').push().key; 
           updates["point_of_interest/"+this.poiKey+"/photos/"+key] = this.myPhotoURL;
           updates["point_of_interest/"+this.poiKey+"/numero_foto"] = (this.num_of_photos+1);
+
+           //Per memorizzare le foto nell'utente
+          var ref = firebase.database().ref('/users/'+this.email+'/photos/');
+          var key = firebase.database().ref().child('/users/'+this.email+'/photos/').push().key; 
+          updates['/users/'+this.email+'/photos/'+key] = this.myPhotoURL;
+          
+          //Incremento i valori nel profilo utente
+          this.num_of_photo = this.num_of_photo + 1; //Incremento il contatore del numero di foto
+          updates["users/"+this.email+"/num_of_photo"] = this.num_of_photo;
+
+          this.points_photos = this.points_photos + 20; //Incremento il punteggio ottenuto dalle foto
+          updates["users/"+this.email+"/points_photos"] = this.points_photos;
+
+          this.punteggio_totale = this.punteggio_totale + 20 ; //Incremento il punteggio totale
+          updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale; 
+
+          this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo; //Incremento il valore della somma dei contributi.
+          updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
+
           firebase.database().ref().update(updates).then(function(){
             self.displayError("Foto caricata correttamente!")
             self.isEnabled = false;
@@ -122,7 +180,104 @@ export class UploadPhotoPage {
             self.displayError("C'è stato un errore nel caricamento della foto.")
           })
           //console.log("url avatar appena caricato"+this.myPhotoURL);
-        });    
+        });   
+        
+    //Assegno i badge e gli achievement
+    var updates = {};
+    this.setPhotoBadges(updates);
+    this.setPhotoAchievement(updates);
+    this.setMiscAchievements(updates);
+    this.setMinscBadges(updates);
+
+    firebase.database().ref().update(updates);
+  }
+
+  setPhotoBadges(updates){
+    if(this.points_photos >= 380){
+      updates["/users/"+this.email+"/badge/Fotografo prodigio"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.points_photos >= 260){
+      updates["/users/"+this.email+"/badge/Fotografo esperto"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.points_photos >= 140){
+      updates["/users/"+this.email+"/badge/Fotografo principiante"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.points_photos >= 60){
+      updates["/users/"+this.email+"/badge/Fotografo novizio"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+    }
+  }
+
+  setPhotoAchievement(updates){
+    if(this.num_of_photo == "1"){
+      updates["/users/"+this.email+"/achievement/1 foto"];
+      updates["/users/"+this.email+"/achievement/1 foto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.num_of_photo == "10"){
+      updates["/users/"+this.email+"/achievement/10 foto"];
+      updates["/users/"+this.email+"/achievement/10 foto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.num_of_photo == "30"){
+      updates["/users/"+this.email+"/achievement/30 foto"];
+      updates["/users/"+this.email+"/achievement/30 foto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.num_of_photo == "100"){
+      updates["/users/"+this.email+"/achievement/100 foto"];
+      updates["/users/"+this.email+"/achievement/100 foto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+    }
+  }
+
+  setMinscBadges(updates){
+    if(this.punteggio_totale >= 1000){
+      updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.punteggio_totale >= 680){
+      updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+
+    }else if(this.punteggio_totale >= 450){
+      updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+      
+    }else if(this.punteggio_totale >= 300){
+      updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;  
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1; 
+
+    }else if(this.punteggio_totale >= 60){
+      updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;  
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1; 
+    }
+  }
+
+  setMiscAchievements(updates){
+    if(this.sum_of_total_contr == "1"){
+      updates["/users/"+this.email+"/achievement/1 misto"];
+      updates["/users/"+this.email+"/achievement/1 misto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.sum_of_total_contr == "50"){
+      updates["/users/"+this.email+"/achievement/50 misto"];
+      updates["/users/"+this.email+"/achievement/50 misto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.sum_of_total_contr == "150"){
+      updates["/users/"+this.email+"/achievement/150 misto"];
+      updates["/users/"+this.email+"/achievement/150 misto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+
+    }else if(this.sum_of_total_contr == "300"){
+      updates["/users/"+this.email+"/achievement/300 misto"];
+      updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+    }
   }
 
   generateUUID(): any {
