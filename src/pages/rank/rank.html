@@ -17,50 +17,22 @@
 
 <ion-content padding class="sfondo_content">
 
-
 	<ion-card>
-			<ion-card-header class ="centered" id="header_classifica" >
-					<div > {{username}} #{{position}} <ion-icon name="podium"></ion-icon></div>
-			</ion-card-header>
+		<ion-card-header class ="centered" id="header_classifica" >
+				<div > {{username}} #{{position}} <ion-icon name="podium"></ion-icon></div>
+		</ion-card-header>
 
-			<ion-card-content>
-				<div class="row" style="height: 20px;">
-					<div class="col classifica" text-uppercase> <b>Rank</b> </div>
-	        <div class="col classifica" text-uppercase> <b>User</b> </div>
-					<div class="col classifica" text-uppercase> <b>Punti</b> </div>     
-				</div>
-			</ion-card-content>
-
+		<ion-list *ngFor="let item of items; let i = index">
+			<ion-item id="item_lista">
+					<ion-icon  item-start class="points" style="margin-left: 10px; margin-right: 25px;" >{{i+1}}</ion-icon>
+					<ion-avatar item-start>
+							<img src="{{item.avatar}}" id="avatar_list">
+					</ion-avatar>
+					<h2>{{ item.username }}</h2>
+					<p><b>{{ item.total_points }} punti</b></p>
+					<p>{{item.sum_contributi}} contributi totali</p>
+			</ion-item>
+		</ion-list>
 	</ion-card>
-
-	
-	<ion-card class="row" *ngFor="let item of items; let i = index" style="height: 70px; line-height: 55px;">
-			<div class="col classifica"><b>{{ i + 1 }}</b></div>
-			<div class="col classifica">{{ item.username }} </div>
-			<div class="col classifica"><span class="points">{{ item.total_points }}</span></div>	
-	</ion-card>
-
-	<!--<ion-card>
-
-	<ion-card-header class ="centered" id="header_classifica" >
-			<div > {{username}} #{{position}} <ion-icon name="podium"></ion-icon></div>
-	</ion-card-header>
-
-	<div id="table">
-		<div class="row header" >
-	        <div class="col classifica"> <b class="voci_table_header"> Rank</b></div>
-	        <div class="col classifica"> <b class="voci_table_header"> User</b></div>
-					<div class="col classifica"> <b class="voci_table_header"> Punti</b></div>     
-	  </div>
-
-	  <div class="row" *ngFor="let item of items; let i = index">
-	        <div class="col classifica">{{ i + 1 }}</div>
-	        <div class="col classifica">{{ item.username }} </div>
-					<div class="col classifica"><span class="points">{{ item.total_points }}</span></div>	
-	  </div>
-	    
-    </div>
-</ion-card>-->
-
 
 </ion-content>
