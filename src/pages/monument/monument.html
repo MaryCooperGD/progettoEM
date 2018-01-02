@@ -101,7 +101,12 @@
       </ion-card-header>
 
       <ion-card-content>
-        <img width="200" height="200" src="assets/img/malatestiana.jpg"/>
+       <!-- <img width="200" height="200" src="assets/img/malatestiana.jpg"/>-->
+       <ion-slides class="image-slider" loop="true" slidesPerView="2">
+        <ion-slide *ngFor="let img of poi_usersssss"> <!--per le foto d'esempio mettere IMAGES (al posto di poi_usersss) CHE E' UN VETTORE DI IMMAGINI DEFINITO NEL MONUMENTS.TS CHE HA 4 IMMAGINI AL SUO INTERNO, CHE SONO IN ASSETS.-->
+          <img src="{{img}}" class="thumb-img" imageViewer />
+        </ion-slide>
+      </ion-slides>
       </ion-card-content>
     </ion-card>
 

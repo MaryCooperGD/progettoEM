@@ -23,6 +23,9 @@ import * as firebase from 'firebase/app';
 })
 export class MonumentPage {
 
+  images = ['1.png', '2.png', '3.png', '4.png'];
+ 
+
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Descrizione";
   
@@ -42,8 +45,11 @@ export class MonumentPage {
    numero_info_POI;
 
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
-    isEnabled_info : boolean = true;
-    isEnabled_tag : boolean = true;
+  isEnabled_info : boolean = true;
+  isEnabled_tag : boolean = true;
+
+
+  public poi_usersssss: Array<any> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
@@ -61,17 +67,17 @@ export class MonumentPage {
   ionViewWillEnter(){
     this.refreshList()
     this.refreshTags()
+    this.retrieveFoto()
   }
 
   pageDetailsRefresh(){
-    
     var poi_ref = firebase.database().ref("/point_of_interest/");
-
     this.poi_NUMEROINFO = [];
+
     poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
-      
       itemSnapshot.forEach(itemSnap =>{
         this.poi_NUMEROINFO.push(itemSnap.val());
+  
         return false;
       });
       this.poi_NUMEROINFO.forEach(i=>{ //Retrieve the details, also the image url
@@ -87,11 +93,37 @@ export class MonumentPage {
         if (i.numero_informazioni == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         {
           this.isEnabled_info = false;
-
         }
       })
     });
   }
+
+  //////---------------------------------------
+  //////---------------------------------------
+  //////---------------------------------------
+  //////---------------------------------------guardamiiiiiiiiii
+  //PER PRENDERE FOTO DEL POI DAL DB
+  retrieveFoto(){
+    var poi_ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/photos");
+    this.poi_usersssss = [];
+
+    //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
+    poi_ref.on('value',itemSnapshot =>{
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_usersssss.push(itemSnap.val()); //ho paura che non capisca di prendermi l'url singolo, ma non avendo un nome referenziabile per il campo dell'alberello, non so come fare <.<. 
+        //cioè siccome le chiavi delle url sono chiavi generate casualmente non so come referenziarmici.
+        //volevo fare come sopra .forEach(i=> ma non saprei cosa associargli. non so se mi son spiegata!
+        //cioè non posso dire this.var = i.urldellafoto. o almeno non so come dirglielo in questo caso.
+
+        console.log("URL"+this.poi_usersssss+"    _____"); //al momento ciascuna di questa stampa mi mostra TUTTI gli url del poi.
+        return false;
+      });
+
+    });
+
+  }
+
+
 
   refreshTags(){
     var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
@@ -147,6 +179,7 @@ export class MonumentPage {
 
     this.descriptions = descpts;
   }
+
 
   openUploadPhotoPage(){
     this.navCtrl.push(UploadPhotoPage, {

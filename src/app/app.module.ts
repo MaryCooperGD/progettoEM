@@ -34,6 +34,8 @@ import {NewtagPage} from "../pages/newtag/newtag";
 import { AchievementsPage } from "../pages/achievements/achievements";
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 
+import { IonicImageViewerModule } from 'ionic-img-viewer';
+
 export const firebaseConfig = {
   
     apiKey: "AIzaSyCJuctITAc5lKZzNwTosmiLzduZjQPgqUg",
@@ -70,6 +72,7 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    IonicImageViewerModule,
     IonicModule.forRoot(MyApp, {
       //Serve affinchè non sballino le form che sono centrate. Senza queste tre righe quando clicchi su un campo la tastiera fa sballare tutto!
       scrollPadding: false,
