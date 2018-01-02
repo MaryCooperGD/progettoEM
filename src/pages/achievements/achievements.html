@@ -15,56 +15,54 @@
 <ion-content padding class="sfondo_content">
 
     <ion-card>
-        <ion-card-header class="blue-title ">
-          Lista di Achievements raggiunti
-        </ion-card-header>
+      <ion-card-header class="blue-title ">
+        Lista di Achievements raggiunti
+      </ion-card-header>
 
-        <ion-card-content>
+      <ion-card-content>
+        <ion-item-group>
 
-          <ion-item-group>
+          <!--ACHIEVEMENTS TAG-->
+          <ion-item-divider color="light" class="divisore_lista">Tag</ion-item-divider>
+            <ion-item  *ngFor="let e of achievements_TAG;">
+              <ion-avatar item-start>
+                  <ion-icon name="create" style="font-size: 50px"></ion-icon>
+              </ion-avatar>
+              <h3 text-wrap >{{e.descr}}</h3>
+              <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
+            </ion-item>
 
-              <!--ACHIEVEMENTS TAG-->
-                <ion-item-divider color="light" class="divisore_lista">Tag</ion-item-divider>
-                <ion-item  *ngFor="let e of achievements_TAG;">
-                    <ion-avatar item-start>
-                      <ion-icon name="create" style="font-size: 50px"></ion-icon>
-                    </ion-avatar>
-                    <h3 text-wrap >{{e.descr}}</h3>
-                    <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
-                </ion-item>
+          <!--ACHIEVEMENTS FOTO--> 
+          <ion-item-divider color="light" class="divisore_lista">Foto</ion-item-divider>
+            <ion-item  *ngFor="let e of achievements_PHOTO;">
+              <ion-avatar item-start>
+                <ion-icon name="images" style="font-size: 50px"></ion-icon>
+              </ion-avatar>
+              <h3 text-wrap >{{e.descr}}</h3>
+              <p>{{e.data | date: 'dd/MM/yyyy'}}</p>
+            </ion-item>
 
-              <!--ACHIEVEMENTS FOTO--> 
-                <ion-item-divider color="light" class="divisore_lista">Foto</ion-item-divider>
-                <ion-item  *ngFor="let e of achievements_PHOTO;">
-                    <ion-avatar item-start>
-                      <ion-icon name="images" style="font-size: 50px"></ion-icon>
-                    </ion-avatar>
-                    <h3 text-wrap >{{e.descr}}</h3>
-                    <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
-                </ion-item>
+          <!--ACHIEVEMENTS INFO-->
+          <ion-item-divider color="light" class="divisore_lista">Informazioni</ion-item-divider>
+            <ion-item  *ngFor="let e of achievements_INFO;">
+                <ion-avatar item-start>
+                  <ion-icon name="chatboxes" style="font-size: 50px"></ion-icon>
+                </ion-avatar>
+                <h3 text-wrap >{{e.descr}}</h3>
+                <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
+            </ion-item>
 
-              <!--ACHIEVEMENTS INFO-->
-                <ion-item-divider color="light" class="divisore_lista">Informazioni</ion-item-divider>
-                <ion-item  *ngFor="let e of achievements_INFO;">
-                    <ion-avatar item-start>
-                      <ion-icon name="chatboxes" style="font-size: 50px"></ion-icon>
-                    </ion-avatar>
-                    <h3 text-wrap >{{e.descr}}</h3>
-                    <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
-                </ion-item>
-
-              <!--ACHIEVEMENTS MISTO-->
-              <ion-item-divider color="light" class="divisore_lista">Misto</ion-item-divider>
-              <ion-item  *ngFor="let e of achievements_MINSC;">
-                  <ion-avatar item-start>
-                    <ion-icon name="document" style="font-size: 50px"></ion-icon>
-                  </ion-avatar>
-                  <h3 text-wrap >{{e.descr}}</h3>
-                  <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
-              </ion-item>
+          <!--ACHIEVEMENTS MISTO-->
+          <ion-item-divider color="light" class="divisore_lista">Misto</ion-item-divider>
+            <ion-item  *ngFor="let e of achievements_MINSC;">
+                <ion-avatar item-start>
+                  <ion-icon name="document" style="font-size: 50px"></ion-icon>
+                </ion-avatar>
+                <h3 text-wrap >{{e.descr}}</h3>
+                <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
+            </ion-item>
 
           </ion-item-group>
-
         </ion-card-content>
         
         <ion-item text-wrap style="border-top: 1px solid #ebebe0; text-align: center;">Continua a contribuire per sbloccare altri achievements!</ion-item>

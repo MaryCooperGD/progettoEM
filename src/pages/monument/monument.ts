@@ -7,6 +7,8 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
+
+
 /**
  * Generated class for the MonumentPage page.
  *

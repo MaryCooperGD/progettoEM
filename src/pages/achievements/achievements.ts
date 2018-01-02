@@ -91,7 +91,6 @@ export class AchievementsPage {
                 var prova = {descr: singolo_ACH.child("descr").val(), data: singolo_ach.child("data").val()}
                 userMinscACH.push(prova);
               }
-
               return false;
             })
           })
@@ -104,8 +103,6 @@ export class AchievementsPage {
       this.achievements_INFO = userInfoACH;
       this.achievements_PHOTO = userPhotoACH;
       this.achievements_MINSC = userMinscACH;
-         
-      
    })
   }
 

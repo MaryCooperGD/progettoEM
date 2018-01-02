@@ -54,12 +54,10 @@ export class EditMonumentPage {
   data_ach;
   sum_of_total_contr;
   num_of_photo;
-
   num_ach;
   num_badge;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
-
     this.poi = navParams.get('poi');
     this.refreshTags();
   }
@@ -114,8 +112,6 @@ export class EditMonumentPage {
 
   } //fine ionViewDidLoad
 
-
-
   refreshTags(){
     var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
     var ref1 = firebase.database().ref('/tag/');
@@ -150,7 +146,6 @@ export class EditMonumentPage {
     console.log("Tags finali(che l'utente non ha)  "+this.tagList)
     this.loadedTagList = tagShow;
   }
-
 
   addSelectedTag(index){
     var tagToAdd = this.tagList[index]; //corretto
@@ -188,11 +183,11 @@ export class EditMonumentPage {
    firebase.database().ref().update(updates);
    this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 5 punti!") ;
    this.refreshTags();
- }
+  }
 
  ionViewWillEnter(){
    this.initializeItems()
- }
+}
 
  initializeItems(): void {
   this.tagList = this.loadedTagList;
@@ -248,9 +243,6 @@ export class EditMonumentPage {
    this.navCtrl.pop(); //Bottone per tornare indietro
   }
 
-  
-
-
   openAddNewTagPage(){
     this.navCtrl.push(NewtagPage, {
      poi: this.poi
@@ -268,7 +260,6 @@ export class EditMonumentPage {
     toast.present();
   }
 
-  
   setTagBadges(updates){
     if(this.punteggio_tag >= 300){
       updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
@@ -288,7 +279,6 @@ export class EditMonumentPage {
 
     }
   }
-
 
   setInfoBadges(updates){
     if(this.punteggio_info >= 390){
@@ -402,6 +392,4 @@ export class EditMonumentPage {
       
     }
   }
-
- 
 }
