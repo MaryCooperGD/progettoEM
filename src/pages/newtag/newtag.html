@@ -22,7 +22,7 @@
                 <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)" placeholder="Aggiungi tag ... "></ion-searchbar>
                     <ion-scroll style="width:100%;height:60vh" scrollY="true">
                         <ion-list>
-                            <ion-item *ngFor="let tag of tagList">
+                            <ion-item *ngFor="let tag of tagList" style="border-bottom: 1px solid #e0e0e0;">
                                 <h2> {{ tag.nome }} </h2>
                             </ion-item>
                         </ion-list>

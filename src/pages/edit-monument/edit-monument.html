@@ -21,31 +21,26 @@
 		</ion-card-header>
 
 		<ion-card-content>
-
-				<ion-row class="blue-title">
-						Selezionalo dalla lista sottostante:
-					</ion-row>
+			<ion-row class="blue-title">
+				Selezionalo dalla lista sottostante:
+			</ion-row>
 
 			<ion-row>
 				<ion-scroll style="width:100%;height:30vh" scrollY="true">
-						<ion-list>
-						<button ion-item *ngFor="let tag of tagList; let i=index" (click)="addSelectedTag(i)">
+					<ion-list>
+						<button ion-item *ngFor="let tag of tagList; let i=index" (click)="addSelectedTag(i)" style="border-bottom: 1px solid #e0e0e0;">
 						  <h2> {{tag.val().nome}}</h2>
 						</button>
-						</ion-list>
-						</ion-scroll>
+					</ion-list>
+				</ion-scroll>
 			</ion-row>
-
-			<!-- <ion-row>
-				<button ion-button class="card-button" color="secondary" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuovo tag</button>
-			</ion-row> -->
 
 			<ion-row class="blue-title">
 				O inseriscine uno nuovo
 			</ion-row>
 			<ion-row>
-					<button ion-button class="card-button" color="secondary" (click)="openAddNewTagPage()" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Crea tag</button>
-				</ion-row>
+				<button ion-button class="card-button" color="secondary" (click)="openAddNewTagPage()" > <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Crea tag</button>
+			</ion-row>
 		</ion-card-content>
 	</ion-card>
 
