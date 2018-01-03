@@ -23,14 +23,10 @@ import * as firebase from 'firebase/app';
 })
 export class MonumentPage {
 
-  images = ['1.png', '2.png', '3.png', '4.png'];
- 
-
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Descrizione";
   
-  //---FINE--parte funzionamento segment
-
+  //Variabili miste
   poi;
   poiName;
   descriptions;
@@ -41,15 +37,15 @@ export class MonumentPage {
   foto_url;
 
   //per le info e i tag del POI
-   public poi_NUMEROINFO: Array<any> = [];
-   numero_info_POI;
+  public poi_NUMEROINFO: Array<any> = [];
+  numero_info_POI;
 
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
   isEnabled_info : boolean = true;
   isEnabled_tag : boolean = true;
 
-
-  public poi_usersssss: Array<any> = [];
+  //Per prendere le foto degli utenti
+  public poi_user_photos: Array<any> = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.poi = navParams.get('reference')
@@ -65,9 +61,9 @@ export class MonumentPage {
   }
 
   ionViewWillEnter(){
-    this.refreshList()
-    this.refreshTags()
-    this.retrieveFoto()
+    this.refreshList();
+    this.refreshTags();
+    this.retrieveFoto();
   }
 
   pageDetailsRefresh(){
@@ -98,32 +94,18 @@ export class MonumentPage {
     });
   }
 
-  //////---------------------------------------
-  //////---------------------------------------
-  //////---------------------------------------
-  //////---------------------------------------guardamiiiiiiiiii
-  //PER PRENDERE FOTO DEL POI DAL DB
   retrieveFoto(){
     var poi_ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/photos");
-    this.poi_usersssss = [];
+    this.poi_user_photos = [];
 
     //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
     poi_ref.on('value',itemSnapshot =>{
       itemSnapshot.forEach(itemSnap =>{
-        this.poi_usersssss.push(itemSnap.val()); //ho paura che non capisca di prendermi l'url singolo, ma non avendo un nome referenziabile per il campo dell'alberello, non so come fare <.<. 
-        //cioè siccome le chiavi delle url sono chiavi generate casualmente non so come referenziarmici.
-        //volevo fare come sopra .forEach(i=> ma non saprei cosa associargli. non so se mi son spiegata!
-        //cioè non posso dire this.var = i.urldellafoto. o almeno non so come dirglielo in questo caso.
-
-        console.log("URL"+this.poi_usersssss+"    _____"); //al momento ciascuna di questa stampa mi mostra TUTTI gli url del poi.
+        this.poi_user_photos.push(itemSnap.val()); 
         return false;
       });
-
     });
-
   }
-
-
 
   refreshTags(){
     var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')

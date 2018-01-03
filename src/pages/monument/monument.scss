@@ -38,7 +38,7 @@ page-monument {
 	}
 
 
-	ion-slide.swiper-slide {
+/*	ion-slide.swiper-slide {
         left: 25%;
     }
     
@@ -48,5 +48,33 @@ page-monument {
  
     .thumb-img {
         padding: 10px;
+	}*/
+	
+
+	.image-container {
+        min-height: 200px;
+        background-size: cover;
+    }
+ 
+    @media (min-width: 0px) {
+        .images {
+            column-count: 2;
+        }
+    }
+ 
+    @media (min-width: 420px) {
+        .images {
+            column-count: 3;
+        }
+    }
+ 
+    @media (min-width: 720px) {
+        .images {
+            column-count: 4;
+        }
+    }
+ 
+    .one-image {
+        margin: 2px;
     }
 }
