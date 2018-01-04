@@ -92,6 +92,24 @@ export class HomePage {
 
         
         if(this.canCalculate){
+           
+            let watch = this.geolocation.watchPosition();
+            watch.subscribe((data)=>{
+              var lat = data.coords.latitude
+              var lon =  data.coords.longitude
+              let latlng = {lat: lat, lng: lon}
+              let marker1 = L.marker(latlng)
+              let content1 = `<b>Tu sei qui</b>`;
+                marker1.bindPopup(content1) 
+                marker1.addTo(this.map)
+               //marker1.openPopup()
+              //this.displayGPSError("La posizione è cambiata")
+              
+            }, error => {
+              this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
+            })
+
+          
           this.withGoogle(this.start, this.destination, this.waypoints);
         } 
         //this.getUsersPref()
@@ -104,6 +122,13 @@ export class HomePage {
 
   ionViewCanLeave(){
     //document.getElementById("map").outerHTML = "";
+    }
+
+    ionViewDidEnter(){
+      if(!this.canCalculate){
+        this.geolocate()
+      }
+      
     }
 
   initMap() {
@@ -198,6 +223,7 @@ export class HomePage {
           text: 'Sì',
           handler: () => {
             this.diagnostic.switchToLocationSettings();
+            
             }
         }
       ]
@@ -221,23 +247,30 @@ export class HomePage {
       request.open(method,url,true);
       var self = this;
       request.onreadystatechange = function(){
-        if (request.readyState == 4 && request.status == 200){
-          var data = JSON.parse(request.responseText);
-          var city;
-
-          for (var i=0; i<data.results[0].address_components.length; i++) {
-            for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
-
-            //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                if (data.results[0].address_components[i].types[b]!=null &&  data.results[0].address_components[i].types[b]== "administrative_area_level_3") {
-                    //this is the object you are looking for
-                    city= data.results[0].address_components[i];
-                    break;
-                }
+        if(request.status == 200){
+          if (request.readyState == 4 && request.status == 200){
+            if(request.responseText){
+              var data = JSON.parse(request.responseText);
+              var city;
+  
+            for (var i=0; i<data.results[0].address_components.length; i++) {
+              for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
+                
+              //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+                  if (data.results[0].address_components[i].types[b]!=null &&  data.results[0].address_components[i].types[b]== "locality"/* "administrative_area_level_3" */) {
+                      //this is the object you are looking for
+                      city= data.results[0].address_components[i];
+                      break;
+                  }
+              }
+          }
+          self.api.setCity(city.long_name);
+  
             }
+            
+          }
         }
-        self.api.setCity(city.long_name);
-        } else {
+         else {
           self.displayGPSError("C'è qualche difficoltà nell'individuare la tua posizione.")
         }
       }
@@ -249,6 +282,7 @@ export class HomePage {
       this.map.setView(latlng,16)
       this.map.panTo(latlng)
       this.getFeatures()
+
       var self = this;
      this.map.addEventListener('dragend', function(e){
        if(self.getMapZoom()>=16){
@@ -270,12 +304,13 @@ export class HomePage {
      })
 
       
-     //se non sono su browser
-      if(!this.platform.is('core')){
+     //se NON sono su browser
+      /* if(!this.platform.is('core')){
         let watch = this.geolocation.watchPosition();
         watch.subscribe((data)=>{
-          data.coords.latitude
-          data.coords.longitude
+          var lat = data.coords.latitude
+          var lon =  data.coords.longitude
+          this.displayGPSError("Coordinate  " + lat + " " + lon )
           //this.displayGPSError("La posizione è cambiata")
           
         }, error => {
@@ -283,10 +318,11 @@ export class HomePage {
         })
         
         
-      }
+      } */
       
     }).catch((err) =>{
       this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
+      this.presentConfirm();
     })
   }
 
@@ -581,10 +617,12 @@ export class HomePage {
         })
         firstpolyline.addTo(newMap);
         this.instructions = [];
-        var myRoute= response.routes[0].legs[0]
-        for(var i =0; i<myRoute.steps.length; i++){
-          this.instructions.push(myRoute.steps[i].instructions)
+        var myRoute= response.routes[0].legs
+        for(var j = 0; j<myRoute.length; j++){
+        for(var i =0; i<myRoute[j].steps.length; i++){
+          this.instructions.push(myRoute[j].steps[i].instructions)
         }
+      }
         //console.dir("I " + myRoute.steps[i].instructions)
       }
   
