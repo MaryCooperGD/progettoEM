@@ -34,7 +34,6 @@ import {NewtagPage} from "../pages/newtag/newtag";
 import { AchievementsPage } from "../pages/achievements/achievements";
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 
-
 export const firebaseConfig = {
   
     apiKey: "AIzaSyCJuctITAc5lKZzNwTosmiLzduZjQPgqUg",
@@ -63,7 +62,7 @@ export const firebaseConfig = {
     TutorialPage,
     CreditsPage,
     NewtagPage,
-    AchievementsPage
+    AchievementsPage,
   ],
   imports: [
     BrowserModule,

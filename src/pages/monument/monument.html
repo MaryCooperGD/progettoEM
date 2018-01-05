@@ -97,20 +97,20 @@
     <!--Card foto utenti-->
     <ion-card>
       <ion-card-header class="blue-title">
-            Foto utenti
+            Foto utenti (clicca per visualizzare)
       </ion-card-header>
 
       <ion-card-content>
 
+          <!--Gallery stile pinterest-->
         <ion-scroll scrollY="true" style="height:300px;">
-        
-          <div class="images" >
-            <div class="one-image" *ngFor="let image of poi_user_photos">
-              <img src="{{image}}">
-            </div>
-          </div>
-        </ion-scroll>
-
+              <div class="images" >
+                <div class="one-image" *ngFor="let image of poi_user_photos; let i=index">
+                  <img src="{{image}}"  (click)="openModal(i)"> <!--Al click della foto si apre la modale!-->
+                </div>
+              </div>
+          </ion-scroll>
+      
       </ion-card-content>
     </ion-card>
 

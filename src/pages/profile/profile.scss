@@ -40,38 +40,37 @@ page-profile {
 
   .icona-bottone{
 		padding-right: 5px;
-	}
+  }
+  
+  //PER GALLERY STILE PINTEREST
+	.image-container {
+    min-height: 200px;
+    background-size: cover;
+}
+
+@media (min-width: 0px) {
+    .images {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 420px) {
+    .images {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 720px) {
+    .images {
+        column-count: 4;
+    }
+}
+
+.one-image {
+    margin: 2px;
+}
 
   
 }
 
 
-
-
-.card-background-page {
-
-  ion-card {
-    position: relative;
-    text-align: center;
-  }
-
-  .card-title {
-    position: absolute;
-    top: 36%;
-    font-size: 2.0em;
-    width: 100%;
-    font-weight: bold;
-    color: #fff;
-  }
-
-  .card-subtitle {
-    font-size: 1.0em;
-    position: absolute;
-    top: 52%;
-    width: 100%;
-    color: #fff;
-  }
-
-  
- 
-}

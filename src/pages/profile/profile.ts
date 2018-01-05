@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { Api } from "../../providers/api";
 import { Camera } from "@ionic-native/camera";
 import * as firebase from 'firebase/app';
@@ -61,7 +61,9 @@ export class ProfilePage {
   avatar_placeholder;
   num_ach;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera) {
+  public profile_user_photos: Array<any> = [];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera, public modal: ModalController) {
   this.myPhotosRef = firebase.storage().ref('avatars/');
   }
 
@@ -104,8 +106,12 @@ export class ProfilePage {
     
     return this.items_user_details; //Restituisce tutte le informazioni
   });
-
   } //--Fine ionViewDidLoad
+
+  ionViewWillEnter(){
+    this.retrieveFoto();
+  }
+
 
   openAchievementsPage(){
     this.navCtrl.push(AchievementsPage)
@@ -217,7 +223,9 @@ export class ProfilePage {
       this.camera.getPicture({
         sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
         destinationType: this.camera.DestinationType.DATA_URL,
-        quality: 100,
+        quality: 90,
+        allowEdit:true,
+        targetHeight: 300,
         encodingType: this.camera.EncodingType.PNG,
       }).then(imageData => {
         this.myAvatar = imageData;
@@ -250,6 +258,25 @@ export class ProfilePage {
             firebase.database().ref().update(updates);
           }
         });    
+    }
+
+    retrieveFoto(){
+      var poi_ref = firebase.database().ref("/users/"+this.email+"/photos");
+      this.profile_user_photos = [];
+  
+      //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
+      poi_ref.on('value',itemSnapshot =>{
+        itemSnapshot.forEach(itemSnap =>{
+          this.profile_user_photos.push(itemSnap.val()); 
+          return false;
+        });
+      });
+    }
+
+    openModal(index){ 
+      let obj = {url_immagine : this.profile_user_photos[index]}
+      let myModal = this.modal.create('FotoUserModalPage', obj);
+      myModal.present();
     }
 
 }

@@ -23,7 +23,8 @@
         <ion-item-group>
 
           <!--ACHIEVEMENTS TAG-->
-          <ion-item-divider color="light" class="divisore_lista">Tag</ion-item-divider>
+          <ion-item-divider color="light" class="divisore_lista">Categoria - <b>Tag</b></ion-item-divider>
+          <ion-scroll scrollY="true" style="height:100px;">
             <ion-item  *ngFor="let e of achievements_TAG;">
               <ion-avatar item-start>
                   <ion-icon name="create" style="font-size: 50px"></ion-icon>
@@ -31,9 +32,11 @@
               <h3 text-wrap >{{e.descr}}</h3>
               <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
             </ion-item>
+          </ion-scroll>
 
           <!--ACHIEVEMENTS FOTO--> 
-          <ion-item-divider color="light" class="divisore_lista">Foto</ion-item-divider>
+          <ion-item-divider color="light" class="divisore_lista">Categoria - <b>Foto</b></ion-item-divider>
+          <ion-scroll scrollY="true" style="height:100px;">
             <ion-item  *ngFor="let e of achievements_PHOTO;">
               <ion-avatar item-start>
                 <ion-icon name="images" style="font-size: 50px"></ion-icon>
@@ -41,9 +44,11 @@
               <h3 text-wrap >{{e.descr}}</h3>
               <p>{{e.data | date: 'dd/MM/yyyy'}}</p>
             </ion-item>
+          </ion-scroll>
 
           <!--ACHIEVEMENTS INFO-->
-          <ion-item-divider color="light" class="divisore_lista">Informazioni</ion-item-divider>
+          <ion-item-divider color="light" class="divisore_lista">Categoria -  <b>Informazioni</b></ion-item-divider>
+          <ion-scroll scrollY="true" style="height:100px;">
             <ion-item  *ngFor="let e of achievements_INFO;">
                 <ion-avatar item-start>
                   <ion-icon name="chatboxes" style="font-size: 50px"></ion-icon>
@@ -51,9 +56,11 @@
                 <h3 text-wrap >{{e.descr}}</h3>
                 <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
             </ion-item>
+          </ion-scroll>
 
           <!--ACHIEVEMENTS MISTO-->
-          <ion-item-divider color="light" class="divisore_lista">Misto</ion-item-divider>
+          <ion-item-divider color="light" class="divisore_lista">Categoria - <b>Misto</b></ion-item-divider>
+          <ion-scroll scrollY="true" style="height:100px;">
             <ion-item  *ngFor="let e of achievements_MINSC;">
                 <ion-avatar item-start>
                   <ion-icon name="document" style="font-size: 50px"></ion-icon>
@@ -61,6 +68,7 @@
                 <h3 text-wrap >{{e.descr}}</h3>
                 <p >{{e.data | date: 'dd/MM/yyyy'}}</p>
             </ion-item>
+          </ion-scroll>
 
           </ion-item-group>
         </ion-card-content>

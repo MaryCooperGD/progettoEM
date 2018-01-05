@@ -26,7 +26,7 @@
                   <img *ngFor="let item of items_user_details;" src="{{item.avatar}}"> <!--All'upload dell'avatar, questo link dovrà cambiare per mostrare la nuova foto -->
               </button>
             </ion-col>
-
+            
             <ion-col col-6>
               <!--<ion-row>-->
                   <b  class="blue-title ">{{username}}</b>
@@ -121,53 +121,6 @@
     </ion-card-content>
   </ion-card>
 
-  <!--QUESTA PARTE COMMENTATA E' DA TOGLIERE SE A MARINA PIACE IL LAYOUT NUOVO-->
-  <!--Card per badges-->
-  <!--<ion-card>
-    <ion-card-header class="blue-title">
-    Badge
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-scroll id="scroll_preferenze" scrollY="true">
-        <ion-row id ="tag-row">
-            <ion-list  *ngFor="let badge of badges_utente_misto;">
-              <ion-badge class="tag-profile" color="secondary">{{badge}} </ion-badge>
-            </ion-list>
-
-            <ion-list  *ngFor="let badge of badges_utente_taggatore;">
-              <ion-badge class="tag-profile" color="light">{{badge}} </ion-badge>
-           </ion-list>
-
-           <ion-list  *ngFor="let badge of badges_utente_fotografo;">
-              <ion-badge class="tag-profile" color="danger">{{badge}} </ion-badge>
-           </ion-list>
-
-           <ion-list  *ngFor="let badge of badges_utente_informatore;">
-              <ion-badge class="tag-profile">{{badge}} </ion-badge>
-           </ion-list>
-        </ion-row>
-      </ion-scroll>
-    </ion-card-content>
-  </ion-card>-->
-
- <!--Card per preferenze--> 
- <!-- <ion-card>
-    <ion-card-header class="blue-title">
-    Preferenze
-    </ion-card-header>
-
-    <ion-card-content style="text-align: center;">
-      <ion-scroll id="scroll_preferenze" scrollY="true">
-        <ion-list *ngFor="let tag of tags">
-          <p>{{tag}}</p>
-        
-        </ion-list>
-      </ion-scroll>
-    </ion-card-content>
-  </ion-card>-->
-
-
  <!--Card per foto--> 
   <ion-card>
     <ion-card-header class="blue-title">
@@ -175,19 +128,16 @@
     </ion-card-header>
 
     <ion-card-content class="card-background-page"  id="foto-card">
-      <ion-scroll id ="scroll_foto" scrollX="true" scrollY="true">
-        <ion-card>
-          <img width="200" height="200" src="assets/img/fontanamasini.jpg"/>
-          <div class="card-title">Fontana masini</div>
-          <div class="card-subtitle">3 Foto caricate</div>
-        </ion-card>
-
-        <ion-card>
-          <img width="200" height="200" src="assets/img/malatestiana-1.jpg"/>
-          <div class="card-title">Malatestiana</div>
-          <div class="card-subtitle">5 foto caricate</div>
-        </ion-card>
+      
+        <!--Gallery stile pinterest-->
+        <ion-scroll scrollY="true" style="height:300px;">
+          <div class="images" >
+            <div class="one-image" *ngFor="let image of profile_user_photos; let i=index">
+              <img src="{{image}}"  (click)="openModal(i)"> <!--Al click della foto si apre la modale!-->
+            </div>
+          </div>
       </ion-scroll>
+
     </ion-card-content>
   </ion-card>
 

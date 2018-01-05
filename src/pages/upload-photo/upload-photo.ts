@@ -109,7 +109,9 @@ export class UploadPhotoPage {
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY, 
       destinationType: this.camera.DestinationType.DATA_URL,
-      quality: 100,
+      quality: 90, //MODIFICA PER PROVARE LA QUALITA' DELLA FOTO - 100 è IL MAX
+      //Do una dimensione di larghezza.
+      targetWidth: 400,
       encodingType: this.camera.EncodingType.PNG,
     }).then(imageData => {
       this.displayError("La foto è stata convertita correttamente. Clicca su 'Carica foto' per completare il caricamento.")
@@ -127,7 +129,8 @@ export class UploadPhotoPage {
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.CAMERA, 
       destinationType: this.camera.DestinationType.DATA_URL,
-      quality: 100,
+      quality: 90, //MODIFICA PER PROVARE LA QUALITA' DELLA FOTO - 100 è IL MAX
+      targetWidth: 400,
       encodingType: this.camera.EncodingType.PNG,
     }).then(imageData => {
       this.displayError("La foto è stata convertita correttamente. Clicca su 'Carica foto' per completare il caricamento.")

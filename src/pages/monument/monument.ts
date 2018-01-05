@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { UploadPhotoPage } from '../upload-photo/upload-photo';
 import { EditMonumentPage } from "../edit-monument/edit-monument";
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
@@ -47,7 +47,7 @@ export class MonumentPage {
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
     this.poiTags = this.poi.tipo
@@ -58,6 +58,13 @@ export class MonumentPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad MonumentPage');
     this.pageDetailsRefresh()
+  }
+
+  //Apre la modale che mi mostra la foto in dimensione originale!
+  openModal(index){ 
+    let obj = {url_immagine : this.poi_user_photos[index]}
+    let myModal = this.modal.create('FotoPoiModalPage', obj);
+    myModal.present();
   }
 
   ionViewWillEnter(){
