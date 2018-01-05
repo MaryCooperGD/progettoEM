@@ -48,13 +48,10 @@ export class ProfilePage {
   public badges_utente_informatore:Array<any>;
   public badges_utente_fotografo:Array<any>;
 
-  //per sapere il numero di contributi
-  num_of_info;
-  num_of_photo;
-  num_of_tag;
-  
-  //mi serve per mostrare a video l'avviso i badge utente
-  isEnabled : boolean = true;
+  //Per avvisi...
+  isEnabled_badges : boolean = true; //...badge
+  isEnabled_preferenze : boolean = true; //...preferenze
+  isEnabled_photos : boolean = true; //...fotografie 
 
   //Mi servono per gestire l'achievement di cambiamento avatar
   oldAvatar : boolean = false; 
@@ -88,9 +85,16 @@ export class ProfilePage {
 
       this.num_ach = i.num_ach;
 
-      if (i.total_points == 0)
-      {
-        this.isEnabled = false;
+      if (i.num_badge == 0){
+        this.isEnabled_badges = false;
+      }
+
+      if(i.num_of_tag == 0){
+        this.isEnabled_preferenze = false
+      }
+
+      if(i.num_of_photo == 0){
+        this.isEnabled_photos = false
       }
 
       //Controllo che l'avatar sia uguale al placeholder iniziale

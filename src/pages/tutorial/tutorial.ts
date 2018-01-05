@@ -39,6 +39,8 @@ export class TutorialPage {
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   id_user; //conterrà la mail
 
+  num_of_tag;
+
   public preferenze_not_user: Array<any>;
 
   //Mi serve per far comparire o meno la card con le preferenze da poter aggiungere
@@ -69,6 +71,19 @@ export class TutorialPage {
 
   ionViewDidLoad() {
     this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente a cui aggiungere le preferenze
+
+    this.user_emailRef.orderByChild("email_user").equalTo(this.email).on('value',itemSnapshot =>{
+      this.user_email = [];
+      itemSnapshot.forEach( itemSnap => {
+        this.user_email.push(itemSnap.val());
+        return false;
+      });
+      this.user_email.forEach(i=>{
+        this.num_of_tag = i.num_of_tag;
+      })
+    });
+
+
     this.showUserPref_Registration();
 
   } // fine --  ionViewDidLoad()
@@ -127,6 +142,7 @@ export class TutorialPage {
     var prefToAdd = this.preferenze_not_user[index]; //preferenza
     var updates = {};
     updates["/users/"+this.email+"/preferenze/"+prefToAdd.key] ="true";
+    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
         
     firebase.database().ref().update(updates);
     this.showUserPref_Registration(); //Mi refresha ad ogni click la lista delle preferenze.

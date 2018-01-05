@@ -25,6 +25,12 @@ export class EditPreferencesPage {
   public preferenze_not_user: Array<any>;
   username:any;
   email:any;
+
+  //per segnare il numero di preferenze che l'utente possiede
+  num_of_tag;
+
+  public user_email: Array<any> = [];
+  public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
   }
@@ -36,7 +42,19 @@ export class EditPreferencesPage {
     }else {
       this.username = this.api.user.displayName
       this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente
-    }   
+    } 
+    
+       
+    this.user_emailRef.orderByChild("email_user").equalTo(this.email).on('value',itemSnapshot =>{
+      this.user_email = [];
+      itemSnapshot.forEach( itemSnap => {
+        this.user_email.push(itemSnap.val());
+        return false;
+      });
+      this.user_email.forEach(i=>{
+        this.num_of_tag = i.num_of_tag;
+      })
+    });
 
     this.showMissingPreferences(); //Mi mostra le preferenze che l'utente non ha scelto e non possiede!
     this.showUserPreferences(); //Mi mostra le preferenze che l'utente possiede e può togliere!
@@ -81,6 +99,7 @@ export class EditPreferencesPage {
     var updates = {};
 
     updates["/users/"+this.email+"/preferenze/"+tagToAdd.key]  = "true";
+    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
     
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai inserito una nuova preferenza") ;
@@ -129,6 +148,8 @@ export class EditPreferencesPage {
     var updates = {};
 
     updates["/users/"+this.email+"/preferenze/"+tagToDelete.key]  = null; //questo mi rimuove il record!!
+    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag - 1;
+
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai eliminato una preferenza") ;
 
