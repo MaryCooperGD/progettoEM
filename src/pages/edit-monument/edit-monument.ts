@@ -28,6 +28,8 @@ export class EditMonumentPage {
   public poi;
   username:any;
   email:any;
+  isAccessibilityOn = false;
+  isFamilyOn = false;
 
   //per prendere email (id dell'utente loggato) che ci serve per sapere dove aggiungere il punteggio
   public user_email: Array<any> = [];
@@ -60,6 +62,7 @@ export class EditMonumentPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public toastCtrl:ToastController,) {
     this.poi = navParams.get('poi');
     this.refreshTags();
+
   }
 
   ionViewDidLoad() {
@@ -102,7 +105,8 @@ export class EditMonumentPage {
         return false;
       });
       this.poi_NUMEROINFO.forEach(i=>{
-        
+        this.isAccessibilityOn = (i.accessibilità=="Y") ? true : false
+        this.isFamilyOn = (i.famiglia=="Y") ? true : false
         this.numero_info_POI = i.numero_informazioni;
         this.numero_tag_POI = i.numero_tag;
         console.log("Numero contributi POI "+this.numero_info_POI);
@@ -391,5 +395,15 @@ export class EditMonumentPage {
       updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
       
     }
+  }
+
+  addInfoAF(){
+    var self = this;
+    var ref = firebase.database().ref('/point_of_interest');
+    var updates = {};
+    updates['/point_of_interest/'+this.poi.chiave+'/accessibilità'] = this.isAccessibilityOn ? 'Y' : 'N'
+    updates['/point_of_interest/'+this.poi.chiave+'/famiglia'] = this.isFamilyOn ? 'Y' : 'N'
+    firebase.database().ref().update(updates);
+    
   }
 }

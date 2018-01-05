@@ -51,7 +51,7 @@
 		</ion-card-header>
 
 		<ion-card-content>
-			<ion-row>
+			<ion-row> 
 				<ion-item>
 					<ion-textarea [(ngModel)]="myInput"  placeholder="Nuova informazione..."></ion-textarea>
 				</ion-item>
@@ -59,6 +59,31 @@
 
 			<ion-row>
 				<button  ion-button class="card-button" color="secondary" (click)="addInfo()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuova informazione</button>
+			</ion-row>
+		</ion-card-content>
+	</ion-card>
+
+
+	<ion-card>
+		<ion-card-header class="blue-title">
+			Completa informazioni sul luogo
+		</ion-card-header>
+
+		<ion-card-content>
+			<ion-row>
+				<ion-item>
+					<ion-label> Accessibilità</ion-label>
+					<ion-toggle checked="isAccesibilityOn" [(ngModel)] = "isAccessibilityOn"></ion-toggle>
+			</ion-item>
+
+			<ion-item>
+				<ion-label>Adatto alle famiglie</ion-label>
+				<ion-toggle checked="isFamilyOn" [(ngModel)] = "isFamilyOn"></ion-toggle> 
+		</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<button  ion-button class="card-button" color="secondary" (click)="addInfoAF()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Modifica informazioni</button>
 			</ion-row>
 		</ion-card-content>
 	</ion-card>

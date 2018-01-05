@@ -34,6 +34,7 @@ export class CreateRoutePage {
   city;
   city_key;
   isAccessibilityOn;
+  isFamilyOn;
   isEnabled = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api) {
@@ -146,8 +147,18 @@ displayError(messageErr: string){
                     }
                   }
                   if(!exists){
-                    if(self.isAccessibilityOn){
-                       if(snapshot.child('accessibilità').val()=="Y"){
+                    /*Casistica accessibilità e famiglie. */
+                    if(self.isAccessibilityOn && self.isFamilyOn){
+                       if(snapshot.child('accessibilità').val()=="Y" && snapshot.child('famiglia').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+                    }else if(self.isAccessibilityOn && !self.isFamilyOn){
+                      if(snapshot.child('accessibilità').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+
+                    }else if(!self.isAccessibilityOn && self.isFamilyOn){
+                      if(snapshot.child('famiglia').val()=="Y"){
                         pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
                        }
                     } else {

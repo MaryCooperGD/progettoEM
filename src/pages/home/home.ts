@@ -247,12 +247,15 @@ export class HomePage {
       request.open(method,url,true);
       var self = this;
       request.onreadystatechange = function(){
+        
         if(request.status == 200){
           if (request.readyState == 4 && request.status == 200){
             if(request.responseText){
               var data = JSON.parse(request.responseText);
               var city;
   
+
+              if(data.results[0]!=null){           
             for (var i=0; i<data.results[0].address_components.length; i++) {
               for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
                 
@@ -265,7 +268,9 @@ export class HomePage {
               }
           }
           self.api.setCity(city.long_name);
-  
+        } else {
+          console.log("Risultato ancora null")
+        }  
             }
             
           }
