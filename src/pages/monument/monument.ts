@@ -40,9 +40,13 @@ export class MonumentPage {
   public poi_NUMEROINFO: Array<any> = [];
   numero_info_POI;
 
+  //per prendere descrizione e foto copertina del POI
+  public poi_photo_description : Array<any> = [];
+
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
   isEnabled_info : boolean = true;
   isEnabled_tag : boolean = true;
+  isEnabled_foto : boolean = true;
 
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
@@ -51,13 +55,12 @@ export class MonumentPage {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
     this.poiTags = this.poi.tipo
-    this.refreshList();
-    this.refreshTags();
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() { //questo metodo viene richiamato solo una volta
     console.log('ionViewDidLoad MonumentPage');
-    this.pageDetailsRefresh()
+    
+    
   }
 
   //Apre la modale che mi mostra la foto in dimensione originale!
@@ -68,9 +71,32 @@ export class MonumentPage {
   }
 
   ionViewWillEnter(){
+    console.log('ionViewWillEnter MonumentPage');
+    
+    this.pageDescriptionPhotoRefresh(); //Carico una volta soltanto la descrizione del POI e la sua foto
+
+    this.pageDetailsRefresh();
     this.refreshList();
     this.refreshTags();
     this.retrieveFoto();
+    
+  }
+
+  pageDescriptionPhotoRefresh(){
+    var poi_ref = firebase.database().ref("/point_of_interest/");
+    this.poi_photo_description = [];
+
+    poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_photo_description.push(itemSnap.val());
+  
+        return false;
+      });
+      this.poi_photo_description.forEach(i=>{ //Retrieve the details, also the image url
+        this.descrizione_poi = i.descrizione;
+        this.foto_url = i.photo_url;
+      })
+    });
   }
 
   pageDetailsRefresh(){
@@ -84,23 +110,35 @@ export class MonumentPage {
         return false;
       });
       this.poi_NUMEROINFO.forEach(i=>{ //Retrieve the details, also the image url
-        this.descrizione_poi = i.descrizione;
-        this.foto_url = i.photo_url;
-
-       // if(i.numero_tag == 0) //Se non ho tag devo nascondere l'elenco vuoto e mostro il messaggio
-        //{
-         //this.isEnabled_tag = false;
-          //console.log("VALORE ISENABLED_INFO"+this.isEnabled_tag);
-        //}
-
+        
         if (i.numero_informazioni == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         {
           this.isEnabled_info = false;
+          console.log("this.isEnabled_info"+this.isEnabled_info);
         }
+
+        console.log("this.isEnabled_info"+this.isEnabled_info);
+    
+        if (i.numero_foto == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
+        {
+          this.isEnabled_foto = false;
+          console.log("this.isEnabled_foto"+this.isEnabled_foto);
+        }
+
+        console.log("this.isEnabled_info"+this.isEnabled_foto);
+
+        if (i.numero_tag == 0) //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
+        {
+          this.isEnabled_tag = false;
+          console.log("this.isEnabled_tag"+this.isEnabled_tag);
+        }
+
+        console.log("this.isEnabled_info"+this.isEnabled_tag);
       })
     });
   }
 
+  //Mostra foto
   retrieveFoto(){
     var poi_ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/photos");
     this.poi_user_photos = [];
@@ -114,7 +152,9 @@ export class MonumentPage {
     });
   }
 
+  //Mostra tag preferenza
   refreshTags(){
+
     var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
     var ref1 = firebase.database().ref('/tag/');
 
@@ -141,11 +181,8 @@ export class MonumentPage {
     this.poiTags = tagShow;
   }
  
+  //Mostra lista descrizioni
   refreshList(){
-    console.log("dentro refresh list dopo aver aggiunto info")
-
-    this.isEnabled_info= true; //Mi serve perchè quando refresho la pagina mi fa subito comparire i commenti inseriti
-    console.log("isenabled: "+this.isEnabled_info)
 
     var ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/description/");
     var ref1 = firebase.database().ref("/descriptions/")

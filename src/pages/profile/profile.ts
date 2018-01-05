@@ -90,11 +90,11 @@ export class ProfilePage {
       }
 
       if(i.num_of_tag == 0){
-        this.isEnabled_preferenze = false
+        this.isEnabled_preferenze = false;
       }
 
       if(i.num_of_photo == 0){
-        this.isEnabled_photos = false
+        this.isEnabled_photos = false;
       }
 
       //Controllo che l'avatar sia uguale al placeholder iniziale

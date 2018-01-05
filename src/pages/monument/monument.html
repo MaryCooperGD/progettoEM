@@ -43,7 +43,7 @@
           <ion-list *ngSwitchCase="'Descrizione'">
             <ion-card-content style="text-align: center;">
               <ion-scroll id="scroll_preferenze" scrollY="true">
-                  <p class="giustificato" *ngFor="let descrizione of poi_NUMEROINFO">
+                  <p class="giustificato" *ngFor="let descrizione of poi_photo_description">
                      {{descrizione.descrizione}}
                   </p>
               </ion-scroll>
@@ -88,7 +88,7 @@
           </ion-scroll>
 
           <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_info" scrollY="true" text-justify >
-            <p>Aggiungi per primo un'informazione!</p>
+            <p>Nessuna informazione presente, aggiungine una tu!</p>
           </ion-scroll>
       </ion-card-content>
 
@@ -103,13 +103,17 @@
       <ion-card-content>
 
           <!--Gallery stile pinterest-->
-        <ion-scroll scrollY="true" style="height:300px;">
+        <ion-scroll scrollY="true" style="height:300px;"  [hidden]="!isEnabled_foto" >
               <div class="images" >
                 <div class="one-image" *ngFor="let image of poi_user_photos; let i=index">
                   <img src="{{image}}"  (click)="openModal(i)"> <!--Al click della foto si apre la modale!-->
                 </div>
               </div>
           </ion-scroll>
+
+        <ion-scroll id="scroll_preferenze" [hidden]="isEnabled_foto" scrollY="true" text-justify >
+            <p>Questo punto di interesse non ha ancora una foto</p>
+        </ion-scroll>
       
       </ion-card-content>
     </ion-card>
