@@ -244,7 +244,7 @@ export class EditMonumentPage {
 
     this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!");
     
-   this.navCtrl.pop(); //Bottone per tornare indietro
+   
   }
 
   openAddNewTagPage(){
