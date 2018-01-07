@@ -135,7 +135,7 @@ export class HomePage {
               var lon =  data.coords.longitude
               let latlng = {lat: lat, lng: lon}
               let marker1 = L.marker(latlng)
-              let content1 = `<b>Tu sei qui</b>`;
+              let content1 = `<b>Posizione corrente</b>`;
                 marker1.bindPopup(content1) 
                 marker1.addTo(this.map)
                //marker1.openPopup()
@@ -231,6 +231,8 @@ export class HomePage {
   
         }
 
+        this.getFeatures();
+
       }
       
 
@@ -296,14 +298,19 @@ export class HomePage {
               for (var b=0;b<data.results[0].address_components[i].types.length;b++) {
                 
               //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
-                  if (data.results[0].address_components[i].types[b]!=null &&  data.results[0].address_components[i].types[b]== "locality"/* "administrative_area_level_3" */) {
+                  if (data.results[0].address_components[i].types[b]!=null &&  data.results[0].address_components[i].types[b]== /*"locality"*/ "administrative_area_level_3" ) {
                       //this is the object you are looking for
                       city= data.results[0].address_components[i];
                       break;
                   }
               }
           }
-          self.api.setCity(city.long_name);
+          if(city.long_name!=null){
+            console.log("Nome " + city.long_name)
+            self.api.setCity(city.long_name);
+          } else {
+            self.displayGPSError("C'è qualche errore nell'individuare la tua città.")
+          }
         } else {
           console.log("Risultato ancora null")
         }  
@@ -322,11 +329,14 @@ export class HomePage {
       positionMarker.bindPopup("Tu sei qui");
       this.map.setView(latlng,16)
       this.map.panTo(latlng)
-      this.getFeatures()
+      if(this.getMapZoom()>=16 && !self.canCalculate){
+        console.log("Chiamo getFeatures")
+        this.getFeatures()
+      }
 
       var self = this;
      this.map.addEventListener('dragend', function(e){
-       if(self.getMapZoom()>=16){
+       if(self.getMapZoom()>=16 && !self.canCalculate){
         self.getFeatures()
        } else {
          self.displayGPSError("Diminuisci il livello di zoom per visualizzare i punti di interesse " +
@@ -338,7 +348,7 @@ export class HomePage {
        if (self.getMapZoom()<16){
         self.displayGPSError("Diminuisci il livello di zoom per visualizzare i punti di interesse " +
         "sulla mappa");     
-       }else {
+       }else if(self.getMapZoom()>=16 && !self.canCalculate){
          self.getFeatures();
        }
        
@@ -977,8 +987,38 @@ export class HomePage {
    }
 
 
+  
+  
   getFeatures(){
-    var pointList = [];
+
+    var self = this;
+
+        var userTags = [];
+        var user_pref = firebase.database().ref('/users/'+ self.api.email_id+'/preferenze/');
+        var ref = firebase.database().ref('/tag/')
+
+
+        user_pref.once('value', function(preferenze) { 
+          var promises = [];
+          preferenze.forEach(function(t) {
+            promises.push(ref.child(t.key).once('value'));
+            return false;
+          });
+          Promise.all(promises).then(function(snapshots) {
+            snapshots.forEach(function(snapshot) {
+              if (snapshot.exists()) {
+                userTags.push(snapshot.key);
+              }
+            });
+          }).then(a=>{
+            self.myTags = userTags
+            self.findPoiByTag(self.myTags) //method I have to call when finished
+          })
+          
+        });
+
+
+    /* var pointList = [];
     let bounds = this.map.getBounds();
     let bbox = bounds.getSouth()+','+bounds.getWest()+','+bounds.getNorth()+','+bounds.getEast();  
     console.log("bbox " + bounds.getSouth()+', '+bounds.getWest()+', '+bounds.getNorth()+', '+bounds.getEast())
@@ -1008,9 +1048,7 @@ export class HomePage {
          for (let tag in  e.tags) {
           content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
         };
-        /* marker.bindPopup(content) 
-       marker.addTo(this.map)
-       marker.openPopup() */
+        //open popup
           } else {
               lat = e.lat
               lon = e.lon
@@ -1020,22 +1058,101 @@ export class HomePage {
             for (let tag in e.tags) {
               content += `<b>${tag}</b>: ${e.tags[tag]}<br/>`;
             };
-           /* marker.bindPopup(content)
-           marker.addTo(this.map)
-          //marker.addTo(overlays['amenity=hospital']);
-           marker.openPopup() */
-          }
-        //  console.log('Latitudine: ' + lat + ' Longitudine: ' + lon)
-      
+          //open popup
+          }      
       });
   
     }).catch(error => {
       console.log(''+ error)
-    });  
+    }); */  
 
     //var ref = firebase.database().ref('/users/'+ this.api.user+'/preferenze')    //this.graphHopper();
     var tags = ["prova"]
     //this.findPoiByTag(tags)
+
+  }
+
+  findPoiByTag(tag){
+
+    var self = this
+      var found = false;
+      var pois = [];
+      var newMap = this.map;
+      var ref = firebase.database().ref('/cities/-KzZFy1JPWnrwTzRyS9R/pois') //punti di interesse di Cesena
+      var ref1 = firebase.database().ref('/point_of_interest/'); //punti di interesse generali
+      
+      ref.once('value', function(preferenze) { 
+        var promises = [];
+        preferenze.forEach(function(t) {
+          promises.push(ref1.child(t.key).once('value'));//aggiungo il mio poi
+          //ho aggiunto tutti e solo i punti di interesse di Cesena
+          return false;
+        });
+        Promise.all(promises).then(function(snapshots) {
+          snapshots.forEach(function(snapshot) {
+            if (snapshot.exists()) {
+              snapshot.child('tags').forEach(function(tags){ //per ogni tag del punto di interesse
+                if(tag.indexOf(tags.key)>-1){//se nei tag dell'utente esiste il tag del poi
+                  found = true;
+                  var exists = false;
+                  for (var i = 0; i<pois.length; i++){
+                    if(pois[i].nome == snapshot.child('nome').val()){
+                      exists = true;
+                      break;
+                    }
+                  }
+                   if(!exists){
+                    //Casistica accessibilità e famiglie.  
+                    /*if(self.isAccessibilityOn && self.isFamilyOn){
+                       if(snapshot.child('accessibilità').val()=="Y" && snapshot.child('famiglia').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+                    }else if(self.isAccessibilityOn && !self.isFamilyOn){
+                      if(snapshot.child('accessibilità').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+
+                    }else if(!self.isAccessibilityOn && self.isFamilyOn){
+                      if(snapshot.child('famiglia').val()=="Y"){
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                       }
+                    } else {
+                      pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
+                    } */
+                    pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
+                } 
+              }
+              })
+              
+            }
+          });
+        }).then(a=>{
+        if (pois.length==0/*!found*/){
+            self.displayGPSError("Ci dispiace, purtroppo non ci sono punti di interesse che rispecchiano le tue preferenze!"
+            +" Prova con altre tipologie o aggiungi i tag che secondo te mancano.")
+            //self.isEnabled = true;
+          } else {
+            
+            pois.forEach(p=>{
+              let marker = L.marker([p.lat,p.lon])
+          let content = `<b>Nome</b>: ${p.nome}<br/>`;
+            marker.bindPopup(content) 
+            marker.addTo(newMap)
+           // marker.openPopup()
+
+              var data = {
+                latlng: [p.lat,p.lon],
+                nome: p.nome
+              }
+              //self.waypoints.push(data)
+            })
+           // self.calculateRoute();
+          }
+
+        })
+        
+      });
+      
 
   }
 }

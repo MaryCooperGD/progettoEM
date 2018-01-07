@@ -121,8 +121,8 @@ displayError(messageErr: string){
  findPoiByTag(tag){
 
       var self = this
-        var found = false;
-        var pois = [];
+      var found = false;
+      var pois = [];
       var ref = firebase.database().ref('/cities/'+ this.city_key+'/pois') //punti di interesse di Cesena
       var ref1 = firebase.database().ref('/point_of_interest/'); //punti di interesse generali
       

@@ -34,7 +34,7 @@ import {NewtagPage} from "../pages/newtag/newtag";
 import { AchievementsPage } from "../pages/achievements/achievements";
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 
-export const firebaseConfig = {
+/* export const firebaseConfig = {
   
     apiKey: "AIzaSyCJuctITAc5lKZzNwTosmiLzduZjQPgqUg",
     authDomain: "cesenaesploraem-f4694.firebaseapp.com",
@@ -43,7 +43,17 @@ export const firebaseConfig = {
     storageBucket: "cesenaesploraem-f4694.appspot.com",
     messagingSenderId: "942441525928"
   
-};  
+}; */  
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyAXB-UMg29lgzPn3ygPQGdcWydxx5_9_MA",
+    authDomain: "cice-ab039.firebaseapp.com",
+    databaseURL: "https://cice-ab039.firebaseio.com",
+    projectId: "cice-ab039",
+    storageBucket: "cice-ab039.appspot.com",
+    messagingSenderId: "491654378214"
+};
+
 @NgModule({
   declarations: [
     MyApp,
