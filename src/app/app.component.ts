@@ -33,6 +33,7 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,public api:Api,
     public alertCtrl:AlertController, public app:App) {
+      
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -99,5 +100,7 @@ export class MyApp {
         }
       })
     }
+
+    
   
 }
