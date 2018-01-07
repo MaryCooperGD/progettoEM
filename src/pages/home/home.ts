@@ -79,12 +79,45 @@ export class HomePage {
 
 
   }
+
+/* CREANO NUOVI POI NEL DB
+  generateUUID(): any {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+      return uuid;
+  }
+
+  createNewPoints(){ 
+    console.log("inside")
+    var ref = firebase.database().ref('/point_of_interest/'+this.generateUUID());
+    var key = firebase.database().ref().child('point_of_interest').push().key;   
+    var updates = {};
+    var data = {
+      città: "Cesena",
+      descrizione: "" ,
+      indirizzo: "",
+      nome: "",
+      lat: 0,
+      lon: 0,
+      numero_foto: 0,
+      numero_informazioni: 0,
+      numero_tag: 0,
+      photo_url: "", 
+    }     
+    updates['/point_of_interest/'+key] = data;      
+    firebase.database().ref().update(updates);      
+  }
+  */
  
  
   ionViewDidLoad() {
     //set map center
     this.center = [44.13832, 12.2447 ]; 
-    
+    //this.createNewPoints() //RICHIAMA LA FUNZIONE PER CREARE NUOVI POI
     
     //setup leaflet map
   

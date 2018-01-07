@@ -106,6 +106,7 @@ export class MonumentPage {
       this.poi_numero_foto.forEach(i=>{ 
         //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         if (i.numero_foto == 0) {
+          console.log("NUMERO FOTO"+i.numero_foto)
           this.isEnabled_foto = false;
           console.log("this.isEnabled_foto"+this.isEnabled_foto);
         }else{
