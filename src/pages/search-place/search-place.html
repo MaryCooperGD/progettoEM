@@ -12,11 +12,10 @@
       </button>
       <ion-title>Cerca luogo in {{city}}</ion-title>
     </ion-navbar>
-  
+    <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar> <!--Così rimane in cima alla barra anche quando scorro la lista-->
   </ion-header>
   
   <ion-content padding class="sfondo_content">
-    <ion-searchbar [(ngModel)]="myInput" (ionInput)="getItems($event)"></ion-searchbar>
     <ion-list>
       <ion-card *ngFor="let item of poisList;">
         <button ion-item (click)="openPlace(item)">

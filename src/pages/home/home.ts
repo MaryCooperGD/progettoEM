@@ -94,7 +94,9 @@ export class HomePage {
   createNewPoints(){ 
     console.log("inside")
     var ref = firebase.database().ref('/point_of_interest/'+this.generateUUID());
-    var key = firebase.database().ref().child('point_of_interest').push().key;   
+    var key = firebase.database().ref().child('point_of_interest').push().key; 
+    
+    
     var updates = {};
     var data = {
       città: "Cesena",
@@ -109,15 +111,16 @@ export class HomePage {
       photo_url: "", 
     }     
     updates['/point_of_interest/'+key] = data;      
+    updates['/cities/-KzZFy1JPWnrwTzRyS9R/pois/'+key] = "true";  
     firebase.database().ref().update(updates);      
-  }
-  */
+  }*/
+  
  
  
   ionViewDidLoad() {
     //set map center
     this.center = [44.13832, 12.2447 ]; 
-    //this.createNewPoints() //RICHIAMA LA FUNZIONE PER CREARE NUOVI POI
+   // this.createNewPoints() //RICHIAMA LA FUNZIONE PER CREARE NUOVI POI
     
     //setup leaflet map
   
