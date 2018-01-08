@@ -34,6 +34,11 @@ export class MyApp {
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,public api:Api,
     public alertCtrl:AlertController, public app:App) {
       
+    //Serve per evitare di vedere la schermata bianca
+    this.platform.ready().then(() => {
+      this.splashScreen.hide();
+    });
+      
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -101,6 +106,7 @@ export class MyApp {
       })
     }
 
+    
     
   
 }
