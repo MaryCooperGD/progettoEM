@@ -253,69 +253,82 @@ displayLoginError(messageErr: string){
 
 
 setTagBadges(updates){
-    if(this.punteggio_tag >= 300){
-      updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
-      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+  if(this.punteggio_tag == "300"){
+    updates["/users/"+this.email+"/badge/Taggatore prodigio"]  = true;
+    this.num_badge = this.num_badge + 1;
+    updates["/users/"+this.email+"/num_badge"] = this.num_badge;
 
-    }else if(this.punteggio_tag >= 180){
-      updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
-      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+  }else if(this.punteggio_tag == "180"){
+    updates["/users/"+this.email+"/badge/Taggatore esperto"]  = true;
+    this.num_badge = this.num_badge + 1;
+    updates["/users/"+this.email+"/num_badge"] = this.num_badge;
 
-    }else if(this.punteggio_tag >= 50){
-      updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
-      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+  }else if(this.punteggio_tag == "50"){
+    updates["/users/"+this.email+"/badge/Taggatore principiante"]  = true;
+    this.num_badge = this.num_badge + 1;
+    updates["/users/"+this.email+"/num_badge"] = this.num_badge;
 
-    }else if(this.punteggio_tag >= 15){
-      updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;
-      updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
+  }else if(this.punteggio_tag == "15"){
+    updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;
+    this.num_badge = this.num_badge + 1;
+    updates["/users/"+this.email+"/num_badge"] = this.num_badge;
 
+  }
+}
+
+
+  setMinscBadges(updates){
+    if(this.punteggio_totale == "1000"){
+      updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+
+    }else if(this.punteggio_totale == "680"){
+      updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+
+    }else if(this.punteggio_totale == "450"){
+      updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+      
+    }else if(this.punteggio_totale == "300"){
+      updates["/users/"+this.email+"/badge/Contributore principiante"]  = true;  
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge; 
+
+    }else if(this.punteggio_totale == "60"){
+      updates["/users/"+this.email+"/badge/Contributore novizio"]  = true; 
+      this.num_badge = this.num_badge + 1; 
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge; 
     }
   }
 
-
-setMinscBadges(updates){
-     if(this.punteggio_totale >= 1000){
-       updates["/users/"+this.email+"/badge/Guru della cultura"]  = true;
-       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-
-     }else if(this.punteggio_totale >= 500){
-       updates["/users/"+this.email+"/badge/Contributore prodigio"]  = true;
-       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-
-     }else if(this.punteggio_totale >= 350){
-       updates["/users/"+this.email+"/badge/Contributore esperto"]  = true;
-       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-
-     }else if(this.punteggio_totale >= 200){
-       updates["/users/"+this.email+"/badge/Contributore principiante"]  = true; 
-       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;  
-     }else if(this.punteggio_totale >= 50){
-       updates["/users/"+this.email+"/badge/Contributore novizio"]  = true;   
-       updates["/users/"+this.email+"/num_badge"] = this.num_badge + 1;
-     }
-   }
-
 setTagAchievements(updates){
-    
     if(this.num_of_tag == "1"){
       updates["/users/"+this.email+"/achievement/1 tag"];
       updates["/users/"+this.email+"/achievement/1 tag/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
 
     }else if(this.num_of_tag == "20"){
       updates["/users/"+this.email+"/achievement/20 tag"];
       updates["/users/"+this.email+"/achievement/20 tag/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
 
     }else if(this.num_of_tag == "100"){
       updates["/users/"+this.email+"/achievement/100 tag"];
       updates["/users/"+this.email+"/achievement/100 tag/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
 
     }else if(this.num_of_tag == "300"){
       updates["/users/"+this.email+"/achievement/300 tag"];
       updates["/users/"+this.email+"/achievement/300 tag/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
     }
     
   }
@@ -324,22 +337,27 @@ setTagAchievements(updates){
     if(this.sum_of_total_contr == "1"){
       updates["/users/"+this.email+"/achievement/1 misto"];
       updates["/users/"+this.email+"/achievement/1 misto/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
-
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+      
     }else if(this.sum_of_total_contr == "50"){
       updates["/users/"+this.email+"/achievement/50 misto"];
       updates["/users/"+this.email+"/achievement/50 misto/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
 
     }else if(this.sum_of_total_contr == "150"){
       updates["/users/"+this.email+"/achievement/150 misto"];
       updates["/users/"+this.email+"/achievement/150 misto/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
 
     }else if(this.sum_of_total_contr == "300"){
       updates["/users/"+this.email+"/achievement/300 misto"];
       updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+      
     }
   }
 

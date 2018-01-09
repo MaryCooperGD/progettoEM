@@ -142,7 +142,7 @@ export class TutorialPage {
     var prefToAdd = this.preferenze_not_user[index]; //preferenza
     var updates = {};
     updates["/users/"+this.email+"/preferenze/"+prefToAdd.key] ="true";
-    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
+    //updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
         
     firebase.database().ref().update(updates);
     this.showUserPref_Registration(); //Mi refresha ad ogni click la lista delle preferenze.
