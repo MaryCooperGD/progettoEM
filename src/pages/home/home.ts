@@ -492,6 +492,9 @@ export class HomePage {
             this.chosenWayPts = newArray; 
             let index = 1;
             newArray.forEach(p =>{
+              /*let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
+                self.manageMarkerClick(e)
+              })*/
               let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
                 self.manageMarkerClick(e)
               })
@@ -564,18 +567,21 @@ export class HomePage {
     })
   }
 
-  openModal(){ 
-    let myModal = this.modal.create('FotoMapModalPage');
+  openModal(point){ 
+    let myModal = this.modal.create('FotoMapModalPage', {
+      poi: point,
+    });
     myModal.present();
   }
 
   manageMarkerClick(e){
+    var point;
     this.chosenWayPts.forEach(p=>{
       if((p.latlng[0] == e.latlng.lat) && (p.latlng[1] == e.latlng.lng)){
-        console.log("Ho trovato il punto corrispondente " + p.nome)
+        point = p;
       }
     })
-    this.openModal()
+    this.openModal(point)
 
     
     //this.displayGPSError("Ho cliccato sul marker " + e.latlng + " lunghezza waypt " + this.chosenWayPts.length)
@@ -739,11 +745,6 @@ export class HomePage {
     
 
 
-  }
-
-  markerClick(e){
-    console.log("Inside marker click " + e.latlng.lat + "  " + e.latlng.lng)
-    this.displayGPSError("You clicked on the marker")
   }
 
 

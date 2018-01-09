@@ -150,19 +150,19 @@ displayError(messageErr: string){
                     /*Casistica accessibilità e famiglie. */
                     if(self.isAccessibilityOn && self.isFamilyOn){
                        if(snapshot.child('accessibilità').val()=="Y" && snapshot.child('famiglia').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val(), key:snapshot.key}) 
                        }
                     }else if(self.isAccessibilityOn && !self.isFamilyOn){
                       if(snapshot.child('accessibilità').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val(), key:snapshot.key}) 
                        }
 
                     }else if(!self.isAccessibilityOn && self.isFamilyOn){
                       if(snapshot.child('famiglia').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
+                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val(), key:snapshot.key}) 
                        }
                     } else {
-                      pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
+                      pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val(), key:snapshot.key})                           
                     }
                 }
               }
@@ -180,7 +180,8 @@ displayError(messageErr: string){
             pois.forEach(p=>{
               var data = {
                 latlng: [p.lat,p.lon],
-                nome: p.nome
+                nome: p.nome,
+                key: p.key
               }
               self.waypoints.push(data)
             })
