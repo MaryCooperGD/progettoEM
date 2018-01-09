@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, MenuController, ToastController, Platform, AlertController, LoadingController} from 'ionic-angular';
+import { NavController, MenuController, ToastController, Platform, AlertController, LoadingController,ModalController} from 'ionic-angular';
 import L from "leaflet";
 import { Geolocation, Geoposition, GeolocationOptions } from '@ionic-native/geolocation';
 import { Diagnostic } from "@ionic-native/diagnostic";
@@ -43,13 +43,14 @@ export class HomePage {
   loading;
   routeDisplayed = false;
   instructions: Array<any>;
+  chosenWayPts = [];
   
 
   @ViewChild('map-container') mapContainer;
 
   constructor(public navCtrl: NavController, public menuCtrl:MenuController,public geolocation:Geolocation,
   public toastCtrl:ToastController, public diagnostic:Diagnostic, public platform:Platform, public alertCtrl:AlertController,
-  public file:File, public api:Api, public navParams: NavParams, public loadingController:LoadingController) {
+  public file:File, public api:Api, public navParams: NavParams, public loadingController:LoadingController,public modal: ModalController) {
     this.menuCtrl.enable(true)
 
     /*Metodo per prenderd l'URL delle foto caricate*/
@@ -182,7 +183,6 @@ export class HomePage {
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
       .addTo(this.map);   
-
 
       if (this.canCalculate){
 
@@ -480,6 +480,8 @@ export class HomePage {
           lunghezza+=myLegs[i].distance.value
         }
 
+        var self = this;
+
          if(chosen=="both"){ //ho chiesto per entrambi
           this.loading.present()
           if(duration>this.maxTime || lunghezza>this.maxLength){
@@ -487,9 +489,12 @@ export class HomePage {
             this.googleRouting(start,arrival,waypoints,"both")
           } else {
             this.loading.dismiss()
+            this.chosenWayPts = newArray; 
             let index = 1;
             newArray.forEach(p =>{
-              let marker = L.marker([p.latlng[0],p.latlng[1]])
+              let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
+                self.manageMarkerClick(e)
+              })
               let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
               marker.bindPopup(content) 
               marker.addTo(newMap)
@@ -511,8 +516,11 @@ export class HomePage {
           } else {
             this.loading.dismiss()
               let index = 1;
+              this.chosenWayPts = newArray; 
               newArray.forEach(p =>{
-                let marker = L.marker([p.latlng[0],p.latlng[1]])
+                let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
+                  self.manageMarkerClick(e)
+                })
                 let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
                 marker.bindPopup(content) 
                 marker.addTo(newMap)
@@ -531,9 +539,13 @@ export class HomePage {
   
           } else {
             this.loading.dismiss()
+            this.chosenWayPts = newArray; 
                let index = 1;
               newArray.forEach(p =>{
-                let marker = L.marker([p.latlng[0],p.latlng[1]])
+                let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
+                  self.manageMarkerClick(e)
+                  
+                })
                 let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
                 marker.bindPopup(content) 
                 marker.addTo(newMap)
@@ -550,6 +562,24 @@ export class HomePage {
         this.displayGPSError("Non è stato possibile pianificare il tuo percorso. Controlla che l'indirizzo di arrivo e partenza siano ben formattati")
       }
     })
+  }
+
+  openModal(){ 
+    let myModal = this.modal.create('FotoMapModalPage');
+    myModal.present();
+  }
+
+  manageMarkerClick(e){
+    this.chosenWayPts.forEach(p=>{
+      if((p.latlng[0] == e.latlng.lat) && (p.latlng[1] == e.latlng.lng)){
+        console.log("Ho trovato il punto corrispondente " + p.nome)
+      }
+    })
+    this.openModal()
+
+    
+    //this.displayGPSError("Ho cliccato sul marker " + e.latlng + " lunghezza waypt " + this.chosenWayPts.length)
+
   }
 
   getRandomNumber(min, max){
@@ -657,8 +687,13 @@ export class HomePage {
         this.distanceAPI(start,arrival,waypoints);
       } else { //non ho limiti, quindi posso calcolare il mio percorso
         let index = 1;
+        this.chosenWayPts = newArray; 
+        var self = this;
         newArray.forEach(p =>{
-          let marker = L.marker([p.latlng[0],p.latlng[1]])
+          //let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click',this.markerClick).addTo(newMap)
+          let marker = L.marker([p.latlng[0],p.latlng[1]]).on('click', function(e){
+            self.manageMarkerClick(e)
+          })
           let content = `<b>Nome</b>: ${p.nome}<br/>`+"Posizione " + index;
             marker.bindPopup(content) 
             marker.addTo(newMap)
@@ -705,6 +740,12 @@ export class HomePage {
 
 
   }
+
+  markerClick(e){
+    console.log("Inside marker click " + e.latlng.lat + "  " + e.latlng.lng)
+    this.displayGPSError("You clicked on the marker")
+  }
+
 
   distanceAPI(start,arrival,waypoints){
     var service = new google.maps.DistanceMatrixService();

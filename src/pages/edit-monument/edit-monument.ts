@@ -107,8 +107,8 @@ export class EditMonumentPage {
         return false;
       });
       this.poi_NUMEROINFO.forEach(i=>{
-        //this.isAccessibilityOn = (i.accessibilità=="Y") ? true : false
-        //this.isFamilyOn = (i.famiglia=="Y") ? true : false
+        this.isAccessibilityOn = (i.accessibilità=="Y") ? true : false
+        this.isFamilyOn = (i.famiglia=="Y") ? true : false
         this.numero_info_POI = i.numero_informazioni;
         this.numero_tag_POI = i.numero_tag;
         //console.log("Numero contributi POI "+this.numero_info_POI);

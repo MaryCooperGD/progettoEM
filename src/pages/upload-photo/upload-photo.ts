@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { WelcomepagePage } from "../welcomepage/welcomepage";
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { Api } from "../../providers/api";
@@ -48,12 +48,16 @@ export class UploadPhotoPage {
   sum_of_total_contr;
   num_badge;
   num_ach;
+  loadingConvert;
+  loadingUpload;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public camera:Camera,
-  public toastCtrl:ToastController) {
+  public toastCtrl:ToastController, public loadingController:LoadingController) {
       this.poi = navParams.get('poi')
       this.poiName = this.poi.myPoi.nome
       this.poiKey = this.poi.chiave;
+      this.loadingConvert = this.loadingController.create({content: "Attendi mentre la foto viene convertita...", spinner:"crescent"})
+      this.loadingUpload = this.loadingController.create({content: "Attendi mentre la foto viene caricata...", spinner:"crescent"})
       var num_photos_ref = firebase.database().ref('point_of_interest/'+this.poiKey+'/numero_foto/')
 
       //Per memorizzare le foto nel POI
@@ -106,6 +110,7 @@ export class UploadPhotoPage {
 
   //Per scegliere l'avatar dalla galleria del cellulare
   selectPhoto_phone(){
+    //this.loadingConvert.present();
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY, 
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -114,10 +119,12 @@ export class UploadPhotoPage {
       targetWidth: 400,
       encodingType: this.camera.EncodingType.PNG,
     }).then(imageData => {
+      //this.loadingConvert.dismiss();
       this.displayError("La foto è stata convertita correttamente. Clicca su 'Carica foto' per completare il caricamento.")
       this.isEnabled = true;
       this.myPhoto = imageData;
     }, error => {
+      //this.loadingConvert.dismiss();
       this.displayError("C'è stato un errore nel convertire la foto.")
       this.isEnabled = false;
       console.log("ERROR -> " + JSON.stringify(error));
@@ -126,6 +133,7 @@ export class UploadPhotoPage {
 
   //Per scegliere l'avatar da una foto appena scattata
   selectPhoto_camera(){
+    //this.loadingConvert.present();
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.CAMERA, 
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -133,10 +141,12 @@ export class UploadPhotoPage {
       targetWidth: 400,
       encodingType: this.camera.EncodingType.PNG,
     }).then(imageData => {
+     // this.loadingConvert.dismiss();
       this.displayError("La foto è stata convertita correttamente. Clicca su 'Carica foto' per completare il caricamento.")
       this.isEnabled = true;
       this.myPhoto = imageData;
     }, error => {
+     // this.loadingConvert.dismiss();
       this.displayError("C'è stato un errore nel convertire la foto.")
       this.isEnabled = false;
       console.log("ERROR -> " + JSON.stringify(error));
@@ -146,6 +156,8 @@ export class UploadPhotoPage {
   
   //Per caricare la foto sullo storage - si attiva dal pulsante carica foto!
   uploadPhoto(): void {
+    this.isEnabled = false;
+    this.loadingUpload.present();
     this.myPhotosRef.child("photo_"+this.poiName).child(this.generateUUID()+'.png') //dare un nome univoco
         .putString(this.myPhoto, 'base64', { contentType: 'image/png' })
         .then((savedPicture) => {
@@ -181,15 +193,19 @@ export class UploadPhotoPage {
           this.setMiscAchievements(updates);
           this.setMinscBadges(updates);
 
-          firebase.database().ref().update(updates).then(function(){
+          firebase.database().ref().update(updates).then(function(){        
+            self.loadingUpload.dismiss();
             self.displayError("Foto caricata correttamente!")
             self.isEnabled = false;
 
-            self.navCtrl.push(MonumentPage);
+            self.navCtrl.setRoot(MonumentPage, {
+              reference: self.poi,
+            });
           }).catch(function(error){
+            self.loadingUpload.dismiss();
+            self.isEnabled = true;
             self.displayError("C'è stato un errore nel caricamento della foto.")
           })
-          //console.log("url avatar appena caricato"+this.myPhotoURL);
         });   
         
    
