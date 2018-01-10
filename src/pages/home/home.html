@@ -22,7 +22,7 @@
   <!--Riga per il bottone e lista con le direzioni-->
     <ion-row id="row_button_list">
       
-      <div *ngIf="routeDisplayed" id="div_button_list">
+      <div *ngIf="routeDisplayed && !clicked" id="div_button_list">
   
         <p text-center>
           <ion-icon name="arrow-dropup-circle" onClick = "document.getElementById('lista_lista').style.height = '300px';" class="icon_style"></ion-icon>      

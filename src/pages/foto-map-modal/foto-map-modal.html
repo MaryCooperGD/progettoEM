@@ -6,14 +6,26 @@
 -->
 
 
+
+
 <ion-content padding class="sfondo_content">
   
   <button ion-button block (click)="closeModal()">Chiudi <ion-icon name="close-circle"  style="padding: 5px"></ion-icon></button>
+  <ion-card>
+    <ion-card-header text-center>
+        <p style="color: #488aff !important; font-size: 20px;">{{poiName}}</p> 
+    </ion-card-header>
+    <ion-card-content>
+        <p text-center>{{description}}</p>
+      </ion-card-content>
+  </ion-card>
+  
   <ion-card>
     <ion-card-header  text-center >
      <p style="color: #488aff !important; font-size: 20px;">Carica o scatta</p>
     <!--  <p style="color: #488aff !important">{{poiName}}</p> -->
     </ion-card-header>
+    
 
     <ion-card-content>
       <ion-row>

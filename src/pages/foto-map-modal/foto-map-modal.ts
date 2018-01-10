@@ -20,7 +20,6 @@ export class FotoMapModalPage {
 
   point;
   poi;
-  poiName;
   poiKey;
   isEnabled =false;
   username;
@@ -46,12 +45,16 @@ export class FotoMapModalPage {
   num_ach;
   loadingConvert;
   loadingUpload;
+  poiName;
+  description;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl: ViewController,
     public loadingController:LoadingController,public toastCtrl:ToastController,public camera:Camera,public api: Api) {
     this.point = this.navParams.get('poi');
+    this.poiName = this.point.nome;
     this.poiKey = this.point.key;
+    this.description = this.point.desc;
     this.loadingConvert = this.loadingController.create({content: "Attendi mentre la foto viene convertita...", spinner:"crescent"})
     this.loadingUpload = this.loadingController.create({content: "Attendi mentre la foto viene caricata...", spinner:"crescent"})
     var num_photos_ref = firebase.database().ref('point_of_interest/'+this.poiKey+'/numero_foto/')

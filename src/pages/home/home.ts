@@ -44,6 +44,7 @@ export class HomePage {
   routeDisplayed = false;
   instructions: Array<any>;
   chosenWayPts = [];
+  clicked = false;
   
 
   @ViewChild('map-container') mapContainer;
@@ -130,12 +131,13 @@ export class HomePage {
         
         if(this.canCalculate){
            
+            let marker1;
             let watch = this.geolocation.watchPosition();
             watch.subscribe((data)=>{
               var lat = data.coords.latitude
               var lon =  data.coords.longitude
               let latlng = {lat: lat, lng: lon}
-              let marker1 = L.marker(latlng)
+              marker1 = L.marker(latlng)
               let content1 = `<b>Posizione corrente</b>`;
                 marker1.bindPopup(content1) 
                 marker1.addTo(this.map)
@@ -183,6 +185,13 @@ export class HomePage {
       accessToken:'pk.eyJ1IjoibWFyeWNvb3BlciIsImEiOiJjajY2bjhqMXUxYjN5MnFuenJtbWQxem8xIn0.JpH5RDkg_yOjcLrwsFA6zA'
     })
       .addTo(this.map);   
+
+      var self = this;
+      this.map.on('click', function(e) {        
+        if(self.canCalculate){
+          self.clicked = !self.clicked
+        }        
+    });
 
       if (this.canCalculate){
 
@@ -506,6 +515,16 @@ export class HomePage {
             
             })
             firstpolyline.addTo(newMap); 
+            this.instructions = [];
+            var myRoute= response.routes[0].legs
+            for(var j = 0; j<myRoute.length; j++){
+              for(var i =0; i<myRoute[j].steps.length; i++){
+                this.instructions.push(myRoute[j].steps[i].instructions)
+              }
+              if(j!=(myRoute.length-1)){
+                this.instructions.push("Ti trovi a " + `<b>`+newArray[j].nome+`</b>`)
+              }
+            }
           }  
         }else  if(chosen=="time"){ // ho chiesto per il tempo
           this.loading.present()
@@ -532,7 +551,16 @@ export class HomePage {
               
               })
               firstpolyline.addTo(newMap); 
-            
+              this.instructions = [];
+              var myRoute= response.routes[0].legs
+              for(var j = 0; j<myRoute.length; j++){
+                for(var i =0; i<myRoute[j].steps.length; i++){
+                  this.instructions.push(myRoute[j].steps[i].instructions)
+                }
+                if(j!=(myRoute.length-1)){
+                  this.instructions.push("Ti trovi a " + `<b>`+newArray[j].nome+`</b>`)
+                }
+              }
           }
         } else if(chosen=="length"){//ho chiesto per la lunghezza
           this.loading.present()
@@ -557,7 +585,17 @@ export class HomePage {
               
               })
               firstpolyline.addTo(newMap); 
-          }
+              this.instructions = [];
+              var myRoute= response.routes[0].legs
+              for(var j = 0; j<myRoute.length; j++){
+                for(var i =0; i<myRoute[j].steps.length; i++){
+                  this.instructions.push(myRoute[j].steps[i].instructions)
+                }
+                if(j!=(myRoute.length-1)){
+                  this.instructions.push("Ti trovi a " + `<b>`+newArray[j].nome+`</b>`)
+                }
+              }
+            }
         }
         
 
@@ -713,6 +751,9 @@ export class HomePage {
         for(var j = 0; j<myRoute.length; j++){
         for(var i =0; i<myRoute[j].steps.length; i++){
           this.instructions.push(myRoute[j].steps[i].instructions)
+        }
+        if(j!=(myRoute.length-1)){
+          this.instructions.push("Ti trovi a " + `<b>`+newArray[j].nome+`</b>`)
         }
       }
         //console.dir("I " + myRoute.steps[i].instructions)
