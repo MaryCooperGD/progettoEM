@@ -32,7 +32,8 @@ export class SearchPlacePage {
     var self = this;
      var ref = firebase.database().ref("/point_of_interest/");
      var ref1 = firebase.database().ref("/tag/")
-     ref.once('value', function(poisList){
+     //Recupero i punti di interesse in ordine alfabetico
+     ref.orderByChild("nome").once('value', function(poisList){
       poisList.forEach(function(singlepoi){
         if(singlepoi.child("città").val() == self.city){
 
