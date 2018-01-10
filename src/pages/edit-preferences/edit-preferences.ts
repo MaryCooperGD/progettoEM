@@ -27,7 +27,7 @@ export class EditPreferencesPage {
   email:any;
 
   //per segnare il numero di preferenze che l'utente possiede
-  num_of_tag;
+  numb_pref;
 
   public user_email: Array<any> = [];
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
@@ -52,7 +52,7 @@ export class EditPreferencesPage {
         return false;
       });
       this.user_email.forEach(i=>{
-        this.num_of_tag = i.num_of_tag;
+        this.numb_pref = i.numb_pref;
       })
     });
 
@@ -99,7 +99,7 @@ export class EditPreferencesPage {
     var updates = {};
 
     updates["/users/"+this.email+"/preferenze/"+tagToAdd.key]  = "true";
-    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
+    updates["/users/"+this.email+"/numb_pref"] = this.numb_pref + 1;
     
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai inserito una nuova preferenza") ;
@@ -124,7 +124,7 @@ export class EditPreferencesPage {
    let userTag = [];
    var ref = firebase.database().ref('/users/'+ this.email+'/preferenze/') 
    var ref1 = firebase.database().ref('/tag/');
-   ref.once('value', function(preferenze){ 
+   ref.orderByChild('nome').once('value', function(preferenze){ 
      preferenze.forEach(function(singolaPref){
        ref1.once('value', function(tags){ 
         tags.forEach(function (singoloTag){ 
@@ -148,7 +148,7 @@ export class EditPreferencesPage {
     var updates = {};
 
     updates["/users/"+this.email+"/preferenze/"+tagToDelete.key]  = null; //questo mi rimuove il record!!
-    updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag - 1;
+    updates["/users/"+this.email+"/numb_pref"] = this.numb_pref - 1;
 
     firebase.database().ref().update(updates);
     this.displayLoginError("Hai eliminato una preferenza") ;

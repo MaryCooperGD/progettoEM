@@ -100,9 +100,10 @@ export class RegisterPage {
       num_ach : 0,
       num_badge : 0,
       sum_contributi: 0,
+      numb_pref: 0, //preferenze dell'utente
 
       //Inserisco il placeholder dell'avatar
-      avatar: "https://firebasestorage.googleapis.com/v0/b/cesenaesploraem-f4694.appspot.com/o/avatars%2Fuser.png?alt=media&token=05f5fca2-2dde-4002-b10c-5fefe2d08fd1",
+      avatar: "https://firebasestorage.googleapis.com/v0/b/cice-ab039.appspot.com/o/avatars%2Fuser.png?alt=media&token=f3ed1eca-3726-431c-9b7d-8cfd8e0d4f05",
     });
   }
 

@@ -89,7 +89,7 @@ export class ProfilePage {
         this.isEnabled_badges = false;
       }
 
-      if(i.num_of_tag == 0){
+      if(i.numb_pref == 0){
         this.isEnabled_preferenze = false;
       }
 
@@ -99,7 +99,7 @@ export class ProfilePage {
 
       //Controllo che l'avatar sia uguale al placeholder iniziale
       this.avatar_placeholder = i.avatar;
-      if(this.avatar_placeholder == "https://firebasestorage.googleapis.com/v0/b/cesenaesploraem-f4694.appspot.com/o/avatars%2Fuser.png?alt=media&token=05f5fca2-2dde-4002-b10c-5fefe2d08fd1"){ 
+      if(this.avatar_placeholder == "https://firebasestorage.googleapis.com/v0/b/cice-ab039.appspot.com/o/avatars%2Fuser.png?alt=media&token=f3ed1eca-3726-431c-9b7d-8cfd8e0d4f05"){ 
         this.oldAvatar = true; //In tal caso dico che è vero che ho l'avatar di partenza
       }
      
@@ -145,7 +145,8 @@ export class ProfilePage {
             nell'html, con i nomi dei tag che l'utente ha tra le preferenze. Quindi farai una cosa del tipo: */
             
             userTags.push(singoloTag.child("nome").val()) //STAI RIEMPIENDO UN VETTORE!
-             
+            console.log("TAGS "+singoloTag.child("nome").val());
+
           /* Nota BENE che singoloTag è la chiave del (dei) tag: facendo .child("nome campo") accedi al campo specifico
             per quell'oggetto (in questo caso a  noi serve "nome"), e il .val() restituisce il valore associato al campo.
             Nel DB infatti abbiamo "name" = "Acquedotto", ad esempio, quindi il .val() restituirà acquedotto.
@@ -162,6 +163,7 @@ export class ProfilePage {
      
     }).then(a=>{
         this.tags = userTags;
+        
         
         /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
         Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 

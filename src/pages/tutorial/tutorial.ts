@@ -39,7 +39,7 @@ export class TutorialPage {
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   id_user; //conterrà la mail
 
-  num_of_tag;
+  numb_pref;
 
   public preferenze_not_user: Array<any>;
 
@@ -79,7 +79,7 @@ export class TutorialPage {
         return false;
       });
       this.user_email.forEach(i=>{
-        this.num_of_tag = i.num_of_tag;
+        this.numb_pref = i.numb_pref;
       })
     });
 
@@ -142,7 +142,7 @@ export class TutorialPage {
     var prefToAdd = this.preferenze_not_user[index]; //preferenza
     var updates = {};
     updates["/users/"+this.email+"/preferenze/"+prefToAdd.key] ="true";
-    //updates["/users/"+this.email+"/num_of_tag"] = this.num_of_tag + 1;
+    updates["/users/"+this.email+"/numb_pref"] = this.numb_pref + 1;
         
     firebase.database().ref().update(updates);
     this.showUserPref_Registration(); //Mi refresha ad ogni click la lista delle preferenze.
