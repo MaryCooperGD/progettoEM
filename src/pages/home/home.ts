@@ -45,6 +45,14 @@ export class HomePage {
   instructions: Array<any>;
   chosenWayPts = [];
   clicked = false;
+  theMarker;
+  yahIcon = L.icon({
+    iconUrl: "assets/images/yah.png",
+
+    iconSize: [30,30],
+    popupAnchor:  [1, -14],
+    iconAnchor: [15,30]
+  })
   
 
   @ViewChild('map-container') mapContainer;
@@ -118,7 +126,16 @@ export class HomePage {
   }*/
   
  
- 
+  onLocationFound(e) {
+
+    if (this.theMarker != undefined) {
+      this.map.removeLayer(this.theMarker);
+};
+    this.theMarker = L.marker(e.latlng, {icon: this.yahIcon}).addTo(this.map)
+        .bindPopup(`<b>Posizione corrente</b>`);
+    
+}
+
   ionViewDidLoad() {
     //set map center
     this.center = [44.13832, 12.2447 ]; 
@@ -130,8 +147,17 @@ export class HomePage {
 
         
         if(this.canCalculate){
+
+          this.map.locate({setView: true, 
+             maxZoom: 16, 
+             watch:true
+           });
+
+
+
+this.map.on('locationfound', this.onLocationFound,this);
            
-            let marker1;
+            /* let marker1;
             let watch = this.geolocation.watchPosition();
             watch.subscribe((data)=>{
               var lat = data.coords.latitude
@@ -146,7 +172,7 @@ export class HomePage {
               
             }, error => {
               this.displayGPSError("Non è stato possibile ottenere la tua posizione. Attiva il GPS o ricarica la pagina.")
-            })
+            }) */
 
           
           this.withGoogle(this.start, this.destination, this.waypoints);
