@@ -124,6 +124,17 @@ export class HomePage {
     updates['/cities/-KzZFy1JPWnrwTzRyS9R/pois/'+key] = "true";  
     firebase.database().ref().update(updates);      
   }*/
+
+  /*Questa funzione crea un tag, la lascio che può servire nuovamente*/
+  /*createTag(){
+    var key = firebase.database().ref().child('tag').push().key; 
+    var updates = {};
+    var data = {
+      nome: "Convento"
+    }
+    updates['/tag/'+key] = data;  
+    firebase.database().ref().update(updates);  
+  }*/
   
  
   onLocationFound(e) {
@@ -140,7 +151,7 @@ export class HomePage {
     //set map center
     this.center = [44.13832, 12.2447 ]; 
    // this.createNewPoints() //RICHIAMA LA FUNZIONE PER CREARE NUOVI POI
-    
+   //this.createTag(); CREARE TAG
     //setup leaflet map
   
      this.initMap();
