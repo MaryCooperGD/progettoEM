@@ -33,6 +33,7 @@ import { CreditsPage } from "../pages/credits/credits";
 import {NewtagPage} from "../pages/newtag/newtag";
 import { AchievementsPage } from "../pages/achievements/achievements";
 import { NavController } from 'ionic-angular/navigation/nav-controller';
+import { CallNumber } from '@ionic-native/call-number';
 
 /* export const firebaseConfig = {
   
@@ -114,6 +115,7 @@ export const firebaseConfig = {
     Diagnostic,
     Api,
     LocalStorage,
+    CallNumber,
     Camera,
     File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

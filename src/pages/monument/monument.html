@@ -15,6 +15,18 @@
 
 <ion-content padding class="sfondo_content">
 
+  <!--Da questa FAB si può chiamare, scrivere la mail e accedere alla homepage del sito-->
+  <ion-fab top right edge  >
+    <button ion-fab mini color="secondary"><ion-icon name="arrow-down"></ion-icon></button>
+    <ion-fab-list>
+      <button ion-fab (click)="phoneCall()" [hidden]="!isEnabled_phone"><ion-icon name="call"></ion-icon> </button>
+      <a ion-fab [hidden]="!isEnabled_email" href="mailto:{{email}}"><ion-icon name="mail"></ion-icon></a>
+      <a ion-fab [hidden]="!isEnabled_website" href="{{website}}"><ion-icon name="home"></ion-icon></a>
+    </ion-fab-list>
+  </ion-fab>
+
+
+
     <!--Card nome e foto-->
     <ion-card>
       <ion-card-header text-center class="blue-title" text-wrap>
@@ -69,20 +81,6 @@
 
             </ion-card-content>
           </ion-list>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <!--Card contatti-->
-    <ion-card>
-      <ion-card-header class="blue-title" text-wrap>
-        Contatti e recapiti
-      </ion-card-header>
-
-      <ion-card-content>
-        <div>
-          <p [hidden]="!isEnabled_email"><b>Email:</b> {{email}}</p>
-          <p [hidden]="!isEnabled_phone"><b>Telefono:</b> {{phone}}</p>
         </div>
       </ion-card-content>
     </ion-card>

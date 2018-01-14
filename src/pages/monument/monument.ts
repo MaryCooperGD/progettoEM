@@ -6,6 +6,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import { CallNumber } from '@ionic-native/call-number';
 
 /**
  * Generated class for the MonumentPage page.
@@ -42,22 +43,21 @@ export class MonumentPage {
 
   email;
   phone;
+  website;
 
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
   isEnabled_info : boolean = true;
   isEnabled_tag : boolean = true;
   isEnabled_foto : boolean = true;
 
-  isEnabled_email : boolean = false;
-  isEnabled_phone : boolean = false;
+  isEnabled_email : boolean = true;
+  isEnabled_phone : boolean = true;
+  isEnabled_website : boolean = true;
 
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
 
-
- 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, private callNumber: CallNumber) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome
     this.poiTags = this.poi.tipo
@@ -101,19 +101,27 @@ export class MonumentPage {
         //Siccome non tutti i campi sono definiti per ogni POI, controllo quali campi ci sono e rendo poi con isEnabled visibili solo quelli presenti per il POI
         this.email = i.email;
         this.phone = i.phone;
+        this.website = i.website;
 
-        if(this.email != undefined){
-          this.isEnabled_email = true;
+        if(this.email == undefined){
+          this.isEnabled_email = false;
         }
         
-        if(this.phone != undefined){
-          this.isEnabled_phone = true;
+        if(this.phone == undefined){
+          this.isEnabled_phone = false;
+        }
+
+        if(this.website == undefined){
+          this.isEnabled_website = false;
         }
 
       })
     });
   }
 
+  phoneCall(){
+    this.callNumber.callNumber(this.phone, false)
+  }
 
   //Mostra foto
   retrieveFoto(){
