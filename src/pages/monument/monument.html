@@ -73,6 +73,20 @@
       </ion-card-content>
     </ion-card>
 
+    <!--Card contatti-->
+    <ion-card>
+      <ion-card-header class="blue-title" text-wrap>
+        Contatti e recapiti
+      </ion-card-header>
+
+      <ion-card-content>
+        <div>
+          <p [hidden]="!isEnabled_email"><b>Email:</b> {{email}}</p>
+          <p [hidden]="!isEnabled_phone"><b>Telefono:</b> {{phone}}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
     <!--Card informazioni utenti-->
     <ion-card>
       <ion-card-header class="blue-title">

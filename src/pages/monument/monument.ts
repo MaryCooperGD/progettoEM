@@ -40,13 +40,22 @@ export class MonumentPage {
   descrizione_poi;
   foto_url;
 
+  email;
+  phone;
+
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
   isEnabled_info : boolean = true;
   isEnabled_tag : boolean = true;
   isEnabled_foto : boolean = true;
 
+  isEnabled_email : boolean = false;
+  isEnabled_phone : boolean = false;
+
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
+
+
+ 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController) {
     this.poi = navParams.get('reference')
@@ -88,9 +97,23 @@ export class MonumentPage {
       this.poi_photo_description.forEach(i=>{ 
         this.descrizione_poi = i.descrizione;
         this.foto_url = i.photo_url;
+
+        //Siccome non tutti i campi sono definiti per ogni POI, controllo quali campi ci sono e rendo poi con isEnabled visibili solo quelli presenti per il POI
+        this.email = i.email;
+        this.phone = i.phone;
+
+        if(this.email != undefined){
+          this.isEnabled_email = true;
+        }
+        
+        if(this.phone != undefined){
+          this.isEnabled_phone = true;
+        }
+
       })
     });
   }
+
 
   //Mostra foto
   retrieveFoto(){
@@ -106,9 +129,8 @@ export class MonumentPage {
       this.poi_numero_foto.forEach(i=>{ 
         //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         if (i.numero_foto == 0) {
-          console.log("NUMERO FOTO"+i.numero_foto)
           this.isEnabled_foto = false;
-          console.log("this.isEnabled_foto"+this.isEnabled_foto);
+          
         }else{
           this.isEnabled_foto = true;
           var poi_ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/photos");
@@ -140,7 +162,7 @@ export class MonumentPage {
         //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         if (i.numero_tag == 0) {
           this.isEnabled_tag = false;
-          console.log("this.isEnabled_tag"+this.isEnabled_tag);
+          
         }else {
           this.isEnabled_tag = true;
           var ref = firebase.database().ref('/point_of_interest/'+this.poi.chiave+'/tags/')
@@ -184,7 +206,7 @@ export class MonumentPage {
         //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         if (i.numero_informazioni == 0) {
           this.isEnabled_info = false;
-          console.log("this.isEnabled_info"+this.isEnabled_info);
+          
         }
         else{
           this.isEnabled_info = true;
