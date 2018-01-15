@@ -17,11 +17,11 @@
 
   <!--Da questa FAB si può chiamare, scrivere la mail e accedere alla homepage del sito-->
   <ion-fab top right edge  >
-    <button ion-fab mini color="secondary"><ion-icon name="arrow-down"></ion-icon></button>
+    <button ion-fab mini color="secondary"><ion-icon name="information"></ion-icon></button>
     <ion-fab-list>
-      <button ion-fab (click)="phoneCall()" [hidden]="!isEnabled_phone"><ion-icon name="call"></ion-icon> </button>
-      <a ion-fab [hidden]="!isEnabled_email" href="mailto:{{email}}"><ion-icon name="mail"></ion-icon></a>
-      <a ion-fab [hidden]="!isEnabled_website" href="{{website}}"><ion-icon name="home"></ion-icon></a>
+      <button ion-fab (click)="phoneCall()" [hidden]="!isEnabled_phone" style="contain: layout;"><ion-icon name="call"></ion-icon> <ion-label>Chiama</ion-label></button>
+      <a ion-fab [hidden]="!isEnabled_email" href="mailto:{{email}}" style="contain: layout;"><ion-icon name="mail"></ion-icon> <ion-label>Email</ion-label></a>
+      <a ion-fab [hidden]="!isEnabled_website" href="{{website}}" style="contain: layout;"><ion-icon name="home"></ion-icon> <ion-label>Sito</ion-label></a>
     </ion-fab-list>
   </ion-fab>
 
