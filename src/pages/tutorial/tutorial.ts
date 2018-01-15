@@ -101,7 +101,7 @@ export class TutorialPage {
                 userPrefMap[userTagSnap.key] = true
                 //console.log("Tag che l'utente possiede  "+userPrefMap[userTagSnap.key]); //mi restituisce true per tutti i tag che l'utente possiede
             })
-            return tagsRef.once('value')
+            return tagsRef.orderByChild("nome").once('value')
                 .then((tagsSnap) => {
                     let missingTags = []
                     tagsSnap.forEach(tagSnap => {

@@ -123,7 +123,7 @@ export class EditMonumentPage {
     var ref1 = firebase.database().ref('/tag/');
 
     let tagShow = [];
-    ref1.once('value', function(snapshot){ //ciclo sui tag
+    ref1.orderByChild("nome").once('value', function(snapshot){ //ciclo sui tag
       snapshot.forEach(function(childSnapshot){
           var childKey = childSnapshot.key; //chiave tag
           var exists = false;
