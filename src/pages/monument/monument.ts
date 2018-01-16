@@ -45,6 +45,9 @@ export class MonumentPage {
   phone;
   website;
 
+  accessibility;
+  families;
+
   //mi serve per mostrare a video l'avviso che il poi non ha informazioni/tag
   isEnabled_info : boolean = true;
   isEnabled_tag : boolean = true;
@@ -53,6 +56,9 @@ export class MonumentPage {
   isEnabled_email : boolean = true;
   isEnabled_phone : boolean = true;
   isEnabled_website : boolean = true;
+
+  isEnabled_accessibility : boolean = true;
+  isEnabled_family : boolean = true;
 
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
@@ -98,6 +104,9 @@ export class MonumentPage {
         this.descrizione_poi = i.descrizione;
         this.foto_url = i.photo_url;
 
+        console.log("ACC"+this.accessibility);
+        console.log("FAM"+this.families);
+
         //Siccome non tutti i campi sono definiti per ogni POI, controllo quali campi ci sono e rendo poi con isEnabled visibili solo quelli presenti per il POI
         this.email = i.email;
         this.phone = i.phone;
@@ -114,6 +123,28 @@ export class MonumentPage {
         if(this.website == undefined){
           this.isEnabled_website = false;
         }
+
+        //Check accessibilità
+        this.accessibility = i.accessibilità;
+
+        if(this.accessibility == undefined || this.accessibility == "N"){
+          this.isEnabled_accessibility = false;
+        }
+        else if(this.accessibility == "Y"){
+            this.accessibility = "Accessibile";
+            this.isEnabled_accessibility = true;
+        }
+          
+        //Check famiglia
+        this.families = i.famiglia;
+
+        if(this.families == undefined || this.families == "N"){
+          this.isEnabled_family = false;
+        }
+        else if(this.families == "Y"){
+            this.families = "Per famiglie";
+            this.isEnabled_family = true;
+          }
 
       })
     });
