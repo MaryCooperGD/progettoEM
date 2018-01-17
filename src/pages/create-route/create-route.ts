@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController,ModalController } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition,MarkerOptions, Marker } from '@ionic-native/google-maps';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
@@ -36,8 +36,11 @@ export class CreateRoutePage {
   isAccessibilityOn;
   isFamilyOn;
   isEnabled = true;
+  isPartenza = false;
+  isArrivo = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api,
+    public modal: ModalController) {
       this.city = this.api.getCity();
       var ref = firebase.database().ref('/cities/')
       var self = this;
@@ -69,6 +72,48 @@ export class CreateRoutePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateRoutePage');
+    
+  }
+  
+
+  openModal(event){ 
+    if(event == "partenza"){
+      this.isPartenza = true;
+      this.isArrivo = false;
+    } else if(event == "arrivo"){
+      this.isArrivo = true;
+      this.isPartenza = false;
+    }  
+    let myModal = this.modal.create('MapModalPage');
+    myModal.onDidDismiss(data=>{
+      this.geocode(data)
+    })
+    myModal.present();   
+  }
+
+  setAddress(address){
+    if(this.isPartenza){
+      this.myInputPartenza = address;
+    } else if (this.isArrivo){
+      this.myInputArrivo = address;
+    }
+
+  }
+
+  
+  geocode(latlng){
+    var geocoder = new google.maps.Geocoder();
+    var self = this;
+    geocoder.geocode({'location':latlng}, function(results, status){
+      if (status === 'OK') {
+        if(results[0]){
+          self.setAddress(results[0].formatted_address)
+        }
+
+      } else {
+        self.displayError("C'è stato qualche errore nell'individuare l'indirizzo. Riprova!")
+      }
+    })
   }
 
 

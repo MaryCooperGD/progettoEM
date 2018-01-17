@@ -156,6 +156,7 @@ export class HomePage {
   
      this.initMap();
 
+   
         
         if(this.canCalculate){
 
@@ -164,7 +165,7 @@ export class HomePage {
              watch:true
            });
 
-
+           
 
 this.map.on('locationfound', this.onLocationFound,this);
            
@@ -424,16 +425,6 @@ this.map.on('locationfound', this.onLocationFound,this);
   }
 
 
-  geocode(address:string){
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address':address}, function(results, status){
-      if (status === 'OK') {
-
-      } else {
-        console.log("Geocoding not ok")
-      }
-    })
-  }
 
 
 

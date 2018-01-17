@@ -73,7 +73,7 @@ export class EditPreferencesPage {
                 userPrefMap[userTagSnap.key] = true
                 //console.log("Tag che l'utente possiede  "+userPrefMap[userTagSnap.key]); //mi restituisce true per tutti i tag che l'utente possiede
             })
-            return tagsRef.once('value')
+            return tagsRef.orderByChild("nome").once('value')
                 .then((tagsSnap) => {
                     let missingTags = []
                     tagsSnap.forEach(tagSnap => {
@@ -124,10 +124,10 @@ export class EditPreferencesPage {
    let userTag = [];
    var ref = firebase.database().ref('/users/'+ this.email+'/preferenze/') 
    var ref1 = firebase.database().ref('/tag/');
-   ref.orderByChild('nome').once('value', function(preferenze){ 
+   ref1.orderByChild("nome").once('value', function(tags){ 
+    tags.forEach(function (singoloTag){ 
+   ref.once('value', function(preferenze){ 
      preferenze.forEach(function(singolaPref){
-       ref1.once('value', function(tags){ 
-        tags.forEach(function (singoloTag){ 
            if(singolaPref.key == singoloTag.key){ 
             userTag.push(singoloTag); //Pusho tutti i tag che l'utente ha
            }
@@ -136,10 +136,13 @@ export class EditPreferencesPage {
        })
        return false;
      })
-   }).then(a=>{
-       this.tags = userTag;
+   }) .then(a=>{   
+       this.tags = userTag;  
+       this.tags.sort(function(b,c){
+         return b.child('nome').val()-c.child('nome').val()
+       })
+     })  
     
-     }) 
   }
 
   deleteSelectedPreferences(index){
@@ -158,3 +161,4 @@ export class EditPreferencesPage {
     this.showMissingPreferences(); 
   }
 }
+
