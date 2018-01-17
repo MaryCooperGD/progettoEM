@@ -4,4 +4,17 @@ page-achievements {
         border: 1px solid #ebebe0;
         
     }
+
+    .ion-scroll-component{
+        height:100px !important;
+    }
+
+    .ion-icon-component{
+        font-size: 50px;
+    }
+
+    #ach_message{
+        border-top: 1px solid #ebebe0; 
+        text-align: center;
+    }
 }

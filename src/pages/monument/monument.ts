@@ -44,6 +44,8 @@ export class MonumentPage {
   email;
   phone;
   website;
+  indirizzo;
+  gratuito;
 
   accessibility;
   families;
@@ -59,7 +61,8 @@ export class MonumentPage {
 
   isEnabled_accessibility : boolean = true;
   isEnabled_family : boolean = true;
-
+  isEnabled_gratuito : boolean = true;
+  
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
 
@@ -103,10 +106,8 @@ export class MonumentPage {
       this.poi_photo_description.forEach(i=>{ 
         this.descrizione_poi = i.descrizione;
         this.foto_url = i.photo_url;
-
-        console.log("ACC"+this.accessibility);
-        console.log("FAM"+this.families);
-
+        this.indirizzo = i.indirizzo;
+        
         //Siccome non tutti i campi sono definiti per ogni POI, controllo quali campi ci sono e rendo poi con isEnabled visibili solo quelli presenti per il POI
         this.email = i.email;
         this.phone = i.phone;
@@ -144,7 +145,23 @@ export class MonumentPage {
         else if(this.families == "Y"){
             this.families = "Per famiglie";
             this.isEnabled_family = true;
-          }
+        }
+
+        //Check gratuito (se c'è un biglietto o meno)
+        this.gratuito = i.gratuito;
+
+        if(this.gratuito == undefined){
+          this.isEnabled_gratuito = false;
+        }
+        else if(this.gratuito == "Y"){
+            this.gratuito = "Gratuito";
+            this.isEnabled_gratuito = true;
+
+        }else if(this.gratuito == "N"){
+          this.gratuito = "A pagamento";
+          this.isEnabled_gratuito = true;
+      }
+
 
       })
     });

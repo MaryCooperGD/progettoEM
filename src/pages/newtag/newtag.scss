@@ -2,6 +2,15 @@ page-newtag {
 
     .searchbar-search-icon{
     background-image: url("http://i.imgur.com/ATn5jLZ.png");
-}
+    }
+
+    #ion-scroll-comp{
+        width:100%;
+        height:60vh;
+    }
+
+    #ion-item-list{
+        border-bottom: 1px solid #e0e0e0;
+    }
 
 }
