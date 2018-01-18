@@ -35,6 +35,8 @@ import { AchievementsPage } from "../pages/achievements/achievements";
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { CallNumber } from '@ionic-native/call-number';
 
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 /* export const firebaseConfig = {
   
     apiKey: "AIzaSyCJuctITAc5lKZzNwTosmiLzduZjQPgqUg",
@@ -59,6 +61,7 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
+
 	CreateRoutePage,
     LoginPage,
     MonumentPage,
@@ -117,6 +120,7 @@ export const firebaseConfig = {
     LocalStorage,
     CallNumber,
     Camera,
+    SocialSharing,
     File,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

@@ -7,7 +7,9 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { CallNumber } from '@ionic-native/call-number';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
+import { Api } from "../../providers/api";
 /**
  * Generated class for the MonumentPage page.
  *
@@ -22,6 +24,9 @@ import { CallNumber } from '@ionic-native/call-number';
 })
 export class MonumentPage {
 
+
+
+
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Descrizione";
   
@@ -30,6 +35,7 @@ export class MonumentPage {
   poiName;
   descriptions;
   poiTags;
+  city_now;
 
   //per vedere il numero di info,tag e foto del POI
   public poi_numero_info: Array<any> = [];
@@ -66,15 +72,71 @@ export class MonumentPage {
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modal: ModalController, private callNumber: CallNumber) {
+
+
+
+
+
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, private callNumber: CallNumber, private sharingVar: SocialSharing) {
     this.poi = navParams.get('reference')
-    this.poiName = this.poi.myPoi.nome
-    this.poiTags = this.poi.tipo
+    this.poiName = this.poi.myPoi.nome;
+    this.poiTags = this.poi.tipo;
+
+    this.city_now = this.api.getCity;
+    console.log(this.city_now + "CITTA'")
   }
+
+  
+  whatsappShare(){
+    console.log(this.city_now+"BNN")
+    this.sharingVar.shareViaWhatsApp("Sto visitando "+this.poiName+", scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+      .then(()=>{
+        alert("Condivisione eseguita correttamente");
+      },
+      ()=>{
+         alert("Condivisione non possibile, assicurati di avere l'app installata")
+      })
+  }
+ 
+  twitterShare(){
+    this.sharingVar.shareViaTwitter("Sto visitando "+this.poiName+", scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+ 
+  facebookShare(){
+    this.sharingVar.shareViaFacebook("Sto visitando "+this.poiName+", scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+ 
+  otherShare(){
+    this.sharingVar.share("Sto visitando "+this.poiName+", scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+  
 
   ionViewDidLoad() { //questo metodo viene richiamato solo una volta
     console.log('ionViewDidLoad MonumentPage');
+    //this.city_now = this.api.city;
+    //console.log(this.city_now + "CITTA'")
+    
   }
+
 
   //Apre la modale che mi mostra la foto in dimensione originale!
   openModal(index){ 

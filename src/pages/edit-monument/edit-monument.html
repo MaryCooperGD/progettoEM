@@ -26,9 +26,9 @@
 			</ion-row>
 
 			<ion-row>
-				<ion-scroll style="width:100%;height:30vh" scrollY="true">
+				<ion-scroll class="ion-scroll-style" scrollY="true">
 					<ion-list>
-						<button ion-item *ngFor="let tag of tagList; let i=index" (click)="addSelectedTag(i)" style="border-bottom: 1px solid #e0e0e0;">
+						<button ion-item *ngFor="let tag of tagList; let i=index" (click)="addSelectedTag(i)" id="button_tag_list">
 						  <h2> {{tag.val().nome}}</h2>
 						</button>
 					</ion-list>
