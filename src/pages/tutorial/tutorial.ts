@@ -14,6 +14,7 @@ import * as firebase from 'firebase/app';
 
 export interface Slide {
   title: string;
+  subtitle: string;
   description: string;
   image: string;
 }
@@ -32,6 +33,7 @@ export class TutorialPage {
   slidess: Slide[];
   showSkip = true;
   second =false;
+  lastTitle = "C.I.C." + `<font color="blue"><b>E</b></font>` + "."
   
   email:any;
   //per prendere email (id dell'utente loggato) in modo da poter avere il riferimento dell'utente
@@ -50,7 +52,34 @@ export class TutorialPage {
     
     this.second = false;
     
-     this.slidess = [
+    this.slidess = [
+      {
+        title: `<font color="blue"><b>C</b></font>` + ".I.C.E.",
+        subtitle: "Collabora",
+        description: "Unisciti alla community e arricchisci anche tu la conoscenza con foto e informazioni!",
+        image: 'assets/img/teamwork.png', 
+      },
+      {
+        title: "C." + `<font color="blue"><b>I</b></font>` +".C.E.",
+        subtitle: "Impara",
+        description: "Conosci davvero i luoghi della tua città? Fai un giro tra le schede monumento: potrai conoscere nuovi aspetti e aneddoti!",
+        image: 'assets/img/impara.png', 
+      },
+      {
+        title: "C.I."+ `<font color="blue"><b>C</b></font>` +".E.",
+        subtitle: "Condividi",
+        description: "La conoscenza è un bene comune che va coltivato. Condividi la tua con gli altri, e fai sapere ai tuoi amici dove ti trovi!",
+        image: 'assets/img/condividi.png', 
+      }/* ,
+      {
+        title: "C.I.C." + `<font color="blue"><b>E</b></font>` + ".",
+        subtitle: "Esplora",
+        description: "Potresti scoprire nuovi posti che rispecchiano i tuoi gusti. Scegli le preferenze con cui iniziare e parti: la città è nelle tue mani!",
+        image: 'assets/img/trip.png',  
+      } */
+    ];
+    
+    /*  this.slidess = [
       {
         title: "Benvenuto su C.I.C.E.",
         description: "C.I.C.E. ti permette di organizzare il tuo viaggio culturale in giro per la città",
@@ -66,7 +95,7 @@ export class TutorialPage {
         description: "Aggiungi foto e aneddoti dei luoghi visitati, ottieni punti e scala la classifica",
         image: 'assets/img/edit.png', 
       }
-    ]; 
+    ];  */
   }
 
   ionViewDidLoad() {
@@ -157,10 +186,10 @@ export class TutorialPage {
   }
 
   //Controlla il cambiamento delle slide. Utilizzo qui isEnabled
-  slideChanged(){
-    let currentIndex = this.slides.getActiveIndex();
+   slideChanged(){
+    /* let currentIndex = this.slides.getActiveIndex();
     //Se siamo nella currentIndex = 1 significa che siamo nella slide dove deve apparire la card.
-    if (currentIndex == 1){
+    if (currentIndex == 3){
       this.isEnabled = true; //Abilito la presenza della card nell'html.
       this.second = true;
     } 
@@ -172,8 +201,8 @@ export class TutorialPage {
     else {
       this.second = false;
       this.isEnabled = false;
-    }
-  }
+    } */
+  } 
   onSlideChangeStart(slider) {
     this.showSkip = !slider.isEnd;
   }

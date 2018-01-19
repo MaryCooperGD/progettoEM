@@ -1,22 +1,23 @@
-<ion-header no-shadow color="primary">
+<!-- <ion-header no-shadow color="primary">
   <ion-toolbar color="primary">
     <ion-buttons end *ngIf="showSkip">
       <button ion-button (click)="startApp()" color="light"><b>SKIP</b></button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content no-bounce class="sfondo_content">
   <ion-slides pager="true" (ionWillChange)="onSlideChangeStart($event)" (ionSlideDidChange)="slideChanged()">
 
     <ion-slide *ngFor="let slide of slidess">
       <img [src]="slide.image" class="slide-image" style="height: 40px; width: 40px;"/>
-      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+      <h1 class="slide-title" [innerHTML]="slide.title"></h1>
+      <h3 class="slide-subtitle" [innerHTML]="slide.subtitle"></h3> 
       <p [innerHTML]="slide.description"></p>
-      <h6 *ngIf="second" class="blue-title" id="riga-preferenze"> (potrai modificarli in seguito)</h6>
+      <!-- <h6 *ngIf="second" class="blue-title" id="riga-preferenze"> (potrai modificarli in seguito)</h6> -->
      
       <!--Se isEnabled è true allora SI vede. perchè se è false rimane nascosto-->
-      <ion-card [hidden]="!isEnabled">
+      <!-- <ion-card [hidden]="!isEnabled">
       <ion-scroll id="scroll-lista-tag" scrollY="true">
         <ion-list id="lista-tag" *ngIf="second">
             <button ion-item *ngFor="let tag of preferenze_not_user; let i=index" (click)="addSelectedPreference(i)">
@@ -24,7 +25,27 @@
             </button>
         </ion-list>
       </ion-scroll>
-    </ion-card>
+    </ion-card> -->
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/img/esplora.png" class="slide-image" style="height: 40px; width: 40px;"/>
+      <h1 class="slide-title" [innerHTML] ="lastTitle"></h1>
+      <h3 class="slide-subtitle">Esplora </h3>
+      <p>Potresti scoprire nuovi posti che rispecchiano i tuoi gusti. Scegli le preferenze con cui iniziare e parti: la città è nelle tue mani!</p>   
+      <h6 class="blue-title" id="riga-preferenze"> (potrai modificarli in seguito)</h6>
+      <ion-card>
+        <ion-scroll id="scroll-lista-tag" scrollY="true">
+          <ion-list id="lista-tag">
+              <button ion-item *ngFor="let tag of preferenze_not_user; let i=index" (click)="addSelectedPreference(i)">
+                  <h2 class="border_tag_list">{{tag.val().nome}}</h2>
+              </button>
+          </ion-list>
+        </ion-scroll>
+      </ion-card>
+      <button ion-button icon-right large clear (click)="startApp()">
+        INIZIA
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
     </ion-slide>
     <!-- <ion-slide *ngFor="let slide of slides">
       <img [src]="slide.image" class="slide-image" />
