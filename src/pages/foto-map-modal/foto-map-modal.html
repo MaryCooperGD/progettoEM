@@ -56,7 +56,35 @@
 				<button  ion-button class="card-button" color="secondary" (click)="addInfo()"> <ion-icon name="add-circle" class="icona-bottone"></ion-icon>Inserisci nuova informazione</button>
 			</ion-row>
 		</ion-card-content>
-	</ion-card>
+  </ion-card>
+  
+  <!--Pulsanti condivisione social-->
+  <ion-card>
+    <ion-card-header class="blue-title">
+      Condividi la tua presenza!
+    </ion-card-header>
+
+    <ion-card-content>
+      <div text-center>
+        <button ion-button (click)="whatsappShare()" style="background-color: #0D9F16" class="bottoni_social">
+            <ion-icon name="logo-whatsapp" item-start class="icone_social"></ion-icon>
+        </button>
+
+        <button ion-button (click)="twitterShare()" style="background-color: #28A9E0" class="bottoni_social">
+            <ion-icon name="logo-twitter" item-start  class="icone_social"></ion-icon>
+        </button>
+
+        <button ion-button (click)="facebookShare()" style="background-color: #3B5998" class="bottoni_social">
+            <ion-icon name="logo-facebook" item-start  class="icone_social"></ion-icon>
+        </button>
+
+        <button ion-button (click)="otherShare()" style="background-color: red" class="bottoni_social">
+            <ion-icon name="share" item-start  class="icone_social"></ion-icon>
+        </button>
+
+      </div>
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>
 

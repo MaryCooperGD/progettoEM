@@ -4,6 +4,7 @@ import { Camera } from "@ionic-native/camera";
 import { Api } from "../../providers/api";
 import * as firebase from 'firebase/app';
 import { FirebaseApp } from "angularfire2";
+import { SocialSharing } from '@ionic-native/social-sharing';
 /**
  * Generated class for the FotoMapModalPage page.
  *
@@ -58,9 +59,8 @@ export class FotoMapModalPage {
   poiName;
   description;
 
-
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl: ViewController,
-    public loadingController:LoadingController,public toastCtrl:ToastController,public camera:Camera,public api: Api) {
+    public loadingController:LoadingController,public toastCtrl:ToastController,public camera:Camera,public api: Api, private sharingVar: SocialSharing) {
     this.point = this.navParams.get('poi');
     this.poiName = this.point.nome;
     this.poiKey = this.point.key;
@@ -463,5 +463,47 @@ export class FotoMapModalPage {
   closeModal() {
     this.viewCtrl.dismiss();
   }
+
+  //-------------------INIZIO--------Funzioni per la condivisione 
+  whatsappShare(){
+    this.sharingVar.shareViaWhatsApp("Sto visitando "+this.poiName+" ! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+      .then(()=>{
+        alert("Condivisione eseguita correttamente");
+      },
+      ()=>{
+         alert("Condivisione non possibile, assicurati di avere l'app installata")
+      })
+  }
+ 
+  twitterShare(){
+    this.sharingVar.shareViaTwitter("Sto visitando "+this.poiName+" ! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+ 
+  facebookShare(){
+    this.sharingVar.shareViaFacebook("Sto visitando "+this.poiName+" ! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+ 
+  otherShare(){
+    this.sharingVar.share("Sto visitando "+this.poiName+" ! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      alert("Condivisione eseguita correttamente");
+    },
+    ()=>{
+       alert("Condivisione non possibile, assicurati di avere l'app installata")
+    })
+  }
+  //-------------------FINE--------Funzioni per la condivisione 
 
 }
