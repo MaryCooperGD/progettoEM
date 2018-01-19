@@ -19,12 +19,20 @@ import { FirebaseApp } from "angularfire2";
 export class FotoMapModalPage {
 
   point;
-  poi;
   poiKey;
   isEnabled =false;
   username;
   email;
   num_of_photos = 0;
+  myInput;
+  public poi_NUMEROINFO: Array<any> = [];
+  public poi_ref: firebase.database.Reference = firebase.database().ref("/point_of_interest/");
+
+  numero_info_POI;
+  
+  //punteggi che verranno incrementati
+  punteggio_info;
+  punteggio_totale;
 
   //Per gestire il caricamento delle foto
   public myPhotosRef: any;
@@ -34,9 +42,11 @@ export class FotoMapModalPage {
   //Per prendere i dati dal profilo utente
   public user_emailRef: firebase.database.Reference = firebase.database().ref('/users/');
   public user_email: Array<any> = [];
+ 
+  public user_informations_Ref: firebase.database.Reference = firebase.database().ref('/users/');
+
   num_of_photo;
   points_photos;
-  punteggio_totale;
   sum_contributi;
   num_of_info; 
   num_of_tag;
@@ -85,21 +95,40 @@ export class FotoMapModalPage {
           this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
     }
     
-    this.user_emailRef.orderByChild("email_user").equalTo(this.email).on('value',itemSnapshot =>{
+    this.user_informations_Ref.orderByKey().equalTo(this.email).on('value',itemSnapshot =>{
       this.user_email = [];
       itemSnapshot.forEach( itemSnap => {
         this.user_email.push(itemSnap.val());
         return false;
       });
       this.user_email.forEach(i=>{
-        this.num_of_photo = i.num_of_photo;
-        this.points_photos = i.points_photos;
+        
+        this.punteggio_info = i.points_info;
         this.punteggio_totale = i.total_points;
-        this.sum_contributi = i.sum_contributi;
-        this.num_of_info = i.num_of_info;
+
+        //numero contributi
         this.num_of_tag = i.num_of_tag;
-        this.num_badge = i.num_badge;
+        this.num_of_info = i.num_of_info;
+        this.num_of_photo = i.num_of_photo;
+
         this.num_ach = i.num_ach;
+        this.num_badge = i.num_badge;
+
+        console.log("this.num_badge "+this.num_badge);
+      })
+    });
+
+
+    this.poi_ref.orderByKey().equalTo(this.poiKey).on('value',itemSnapshot =>{
+      this.poi_NUMEROINFO = [];
+      itemSnapshot.forEach(itemSnap =>{
+        this.poi_NUMEROINFO.push(itemSnap.val());
+        return false;
+      });
+      this.poi_NUMEROINFO.forEach(i=>{
+        this.numero_info_POI = i.numero_informazioni;
+        //console.log("Numero contributi POI "+this.numero_info_POI);
+        //console.log("Numero tag POI "+this.numero_tag_POI);
       })
     });
   }
@@ -186,7 +215,7 @@ export class FotoMapModalPage {
           //Assegno i badge e gli achievement
           this.setPhotoBadges(updates);
           this.setPhotoAchievement(updates);
-          this.setMiscAchievements(updates);
+          this.setMinscAchievements(updates);
           this.setMinscBadges(updates);
 
           firebase.database().ref().update(updates).then(function(){        
@@ -285,13 +314,13 @@ export class FotoMapModalPage {
     }
   }
 
-  setMiscAchievements(updates){
+  setMinscAchievements(updates){
     if(this.sum_of_total_contr == "1"){
       updates["/users/"+this.email+"/achievement/1 misto"];
       updates["/users/"+this.email+"/achievement/1 misto/data"] = new Date().getTime();
       this.num_ach = this.num_ach + 1;
       updates["/users/"+this.email+"/num_ach"] = this.num_ach;
-
+      
     }else if(this.sum_of_total_contr == "50"){
       updates["/users/"+this.email+"/achievement/50 misto"];
       updates["/users/"+this.email+"/achievement/50 misto/data"] = new Date().getTime();
@@ -309,6 +338,106 @@ export class FotoMapModalPage {
       updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
       this.num_ach = this.num_ach + 1;
       updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+      
+    }
+  }
+
+  addInfo(){
+
+    var ref = firebase.database().ref("/descriptions/");
+    var ref1 = firebase.database().ref("/point_of_interest/"+this.poiKey+"/")
+    var key = firebase.database().ref().child('descriptions').push().key;
+
+    var data = {
+      testo: this.myInput,
+      username_utente: this.username,
+      insert_data : new Date().getTime()
+    }
+
+    var updates = {}
+    updates["/descriptions/"+key] = data;
+    updates["/point_of_interest/"+this.poiKey+"/description/" + key ] = true;
+
+    //Incrementa la variabile dei punti delle informazioni
+    this.punteggio_info = this.punteggio_info + 15 ;
+    updates["/users/"+this.email+"/points_info"]  = this.punteggio_info;
+
+    //Incrementa la variabile dei PUNTI TOTALI
+    this.punteggio_totale = this.punteggio_totale + 15 ;
+    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
+
+    //incrementa la variabile del numero delle info inserite 
+    this.num_of_info = this.num_of_info + 1;
+    updates["/users/"+this.email+"/num_of_info"]  = this.num_of_info;
+   
+    this.sum_of_total_contr = this.num_of_info + this.num_of_tag;
+    updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr
+    //console.log("Dentro addInfo: "+this.sum_of_total_contr);
+
+    this.numero_info_POI ++;
+    updates["/point_of_interest/"+this.poiKey+"/numero_informazioni/"] = this.numero_info_POI;
+    //Controllo il punteggio delle informazioni, in base a quanto è, associo un badge!!! 
+    //non mi piace troppo tecnicamente ma funziona. è da migliorare se possibile
+    this.setInfoBadges(updates);
+    this.setMinscBadges(updates);
+
+    this.setInfoAchievements(updates);
+    this.setMinscAchievements(updates);
+
+    firebase.database().ref().update(updates);
+
+    this.displayError("Grazie per aver contributo, hai appena guadagnato 15 punti!");
+   
+  }
+
+  setInfoAchievements(updates){
+    if(this.num_of_info == "1"){
+      updates["/users/"+this.email+"/achievement/1 info"];
+      updates["/users/"+this.email+"/achievement/1 info/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+      
+      
+    }else if(this.num_of_info == "10"){
+      updates["/users/"+this.email+"/achievement/10 info"];
+      updates["/users/"+this.email+"/achievement/10 info/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+      
+    }else if(this.num_of_info == "50"){
+      updates["/users/"+this.email+"/achievement/50 info"];
+      updates["/users/"+this.email+"/achievement/50 info/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+
+    }else if(this.num_of_info == "150"){
+      updates["/users/"+this.email+"/achievement/150 info"];
+      updates["/users/"+this.email+"/achievement/150 info/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
+    }
+  }
+
+  setInfoBadges(updates){
+    if(this.punteggio_info == "390"){
+      updates["/users/"+this.email+"/badge/Informatore prodigio"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+
+    }else if(this.punteggio_info == "225"){
+      updates["/users/"+this.email+"/badge/Informatore esperto"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+
+    }else if(this.punteggio_info == "120"){
+      updates["/users/"+this.email+"/badge/Informatore principiante"]  = true;
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge;
+      
+    }else if(this.punteggio_info == "45"){
+      updates["/users/"+this.email+"/badge/Informatore novizio"]  = true;  
+      this.num_badge = this.num_badge + 1;
+      updates["/users/"+this.email+"/num_badge"] = this.num_badge; 
     }
   }
 
