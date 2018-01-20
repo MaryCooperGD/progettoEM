@@ -95,8 +95,6 @@ export class EditMonumentPage {
 
         this.num_ach = i.num_ach;
         this.num_badge = i.num_badge;
-
-        console.log("this.num_badge "+this.num_badge);
       })
     });
 
@@ -111,8 +109,6 @@ export class EditMonumentPage {
         this.isFamilyOn = (i.famiglia=="Y") ? true : false
         this.numero_info_POI = i.numero_informazioni;
         this.numero_tag_POI = i.numero_tag;
-        //console.log("Numero contributi POI "+this.numero_info_POI);
-        //console.log("Numero tag POI "+this.numero_tag_POI);
       })
     });
 
@@ -149,7 +145,6 @@ export class EditMonumentPage {
     })
 
     this.tagList = tagShow;
-    //console.log("Tags finali(che l'utente non ha)  "+this.tagList)
     this.loadedTagList = tagShow;
   }
 
@@ -160,7 +155,6 @@ export class EditMonumentPage {
    updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
 
    //Incrementa la variabile dei punti delle informazioni
-   
    this.punteggio_tag = this.punteggio_tag + 5 ;
    updates["/users/"+this.email+"/points_tag"]  = this.punteggio_tag;
 
@@ -181,9 +175,6 @@ export class EditMonumentPage {
    //Incremento il numero di tag che il POI possiede
     this.numero_tag_POI ++;
     updates["/point_of_interest/"+this.poi.chiave+"/numero_tag/"] = this.numero_tag_POI;
-
-
-
 
     this.setTagBadges(updates)
     this.setMinscBadges(updates);

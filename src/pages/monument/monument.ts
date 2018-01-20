@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { UploadPhotoPage } from '../upload-photo/upload-photo';
 import { EditMonumentPage } from "../edit-monument/edit-monument";
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
@@ -24,9 +24,6 @@ import { Api } from "../../providers/api";
 })
 export class MonumentPage {
 
-
-
-
   //---INIZIO--parte per far funzionare i segment
   menu: string = "Descrizione";
   
@@ -35,7 +32,6 @@ export class MonumentPage {
   poiName;
   descriptions;
   poiTags;
-  city_now;
 
   //per vedere il numero di info,tag e foto del POI
   public poi_numero_info: Array<any> = [];
@@ -47,11 +43,13 @@ export class MonumentPage {
   descrizione_poi;
   foto_url;
 
-  email;
+  email_user;
+  username;
   phone;
   website;
   indirizzo;
   gratuito;
+  email;
 
   accessibility;
   families;
@@ -72,60 +70,43 @@ export class MonumentPage {
   //Per prendere le foto degli utenti
   public poi_user_photos: Array<any> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: Api, public modal: ModalController, private callNumber: CallNumber, private sharingVar: SocialSharing) {
+  //Per il numero di contributi dell'utente 
+  public user_informations_Ref: firebase.database.Reference = firebase.database().ref('/users/');
+  public user_details : Array<any> = [];
+  num_cond;
+  num_ach; //per incrementare gli achievements
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public api: Api, public modal: ModalController, private callNumber: CallNumber, private sharingVar: SocialSharing) {
     this.poi = navParams.get('reference')
     this.poiName = this.poi.myPoi.nome;
     this.poiTags = this.poi.tipo;
-
-    this.city_now = this.api.getCity;
-    console.log(this.city_now + "CITTA'")
   }
 
-  //-------------------INIZIO--------Funzioni per la condivisione 
-  whatsappShare(){
-    console.log(this.city_now+"BNN")
-    this.sharingVar.shareViaWhatsApp("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
-      .then(()=>{
-        alert("Condivisione eseguita correttamente");
-      },
-      ()=>{
-         alert("Condivisione non possibile, assicurati di avere l'app installata")
-      })
-  }
- 
-  twitterShare(){
-    this.sharingVar.shareViaTwitter("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
-    .then(()=>{
-      alert("Condivisione eseguita correttamente");
-    },
-    ()=>{
-       alert("Condivisione non possibile, assicurati di avere l'app installata")
-    })
-  }
- 
-  facebookShare(){
-    this.sharingVar.shareViaFacebook("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
-    .then(()=>{
-      alert("Condivisione eseguita correttamente");
-    },
-    ()=>{
-       alert("Condivisione non possibile, assicurati di avere l'app installata")
-    })
-  }
- 
-  otherShare(){
-    this.sharingVar.share("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
-    .then(()=>{
-      alert("Condivisione eseguita correttamente");
-    },
-    ()=>{
-       alert("Condivisione non possibile, assicurati di avere l'app installata")
-    })
-  }
-  //-------------------FINE--------Funzioni per la condivisione 
-
+  
   ionViewDidLoad() { //questo metodo viene richiamato solo una volta
     console.log('ionViewDidLoad MonumentPage');
+
+    if(this.api.user.displayName==null){
+      this.username = '';
+      this.email_user = '';
+    }else {
+      this.username = this.api.user.displayName
+      this.email_user = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente
+    }   
+     
+    this.user_informations_Ref.orderByKey().equalTo(this.email_user).on('value',itemSnapshot =>{
+      this.user_details = [];
+      itemSnapshot.forEach( itemSnap => {
+        this.user_details.push(itemSnap.val());
+        return false;
+      });
+      this.user_details.forEach(i=>{
+        this.num_cond = i.num_cond;
+        this.num_ach = i.num_ach;
+
+      })
+    });
+
   }
 
   //Apre la modale che mi mostra la foto in dimensione originale!
@@ -159,7 +140,7 @@ export class MonumentPage {
         this.descrizione_poi = i.descrizione;
         this.foto_url = i.photo_url;
         this.indirizzo = i.indirizzo;
-        
+
         //Siccome non tutti i campi sono definiti per ogni POI, controllo quali campi ci sono e rendo poi con isEnabled visibili solo quelli presenti per il POI
         this.email = i.email;
         this.phone = i.phone;
@@ -353,6 +334,97 @@ export class MonumentPage {
       poi: this.poi,  
     })
   } 
+
+  //-------------------INIZIO--------Funzioni per la condivisione 
+  whatsappShare(){
+    this.sharingVar.shareViaWhatsApp("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+      .then(()=>{
+        this.displayError("Grazie per aver condiviso!");
+        this.updateNumCond();
+      },
+      ()=>{
+        this.displayError("Condivisione non possibile, assicurati di avere l'app installata");
+      })
+  }
+ 
+  twitterShare(){
+    this.sharingVar.shareViaTwitter("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      this.displayError("Grazie per aver condiviso!");
+      this.updateNumCond();
+    },
+    ()=>{
+      this.displayError("Condivisione non possibile, assicurati di avere l'app installata");
+    })
+  }
+ 
+  facebookShare(){
+    this.sharingVar.shareViaFacebook("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      this.displayError("Grazie per aver condiviso!");
+      this.updateNumCond();
+    },
+    ()=>{
+      this.displayError("Condivisione non possibile, assicurati di avere l'app installata");
+    })
+  }
+ 
+  otherShare(){
+    this.sharingVar.share("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    .then(()=>{
+      this.displayError("Grazie per aver condiviso!");
+      this.updateNumCond();
+    },
+    ()=>{
+      this.displayError("Condivisione non possibile, assicurati di avere l'app installata");
+    })
+  }
+  //-------------------FINE--------Funzioni per la condivisione 
+
+  setShareAchievements(updates){
+    if(this.num_cond == "1"){
+      updates["/users/"+this.email_user+"/achievement/1 condivisione"];
+      updates["/users/"+this.email_user+"/achievement/1 condivisione/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email_user+"/num_ach"] = this.num_ach;
+    }else if(this.num_cond == "10"){
+      updates["/users/"+this.email_user+"/achievement/10 condivisioni"];
+      updates["/users/"+this.email_user+"/achievement/10 condivisioni/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email_user+"/num_ach"] = this.num_ach;
+
+    }else if(this.num_cond == "50"){
+      updates["/users/"+this.email_user+"/achievement/50 condivisioni"];
+      updates["/users/"+this.email_user+"/achievement/50 condivisioni/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email_user+"/num_ach"] = this.num_ach;
+
+    }else if(this.num_cond == "100"){
+      updates["/users/"+this.email_user+"/achievement/100 condivisioni"];
+      updates["/users/"+this.email_user+"/achievement/100 condivisioni/data"] = new Date().getTime();
+      this.num_ach = this.num_ach + 1;
+      updates["/users/"+this.email_user+"/num_ach"] = this.num_ach;
+    }
+  }
+
+
+  updateNumCond(){
+    var updates = {}
+    this.num_cond = this.num_cond + 1;
+    updates["/users/"+this.email_user+"/num_cond"]  = this.num_cond;
+    this.setShareAchievements(updates)
+    firebase.database().ref().update(updates);
+  }
+
+  //per il messaggio di avvenuto inserimento o meno
+  displayError(messageErr: string){
+    let toast = this.toastCtrl.create({
+      message: messageErr,
+      duration: 2000,
+      position: 'top'
+    });
+    toast.present();
+  }
 
 
 }
