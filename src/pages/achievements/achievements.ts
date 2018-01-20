@@ -58,7 +58,7 @@ export class AchievementsPage {
     var ref_utente = firebase.database().ref('/users/'+ this.email+'/achievement/');
     var ref_ach = firebase.database().ref('/achievements/');
 
-    ref_utente.once('value',function(achievement){
+    ref_utente.orderByChild("data").once('value',function(achievement){
         achievement.forEach(function(singolo_ach){
           ref_ach.once('value',function(achievements_ar){
             achievements_ar.forEach(function(singolo_ACH){
