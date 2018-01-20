@@ -468,7 +468,7 @@ export class FotoMapModalPage {
 
   //-------------------INIZIO--------Funzioni per la condivisione 
   whatsappShare(){
-    this.sharingVar.shareViaWhatsApp("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    this.sharingVar.shareViaWhatsApp("Ho visitato "+this.poiName+" e l'ho trovato molto interessante! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
       .then(()=>{
         this.displayError("Grazie per aver condiviso!");
         this.updateNumCond();
@@ -479,7 +479,7 @@ export class FotoMapModalPage {
   }
  
   twitterShare(){
-    this.sharingVar.shareViaTwitter("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    this.sharingVar.shareViaTwitter("Ho visitato "+this.poiName+" e l'ho trovato molto interessante! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
     .then(()=>{
       this.displayError("Grazie per aver condiviso!");
       this.updateNumCond();
@@ -490,7 +490,7 @@ export class FotoMapModalPage {
   }
  
   facebookShare(){
-    this.sharingVar.shareViaFacebook("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    this.sharingVar.shareViaFacebook("Ho visitato "+this.poiName+" e l'ho trovato molto interessante! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
     .then(()=>{
       this.displayError("Grazie per aver condiviso!");
       this.updateNumCond();
@@ -501,7 +501,7 @@ export class FotoMapModalPage {
   }
  
   otherShare(){
-    this.sharingVar.share("Trovo che "+this.poiName+" sia molto interessante, scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
+    this.sharingVar.share("Ho visitato "+this.poiName+" e l'ho trovato molto interessante! Scopri anche tu nuovi luoghi culturali di Cesena con l'app C.I.C.E !")
     .then(()=>{
       this.displayError("Grazie per aver condiviso!");
       this.updateNumCond();
