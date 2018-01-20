@@ -63,13 +63,13 @@ export class HomePage {
     this.menuCtrl.enable(true)
 
     /*Metodo per prenderd l'URL delle foto caricate*/
-    var storage = firebase.storage();
+    /* var storage = firebase.storage();
     var pathReference = storage.ref();
     pathReference.child('photos_POIS/biblioteca_malatestiana.jpg').getDownloadURL().then(function(url) {
       console.log("Url è " + url)
     }).catch(function(error){
       console.log("Errore nel retrieve")
-    })
+    }) */
     var first = this.navParams.get('firstAddress')
     var second = this.navParams.get('secondAddress')
     this.waypoints = this.navParams.get('waypts')
@@ -167,7 +167,7 @@ export class HomePage {
 
            
 
-this.map.on('locationfound', this.onLocationFound,this);
+          this.map.on('locationfound', this.onLocationFound,this);
            
             /* let marker1;
             let watch = this.geolocation.watchPosition();
@@ -1123,7 +1123,7 @@ this.map.on('locationfound', this.onLocationFound,this);
             });
           }).then(a=>{
             self.myTags = userTags
-            self.findPoiByTag(self.myTags) //method I have to call when finished
+            self.findPoiByTag(self.myTags) 
           })
           
         });
@@ -1184,7 +1184,7 @@ this.map.on('locationfound', this.onLocationFound,this);
   }
 
   findPoiByTag(tag){
-
+ 
     var self = this
       var found = false;
       var pois = [];
@@ -1203,7 +1203,8 @@ this.map.on('locationfound', this.onLocationFound,this);
           snapshots.forEach(function(snapshot) {
             if (snapshot.exists()) {
               snapshot.child('tags').forEach(function(tags){ //per ogni tag del punto di interesse
-                if(tag.indexOf(tags.key)>-1){//se nei tag dell'utente esiste il tag del poi
+                if(tag.indexOf(tags.key)>-1){//se nei tag dell'utente esiste il tag del poi   
+                  
                   found = true;
                   var exists = false;
                   for (var i = 0; i<pois.length; i++){
@@ -1212,25 +1213,8 @@ this.map.on('locationfound', this.onLocationFound,this);
                       break;
                     }
                   }
-                   if(!exists){
-                    //Casistica accessibilità e famiglie.  
-                    /*if(self.isAccessibilityOn && self.isFamilyOn){
-                       if(snapshot.child('accessibilità').val()=="Y" && snapshot.child('famiglia').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
-                       }
-                    }else if(self.isAccessibilityOn && !self.isFamilyOn){
-                      if(snapshot.child('accessibilità').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
-                       }
-
-                    }else if(!self.isAccessibilityOn && self.isFamilyOn){
-                      if(snapshot.child('famiglia').val()=="Y"){
-                        pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()}) 
-                       }
-                    } else {
-                      pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
-                    } */
-                    pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val()})                           
+                   if(!exists){//se il punto non era ancora stato aggiunto
+                    pois.push({lat: snapshot.child('lat').val(), lon: snapshot.child('lon').val(), nome: snapshot.child('nome').val(), tag: tags.key})                           
                 } 
               }
               })
@@ -1244,9 +1228,29 @@ this.map.on('locationfound', this.onLocationFound,this);
             //self.isEnabled = true;
           } else {
             
-            pois.forEach(p=>{
+            var tagsToUse = [];
+            var isThere = false;
+            var refTags = firebase.database().ref('/tag/');
+            refTags.once('value', function(tags){
+              pois.forEach(p=>{
+                tags.forEach(function(t){
+                  if(p.tag == t.key){//se trovo un tag corrispondente
+                    console.log("Index " + tagsToUse.indexOf(t.child('nome').val()))
+                    if(tagsToUse.indexOf(t.child('nome').val())==-1){//se non l'ho già aggiunto
+                      tagsToUse.push(t.child('nome').val())
+                      console.log("Added "+ t.child('nome').val())
+                    } 
+                  }
+                  return false;
+                })
+
+              })
+
+            })
+           
+            pois.forEach(p=>{              
               let marker = L.marker([p.lat,p.lon])
-          let content = `<b>Nome</b>: ${p.nome}<br/>`;
+            let content = `<b>Nome</b>: ${p.nome}<br/>`;
             marker.bindPopup(content) 
             marker.addTo(newMap)
            // marker.openPopup()
