@@ -316,15 +316,20 @@ displayError(messageErr: string){
 
     checkDuration(){
       var regSec = /([0-9]+)[s]/;
-      var regMin = /([0-9]+)[m]/
+      var regMin = /([0-9]+)[m]/;
+      var regHour = /([0-9]+)[h]/;
       if(regSec.test(this.duration)){
         this.duration = this.duration.match(/\d+/).map(String).join("")
         return true;
       } else if(regMin.test(this.duration)){
         this.duration = Number(this.duration.match(/\d+/).map(String).join(""))*60;
         return true;
+      } else if(regHour.test(this.duration)) {
+        this.duration = Number(this.duration.match(/\d+/).map(String).join(""))*3600;
+        return true;
       }else {
         this.displayError("La durata inserita non è corretta.")
+        this.duration =""
         this.isEnabled = true;
       }
     }
@@ -335,6 +340,7 @@ displayError(messageErr: string){
         return true;
       } else {
         this.displayError("La lunghezza inserita non è valida.")
+        this.length = ""
         this.isEnabled = true;
       }
     }
@@ -355,14 +361,15 @@ displayError(messageErr: string){
         user_pref.once('value', function(preferenze) { 
           var promises = [];
           preferenze.forEach(function(t) {
-            promises.push(ref.child(t.key).once('value'));
+            promises.push(t.key);
             return false;
           });
           Promise.all(promises).then(function(snapshots) {
             snapshots.forEach(function(snapshot) {
-              if (snapshot.exists()) {
-                userTags.push(snapshot.key);
-              }
+             // if (snapshot.exists()) {
+                console.log("Chiave aggiunta " + snapshot)
+                userTags.push(snapshot); 
+            //  }
             });
           }).then(a=>{
             self.myTags = userTags
