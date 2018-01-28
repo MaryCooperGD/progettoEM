@@ -38,9 +38,12 @@ export class CreateRoutePage {
   isEnabled = true;
   isPartenza = false;
   isArrivo = false;
+  user_position;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl:ToastController, public api:Api,
     public modal: ModalController) {
+      this.user_position = this.navParams.get("position")
+      console.log("Posizione " + this.user_position)
       this.city = this.api.getCity();
       var ref = firebase.database().ref('/cities/')
       var self = this;
@@ -98,6 +101,21 @@ export class CreateRoutePage {
       this.myInputArrivo = address;
     }
 
+  }
+
+  setPosition(event){
+    if(this.user_position!=null){     
+    if(event == "partenza"){
+      this.isPartenza = true;
+      this.isArrivo = false; 
+    } else if (event == "arrivo"){
+      this.isArrivo = true;
+      this.isPartenza = false; 
+    }
+      this.geocode(this.user_position)
+    } else {
+      this.displayError("La tua posizione non è nota. Abilitala il GPS o attendi che venga identificata!")
+    }
   }
 
   

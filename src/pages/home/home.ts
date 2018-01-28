@@ -46,6 +46,7 @@ export class HomePage {
   chosenWayPts = [];
   clicked = false;
   theMarker;
+  user_position;
   yahIcon = L.icon({
     iconUrl: "assets/images/yah.png",
 
@@ -284,7 +285,9 @@ export class HomePage {
   }
 
   planTrip(){
-    this.navCtrl.push(CreateRoutePage);
+    this.navCtrl.push(CreateRoutePage, {
+      position: this.user_position
+    });
   }
 
   
@@ -368,7 +371,7 @@ export class HomePage {
       }
       request.send();
       
-      
+      this.user_position = latlng;
       positionMarker = L.marker(latlng).addTo(this.map);
       positionMarker.bindPopup("Tu sei qui");
       this.map.setView(latlng,16)

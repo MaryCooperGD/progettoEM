@@ -27,7 +27,8 @@
     <ion-card-content>
             <ion-textarea [(ngModel)]="myInputPartenza"  placeholder="Es: Piazza Maurizio Bufalini, Cesena"></ion-textarea>
             <button ion-button class="card-button" [disabled]="!isEnabled" (click)="openModal('partenza')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Scegli su mappa</button>
-       <!--  <ion-row>
+            <button ion-button class="card-button" [disabled]="!isEnabled" (click)="setPosition('partenza')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Posizione attuale</button>
+            <!--  <ion-row>
             <button ion-button class="card-button"> <ion-icon name="compass" class="icona-bottone"></ion-icon> Cerca su mappa</button>
         </ion-row> -->
 
@@ -44,6 +45,7 @@
     <ion-card-content>
             <ion-textarea [(ngModel)]="myInputArrivo"  placeholder="Es: Piazza Maurizio Bufalini, Cesena"></ion-textarea>
             <button ion-button class="card-button" [disabled]="!isEnabled" (click)="openModal('arrivo')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Scegli su mappa</button>
+            <button ion-button class="card-button" [disabled]="!isEnabled" (click)="setPosition('arrivo')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Posizione attuale</button>
         <!-- <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar> -->
         <!-- <ion-row>
             <button ion-button class="card-button"> <ion-icon name="compass" class="icona-bottone"></ion-icon> Cerca su mappa</button>
