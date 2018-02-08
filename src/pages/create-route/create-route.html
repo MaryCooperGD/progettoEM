@@ -47,10 +47,10 @@
       <ion-textarea [(ngModel)]="myInputArrivo"  placeholder="Es: Piazza Maurizio Bufalini, Cesena"></ion-textarea>
       <ion-row>
         <ion-col col-6>
-          <button ion-button full class="card-button" [disabled]="!isEnabled" (click)="openModal('partenza')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Mappa</button>
+          <button ion-button full class="card-button" [disabled]="!isEnabled" (click)="openModal('arrivo')"> <ion-icon name="map" class="icona-bottone"></ion-icon>Mappa</button>
         </ion-col>
         <ion-col col-6>
-          <button ion-button full class="card-button" [disabled]="!isEnabled" (click)="setPosition('partenza')"> <ion-icon name="pin" class="icona-bottone"></ion-icon>Posizione</button>
+          <button ion-button full class="card-button" [disabled]="!isEnabled" (click)="setPosition('arrivo')"> <ion-icon name="pin" class="icona-bottone"></ion-icon>Posizione</button>
         </ion-col>
       </ion-row>      
     </ion-card-content>
