@@ -110,7 +110,7 @@ export class FotoMapModalPage {
         this.num_of_tag = i.num_of_tag;
         this.num_of_info = i.num_of_info;
         this.num_of_photo = i.num_of_photo;
-
+        this.points_photos = i.points_photos;
         this.num_ach = i.num_ach;
         this.num_badge = i.num_badge;
 
@@ -137,6 +137,7 @@ export class FotoMapModalPage {
 
 
   selectPhoto_phone(){
+    
     //this.loadingConvert.present();
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY, 
@@ -160,6 +161,7 @@ export class FotoMapModalPage {
 
   //Per scegliere l'avatar da una foto appena scattata
   selectPhoto_camera(){
+    this.callCheck()
     //this.loadingConvert.present();
     this.camera.getPicture({
       sourceType: this.camera.PictureSourceType.CAMERA, 
@@ -220,7 +222,8 @@ export class FotoMapModalPage {
           this.setMinscAchievements(updates);
           this.setMinscBadges(updates);
 
-          firebase.database().ref().update(updates).then(function(){        
+          firebase.database().ref().update(updates).then(function(){   
+            //this.displayError("Faccio l'update")     
             self.loadingUpload.dismiss();
             self.displayError("Foto caricata correttamente!")
             self.isEnabled = false;
@@ -235,6 +238,33 @@ export class FotoMapModalPage {
         
    
   }
+
+  callCheck(){
+    var updates = {};
+      var ref = firebase.database().ref('/point_of_interest/'+this.poiKey+'/photos/');
+      var key = firebase.database().ref().child('/point_of_interest/'+this.poiKey+'/photos/').push().key; 
+      console.log("point_of_interest/"+this.poiKey+"/photos/"+key +" = " +this.myPhotoURL);
+      console.log("point_of_interest/"+this.poiKey+"/numero_foto"+" = " +this.num_of_photos);
+
+       //Per memorizzare le foto nell'utente
+      var ref = firebase.database().ref('/users/'+this.email+'/photos/');
+      var key = firebase.database().ref().child('/users/'+this.email+'/photos/').push().key; 
+      console.log('/users/'+this.email+'/photos/'+key+" = "+ this.myPhotoURL);
+      
+      //Incremento i valori nel profilo utente
+      this.num_of_photo = this.num_of_photo + 1; //Incremento il contatore del numero di foto
+      console.log("users/"+this.email+"/num_of_photo"+" = "+this.num_of_photo);
+
+      this.points_photos = this.points_photos + 20; //Incremento il punteggio ottenuto dalle foto
+      console.log("users/"+this.email+"/points_photos"+" = "+this.points_photos);
+
+      this.punteggio_totale = this.punteggio_totale + 20 ; //Incremento il punteggio totale
+      console.log("/users/"+this.email+"/total_points"+" = "+this.punteggio_totale); 
+
+      this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo; //Incremento il valore della somma dei contributi.
+      console.log("/users/"+this.email+"/sum_contributi"+" = "+this.sum_of_total_contr);
+
+}
 
 
 
