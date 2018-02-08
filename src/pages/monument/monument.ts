@@ -24,7 +24,6 @@ import { Api } from "../../providers/api";
 })
 export class MonumentPage {
 
-  //---INIZIO--parte per far funzionare i segment
   menu: string = "Descrizione";
   
   //Variabili miste
@@ -82,7 +81,6 @@ export class MonumentPage {
     this.poiTags = this.poi.tipo;
   }
 
-  
   ionViewDidLoad() { //questo metodo viene richiamato solo una volta
     console.log('ionViewDidLoad MonumentPage');
 
@@ -103,10 +101,8 @@ export class MonumentPage {
       this.user_details.forEach(i=>{
         this.num_cond = i.num_cond;
         this.num_ach = i.num_ach;
-
       })
     });
-
   }
 
   //Apre la modale che mi mostra la foto in dimensione originale!
@@ -118,9 +114,7 @@ export class MonumentPage {
 
   ionViewWillEnter(){
     console.log('ionViewWillEnter MonumentPage');
-    
     this.pageDescriptionPhotoRefresh(); //Per caricare la descrizione e la foto
-
     //Carico informazioni, tag e foto
     this.refreshList();
     this.refreshTags();
@@ -212,19 +206,16 @@ export class MonumentPage {
     poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
       itemSnapshot.forEach(itemSnap =>{
         this.poi_numero_foto.push(itemSnap.val());
-  
         return false;
       });
       this.poi_numero_foto.forEach(i=>{ 
         //Se non ho info nel POI devo nascondere l'elenco vuoto e mostro il messaggio
         if (i.numero_foto == 0) {
           this.isEnabled_foto = false;
-          
         }else{
           this.isEnabled_foto = true;
           var poi_ref = firebase.database().ref("/point_of_interest/"+this.poi.chiave+"/photos");
           this.poi_user_photos = [];
-
           //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
           poi_ref.on('value',itemSnapshot =>{
             itemSnapshot.forEach(itemSnap =>{
@@ -406,7 +397,6 @@ export class MonumentPage {
       updates["/users/"+this.email_user+"/num_ach"] = this.num_ach;
     }
   }
-
 
   updateNumCond(){
     var updates = {}
