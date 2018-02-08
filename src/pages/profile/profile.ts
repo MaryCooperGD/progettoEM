@@ -163,8 +163,6 @@ export class ProfilePage {
      
     }).then(a=>{
         this.tags = userTags;
-        
-        
         /* QUESTO PASSAGGIO QUI SOPRA E' FONDAMENTALE. 
         Ti sembrerà superfluo copiare un vettore dentro un altro, tu dirai "perché non posso usare direttamente un 
         unico vettore?". Il fatto è che essendo questa una callback, non puoi accedere agli elementi esterni della classe,
@@ -225,7 +223,7 @@ export class ProfilePage {
   }
 
     //Per scegliere l'avatar dalla galleria del cellulare
-    selectPhoto(){
+  selectPhoto(){
       this.camera.getPicture({
         sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -239,50 +237,48 @@ export class ProfilePage {
       }, error => {
         console.log("ERROR -> " + JSON.stringify(error));
       });
+  }
   
-    }
-  
-    //Per caricare la foto sullo storage
-    uploadPhoto(): void {
-      this.myPhotosRef.child("avatar_"+this.email).child('myAvatar.png')
-        .putString(this.myAvatar, 'base64', { contentType: 'image/png' })
-        .then((savedPicture) => {
-          this.myPhotoURL = savedPicture.downloadURL;
-          //console.log("url avatar appena caricato"+this.myPhotoURL);
-  
-          //Salvo url su database
+  //Per caricare la foto sullo storage
+  uploadPhoto(): void {
+    this.myPhotosRef.child("avatar_"+this.email).child('myAvatar.png')
+      .putString(this.myAvatar, 'base64', { contentType: 'image/png' })
+      .then((savedPicture) => {
+        this.myPhotoURL = savedPicture.downloadURL;
+
+        //Salvo url su database
+        var updates = {};
+        updates['/users/'+this.email+'/avatar'] = this.myPhotoURL;
+        firebase.database().ref().update(updates);
+
+        //Se l'avatar che avevo prima del cambiamento è quello di placeholder allora inserisco l'achievement!!
+        if(this.oldAvatar == true){
           var updates = {};
-          updates['/users/'+this.email+'/avatar'] = this.myPhotoURL;
+          updates["/users/"+this.email+"/achievement/avatar_up"];
+          updates["/users/"+this.email+"/achievement/avatar_up/data"] = new Date().getTime();
+          updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
           firebase.database().ref().update(updates);
+        }
+      });    
+  }
 
-          //Se l'avatar che avevo prima del cambiamento è quello di placeholder allora inserisco l'achievement!!
-          if(this.oldAvatar == true){
-            var updates = {};
-            updates["/users/"+this.email+"/achievement/avatar_up"];
-            updates["/users/"+this.email+"/achievement/avatar_up/data"] = new Date().getTime();
-            updates["/users/"+this.email+"/num_ach"] = this.num_ach + 1;
-            firebase.database().ref().update(updates);
-          }
-        });    
-    }
-
-    retrieveFoto(){
-      var poi_ref = firebase.database().ref("/users/"+this.email+"/photos");
-      this.profile_user_photos = [];
+  retrieveFoto(){
+    var poi_ref = firebase.database().ref("/users/"+this.email+"/photos");
+    this.profile_user_photos = [];
   
-      //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
-      poi_ref.on('value',itemSnapshot =>{
-        itemSnapshot.forEach(itemSnap =>{
-          this.profile_user_photos.push(itemSnap.val()); 
+    //voglio ciclare in photos dentro al POI e tirare fuori i val di photos. 
+    poi_ref.on('value',itemSnapshot =>{
+      itemSnapshot.forEach(itemSnap =>{
+        this.profile_user_photos.push(itemSnap.val()); 
           return false;
-        });
       });
-    }
+    });
+  }
 
-    openModal(index){ 
-      let obj = {url_immagine : this.profile_user_photos[index]}
-      let myModal = this.modal.create('FotoUserModalPage', obj);
-      myModal.present();
-    }
+  openModal(index){ 
+    let obj = {url_immagine : this.profile_user_photos[index]}
+    let myModal = this.modal.create('FotoUserModalPage', obj);
+    myModal.present();
+  }
 
 }
