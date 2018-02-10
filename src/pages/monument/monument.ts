@@ -187,9 +187,7 @@ export class MonumentPage {
         }else if(this.gratuito == "N"){
           this.gratuito = "A pagamento";
           this.isEnabled_gratuito = true;
-      }
-
-
+        }
       })
     });
   }

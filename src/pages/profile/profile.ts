@@ -188,55 +188,54 @@ export class ProfilePage {
     
     ref2.once('value',function(badge){ //ciclo sui badge dell'utente
       badge.forEach(function(singolo_Badge_Utente){
-            ref3.once('value', function(badge_totali){
-               badge_totali.forEach(function(badge_lista_totale){ //come sopra! è speculare
+        ref3.once('value', function(badge_totali){
+          badge_totali.forEach(function(badge_lista_totale){ //come sopra! è speculare
                 
-                    if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "misto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
-                      //rispetto a quelle presenti nel nodo dei badge complessivi
-                      userMiscBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
-                    }
-                    if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "taggatore")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
-                    //rispetto a quelle presenti nel nodo dei badge complessivi
-                      userTagBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
-                    }
-                    if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "foto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
-                    //rispetto a quelle presenti nel nodo dei badge complessivi
-                      userFotoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
-                    }
-                    if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "info")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
-                    //rispetto a quelle presenti nel nodo dei badge complessivi
-                      userInfoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
-                    }
-                    return false;
-                })
-    
-            })
+            if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "misto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+              //rispetto a quelle presenti nel nodo dei badge complessivi
+              userMiscBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+            }
+            if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "taggatore")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+              //rispetto a quelle presenti nel nodo dei badge complessivi
+              userTagBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+            }
+            if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "foto")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+              //rispetto a quelle presenti nel nodo dei badge complessivi
+              userFotoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+            }
+            if((singolo_Badge_Utente.key == badge_lista_totale.key) && (badge_lista_totale.child("tipologia").val()== "info")){ //effettuo il confronto tra le chiavi per vedere quali possiede l'utente
+              //rispetto a quelle presenti nel nodo dei badge complessivi
+              userInfoBadges.push(badge_lista_totale.key) //Questa volta devo pushare la chiave perchè è l'identificativo stesso che mi interessa. 
+            }
+            
             return false;
+          })
         })
+      return false;
+      })
     }).then(a=>{
         this.badges_utente_misto = userMiscBadges;
         this.badges_utente_taggatore = userTagBadges;
         this.badges_utente_fotografo = userFotoBadges;
         this.badges_utente_informatore = userInfoBadges;
     })
-    //Fine parte dei badge
   }
 
-    //Per scegliere l'avatar dalla galleria del cellulare
+  //Per scegliere l'avatar dalla galleria del cellulare
   selectPhoto(){
-      this.camera.getPicture({
-        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-        destinationType: this.camera.DestinationType.DATA_URL,
-        quality: 90,
-        allowEdit:true,
-        targetHeight: 300,
-        encodingType: this.camera.EncodingType.PNG,
-      }).then(imageData => {
-        this.myAvatar = imageData;
-        this.uploadPhoto();
-      }, error => {
-        console.log("ERROR -> " + JSON.stringify(error));
-      });
+    this.camera.getPicture({
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      quality: 90,
+      allowEdit:true,
+      targetHeight: 300,
+      encodingType: this.camera.EncodingType.PNG,
+    }).then(imageData => {
+      this.myAvatar = imageData;
+      this.uploadPhoto();
+    }, error => {
+      console.log("ERROR -> " + JSON.stringify(error));
+    });
   }
   
   //Per caricare la foto sullo storage

@@ -18,7 +18,6 @@ export class NewtagPage {
   public textSearch:any;
   poi;
 
-  
   username:any;
   email: any;
 
@@ -69,7 +68,6 @@ export class NewtagPage {
     }else {
       this.username = this.api.user.displayName;
       this.email = this.api.email_id; //Ricavo dall'API la mail che mi serve per identificare l'utente 
-      
     }   
      
     this.user_emailRef.orderByChild("username").equalTo(this.username).on('value',itemSnapshot =>{
@@ -91,8 +89,6 @@ export class NewtagPage {
 
       })
     });
-
-
     this.poi_ref.orderByKey().equalTo(this.poi.chiave).on('value',itemSnapshot =>{
       this.poi_NUMEROINFO = [];
       itemSnapshot.forEach(itemSnap =>{
@@ -112,28 +108,26 @@ export class NewtagPage {
 
   }
 
-  addSelectedTag(index){
-   var tagToAdd = this.tagList[index]; //corretto
-   var updates = {};
+addSelectedTag(index){
+  var tagToAdd = this.tagList[index]; //corretto
+  var updates = {};
   updates['/point_of_interest/'+ this.poi.chiave + '/tags/' + tagToAdd.key] = "true";
   firebase.database().ref().update(updates);
 }
 
 refreshItems():void{
 var ref1 = firebase.database().ref('/tag/'); //prendo tutti i tag esistenti
-
-
-      //creo la lista di tag
-       ref1.on('value', tagList => {
-      let tags = [];
-      tagList.forEach( poi => {
-        tags.push(poi.val());
-        return false;
-      });
-
-      this.tagList = tags;
-      this.loadedTagList = tags;
+  //creo la lista di tag
+  ref1.on('value', tagList => {
+    let tags = [];
+    tagList.forEach( poi => {
+      tags.push(poi.val());
+      return false;
     });
+
+    this.tagList = tags;
+    this.loadedTagList = tags;
+  });
 }
 
 initializeItems(): void {
@@ -141,7 +135,6 @@ initializeItems(): void {
 }
 
 presentToastOk(){
-  
   let toast = this.toastCtrl.create({
     message: 'Il tag è stato aggiunto correttamente!',
     duration: 2000,
@@ -156,7 +149,6 @@ presentToastWrong(){
     duration: 2000,
     position: 'top'
   }).present();
-
 }
 
 clickedButton(){
@@ -206,7 +198,6 @@ clickedButton(){
   }
 }
 
-
 getItems(searchbar) {
   // Reset items back to all of the items
   this.initializeItems();
@@ -235,10 +226,7 @@ getItems(searchbar) {
   } else{
     this.isEnabled = false;
   }
-
- 
 }
-
 
 //per il messaggio di conferma!
 displayLoginError(messageErr: string){
@@ -249,8 +237,6 @@ displayLoginError(messageErr: string){
   });
   toast.present();
 }
-
-
 
 setTagBadges(updates){
   if(this.punteggio_tag == "300"){

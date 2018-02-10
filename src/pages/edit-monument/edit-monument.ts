@@ -160,17 +160,13 @@ export class EditMonumentPage {
 
    //Incrementa la variabile dei PUNTI TOTALI
    this.punteggio_totale = this.punteggio_totale + 5 ;
-   console.log("punteggio totale PRIMA DELL'UPDATE"+ this.punteggio_totale )
    updates["/users/"+this.email+"/total_points"]  = this.punteggio_totale;
-   console.log("punteggio totale DOPO DELL'UPDATE"+ this.punteggio_totale )
    
    this.num_of_tag = this.num_of_tag + 1;
-   console.log("THIS NUM OF TAG"+this.num_of_tag);
    updates["/users/"+this.email+"/num_of_tag"]  = this.num_of_tag;
 
    this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo;
    updates["/users/"+this.email+"/sum_contributi"]  = this.sum_of_total_contr;
-   //console.log("Dentro addSelectedTag: "+this.sum_of_total_contr);
 
    //Incremento il numero di tag che il POI possiede
     this.numero_tag_POI ++;
@@ -239,10 +235,7 @@ export class EditMonumentPage {
     this.setMinscAchievements(updates);
 
     firebase.database().ref().update(updates);
-
     this.displayLoginError("Grazie per aver contributo, hai appena guadagnato 15 punti!");
-    
-   
   }
 
   openAddNewTagPage(){
@@ -282,7 +275,6 @@ export class EditMonumentPage {
       updates["/users/"+this.email+"/badge/Taggatore novizio"]  = true;
       this.num_badge = this.num_badge + 1;
       updates["/users/"+this.email+"/num_badge"] = this.num_badge;
-
     }
   }
 
@@ -372,7 +364,6 @@ export class EditMonumentPage {
       this.num_ach = this.num_ach + 1;
       updates["/users/"+this.email+"/num_ach"] = this.num_ach;
       
-      
     }else if(this.num_of_info == "10"){
       updates["/users/"+this.email+"/achievement/10 info"];
       updates["/users/"+this.email+"/achievement/10 info/data"] = new Date().getTime();
@@ -417,7 +408,6 @@ export class EditMonumentPage {
       updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
       this.num_ach = this.num_ach + 1;
       updates["/users/"+this.email+"/num_ach"] = this.num_ach;
-      
     }
   }
 

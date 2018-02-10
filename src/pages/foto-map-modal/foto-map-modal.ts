@@ -225,7 +225,7 @@ export class FotoMapModalPage {
           firebase.database().ref().update(updates).then(function(){   
             //this.displayError("Faccio l'update")     
             self.loadingUpload.dismiss();
-            self.displayError("Foto caricata correttamente!")
+            self.displayError("Foto caricata correttamente, hai appena guadagnato 20 punti!")
             self.isEnabled = false;
             self.closeModal();
 
@@ -263,10 +263,7 @@ export class FotoMapModalPage {
 
       this.sum_of_total_contr = this.num_of_info + this.num_of_tag + this.num_of_photo; //Incremento il valore della somma dei contributi.
       console.log("/users/"+this.email+"/sum_contributi"+" = "+this.sum_of_total_contr);
-
 }
-
-
 
   setPhotoBadges(updates){
     if(this.points_photos == "380"){
@@ -369,13 +366,11 @@ export class FotoMapModalPage {
       updates["/users/"+this.email+"/achievement/300 misto"];
       updates["/users/"+this.email+"/achievement/300 misto/data"] = new Date().getTime();
       this.num_ach = this.num_ach + 1;
-      updates["/users/"+this.email+"/num_ach"] = this.num_ach;
-      
+      updates["/users/"+this.email+"/num_ach"] = this.num_ach;   
     }
   }
 
   addInfo(){
-
     var ref = firebase.database().ref("/descriptions/");
     var ref1 = firebase.database().ref("/point_of_interest/"+this.poiKey+"/")
     var key = firebase.database().ref().child('descriptions').push().key;
@@ -575,8 +570,4 @@ export class FotoMapModalPage {
     this.setShareAchievements(updates)
     firebase.database().ref().update(updates);
   }
-
-
-
-
 }
